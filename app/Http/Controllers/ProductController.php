@@ -17,7 +17,7 @@ class ProductController extends Controller
      */
     public function index()
     {
-        $products = Product::get();
+        $products = Product::join('categories','categories.id','=','products.category_id')->select('products.*','categories.title as category_name')->get();
         return view('admin.products.index',compact('products'));
     }
 
@@ -67,8 +67,9 @@ class ProductController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function edit(Product $product)
-    {
-        //
+    {   
+        $categories = Category::get();
+        return view('admin.products.edit',compact('product','categories'));
     }
 
     /**
@@ -80,7 +81,13 @@ class ProductController extends Controller
      */
     public function update(UpdateProductRequest $request, Product $product)
     {
-        //
+        $data = $request->validated();
+        $data['unit'] = $request->unit;
+        $data['detail'] = $request->unit;
+        $data['images'] = $request->unit;
+        $data['user_id'] = Auth::user()->id;
+        $product->update($data);
+        return redirect()->route('products.index')->with('success','Update Product Success');
     }
 
     /**
@@ -91,6 +98,7 @@ class ProductController extends Controller
      */
     public function destroy(Product $product)
     {
-        //
+        $product->delete();
+        return redirect()->route('products.index')->with('success','Delete Product Success');
     }
 }

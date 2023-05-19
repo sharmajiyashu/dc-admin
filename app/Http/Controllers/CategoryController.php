@@ -77,7 +77,7 @@ class CategoryController extends Controller
         $data = $request->validated();
         $data['packing_quantity'] = $request->packing_quantity;
         $category->update($data);
-        return redirect()->route('categories.index');
+        return redirect()->route('categories.index')->with('success','Category Update Success');
     }
 
     /**
@@ -88,6 +88,7 @@ class CategoryController extends Controller
      */
     public function destroy(Category $category)
     {
-        //
+        $category->delete();
+        return redirect()->route('categories.index')->with('success','Category Delete Success');
     }
 }

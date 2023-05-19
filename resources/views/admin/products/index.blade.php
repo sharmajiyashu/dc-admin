@@ -3,6 +3,15 @@
 
 @section('content')
 
+<style>
+    .Active{
+        color: green;
+    }
+    .Inactive{
+        color: red;
+    }
+</style>
+
  <!-- BEGIN: Content-->
 <!-- BEGIN: Content-->
 <div class="app-content content ">
@@ -18,7 +27,7 @@
                                 <ol class="breadcrumb">
                                     <li class="breadcrumb-item"><a href="{{url('/')}}">Home</a>
                                     </li>
-                                    <li class="breadcrumb-item"><a href="{{ route('products.index') }}">products</a>
+                                    <li class="breadcrumb-item"><a href="{{ route('products.index') }}">Products</a>
                                     </li>
                                     <li class="breadcrumb-item active">List
                                     </li>
@@ -36,7 +45,7 @@
                             <div class="card">
                                 <div class="card-header border-bottom">
                                     <h4 class="card-title">List</h4>
-                                    <a href="{{route('products.create')}}" class=" btn btn-info btn-gradient round  ">Add</a>
+                                    <a href="{{route('products.create')}}" class=" btn btn-info btn-gradient round  ">Add Product</a>
                                 </div>
                                 <div class="card-datatable">
                                     <table class="datatables-ajax table table-responsive">
@@ -44,6 +53,7 @@
                                             <tr>
                                                 <th>Sr.no</th>
                                                 <th>Name</th>
+                                                <th>Category</th>
                                                 <th>mrp</th>
                                                 <th>sp</th>
                                                 <th>stock</th>
@@ -58,32 +68,46 @@
                                             @foreach($products as $key => $val)
                                             <tr>
                                                 <th scope="row">{{ $i }}</th>
-                                                <td>{{ $val->name }}</td>
+                                                <td><strong>{{ $val->name }}</strong></td>
+                                                <td>{{ $val->category_name }}</td>
                                                 <td>{{ $val->mrp }}</td>
                                                 <td>{{ $val->sp }}</td>
                                                 <td>{{ $val->stock }}</td>
-                                                <td>{{ $val->status }}</td>
+                                                <td class="{{$val->status}} text-bold">{{ $val->status }}</td>
                                                 <td>{{ $val->packing_quantity }}</td>
-                                                <td>{{ $val->created_at }}</td>
+                                                <td>{{ date('d-M-y H:i:s',strtotime($val->created_at)) }}</td>
                                                 <td>
-                                                    <div class="dropdown">
-                                                        <button type="button" class="btn btn-sm dropdown-toggle hide-arrow py-0" data-bs-toggle="dropdown">
-                                                            <i data-feather="more-vertical"></i>
-                                                        </button>
-                                                        <div class="dropdown-menu dropdown-menu-end">
-                                                            <a class="dropdown-item" href="{{route('products.edit',$val->id)}}">
-                                                                <i data-feather="edit-2" class="me-50"></i>
-                                                                <span>Edit</span>
-                                                            </a>
-                                                            <form action="{{route('products.destroy',$val->id)}}" method="POST">
-                                                                @csrf
-                                                                @method('delete')
-                                                                <button type="submit" class="dropdown-item"> <i data-feather="trash" class="me-50"></i>
-                                                                <span>Delete</span></button>
-                                                            </form>
+                                                    <a  href="{{route('products.edit',$val->id)}}">
+                                                        <i data-feather="edit-2" class="me-50"></i>
+                                                        {{-- <span>Edit</span> --}}
+                                                    </a>
+
+                                                    <a href="#" class="text-danger" data-bs-toggle="modal" data-bs-target="#danger_ke"><i data-feather="trash" class="me-50"></i></a>
+
+                                                    <!-- Modal -->
+                                                    <div class="modal fade modal-danger text-start" id="danger_ke" tabindex="-1" aria-labelledby="myModalLabel120" aria-hidden="true">
+                                                        <div class="modal-dialog modal-dialog-centered">
+                                                            
+                                                                <div class="modal-content">
+                                                                    <div class="modal-header">
+                                                                        <h5 class="modal-title" id="myModalLabel120">Delete Product</h5>
+                                                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                                    </div>
+                                                                    <div class="modal-body">
+                                                                        Are you Shure you want to delete !
+                                                                    </div>
+                                                                    <form action="{{route('products.destroy',$val->id)}}" method="POST">
+                                                                        @csrf
+                                                                        @method('delete')
+                                                                        <div class="modal-footer">
+                                                                            <button type="submit" class="btn btn-danger" data-bs-dismiss="modal">Delete</button>
+                                                                        </div>
+                                                                    </form>
+                                                                </div>
                                                         </div>
                                                     </div>
                                                 </td>
+
                                             </tr>
                                             @php $i++; @endphp
                                             @endforeach

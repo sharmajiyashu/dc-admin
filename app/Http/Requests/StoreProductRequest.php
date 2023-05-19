@@ -32,6 +32,7 @@ class StoreProductRequest extends FormRequest
             'quantity'=> 'required',
             'packing_quantity'=> 'required',
             'order_limit'=> 'required',
+            'status' => 'required',
         ];
     }
 }

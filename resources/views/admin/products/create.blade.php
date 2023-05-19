@@ -17,9 +17,9 @@
                             <h2 class="content-header-title float-start mb-0">Product</h2>
                             <div class="breadcrumb-wrapper">
                                 <ol class="breadcrumb">
-                                    <li class="breadcrumb-item"><a href="{{ url('admin')}}">Home</a>
+                                    <li class="breadcrumb-item"><a href="{{ url('/')}}">Home</a>
                                     </li>
-                                    <li class="breadcrumb-item"><a href="{{ route('categories.index') }}">categories</a>
+                                    <li class="breadcrumb-item"><a href="{{ route('products.index') }}">products</a>
                                     </li>
                                     <li class="breadcrumb-item active"><a href="#">Add</a>
                                     </li>
