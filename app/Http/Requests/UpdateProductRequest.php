@@ -25,13 +25,7 @@ class UpdateProductRequest extends FormRequest
     {
         return [
             'name' => 'required',
-            'stock'=> 'required',
             'category_id'=> 'required',
-            'mrp'=> 'required',
-            'sp'=> 'required',
-            'quantity'=> 'required',
-            'packing_quantity'=> 'required',
-            'order_limit'=> 'required',
             'status'=> 'required',
         ];
     }

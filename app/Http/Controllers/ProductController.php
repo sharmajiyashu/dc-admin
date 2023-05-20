@@ -41,8 +41,7 @@ class ProductController extends Controller
     public function store(StoreProductRequest $request)
     {
         $data = $request->validated();
-        $data['unit'] = $request->unit;
-        $data['detail'] = $request->unit;
+        $data['detail'] = $request->detail;
         $data['images'] = $request->unit;
         $data['user_id'] = Auth::user()->id;
         Product::create($data);
@@ -82,8 +81,7 @@ class ProductController extends Controller
     public function update(UpdateProductRequest $request, Product $product)
     {
         $data = $request->validated();
-        $data['unit'] = $request->unit;
-        $data['detail'] = $request->unit;
+        $data['detail'] = $request->detail;
         $data['images'] = $request->unit;
         $data['user_id'] = Auth::user()->id;
         $product->update($data);

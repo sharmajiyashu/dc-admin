@@ -55,25 +55,19 @@
                                     {{ csrf_field() }}
                                     
                                         <div class="row">
+
                                             <div class="col-md-6 col-12">
                                                 <div class="mb-1">
                                                     <label class="form-label" for="first-name-column">Product Name</label>
                                                     <input type="text" id="first-name-column" name="name" class="form-control" placeholder="Title" value="{{ old('name') }}" />
                                                 </div>
                                             </div>
+                                            
                                             <div class="col-md-6 col-12">
-                                                <div class="mb-1">
-                                                    <label class="form-label"  for="last-name-column">Status</label>
-                                                    <select class="form-select" name="status" id="basicSelect">
-                                                        <option value="Active">Active</option>
-                                                        <option value="Inactive">Inactive</option>
-                                                    </select>
-                                                </div>
-                                            </div><div class="col-md-6 col-12">
                                                 <div class="mb-1">
                                                     <label class="form-label"  for="last-name-column">Category</label>
                                                     <select class="form-select" name="category_id" id="basicSelect">
-                                                        <option value="Active">(Select Category)</option>
+                                                        <option value="">(Select Category)</option>
                                                         @foreach ($categories as $item)
                                                             <option value="{{ $item->id }}">{{ $item->title }}</option>
                                                         @endforeach
@@ -83,50 +77,11 @@
 
                                             <div class="col-md-6 col-12">
                                                 <div class="mb-1">
-                                                    <label class="form-label" for="first-name-column">Stock</label>
-                                                    <input type="number" id="first-name-column" name="stock" class="form-control" placeholder="Stock" value="{{ old('stock') }}" />
-                                                </div>
-                                            </div>
-
-                                            <div class="col-md-6 col-12">
-                                                <div class="mb-1">
-                                                    <label class="form-label" for="first-name-column">Price MRP*</label>
-                                                    <input type="text" id="first-name-column" name="mrp" class="form-control" placeholder="M.R.P" value="{{ old('mrp') }}" />
-                                                </div>
-                                            </div>
-
-                                            <div class="col-md-6 col-12">
-                                                <div class="mb-1">
-                                                    <label class="form-label" for="first-name-column">Selling Price*</label>
-                                                    <input type="text" id="first-name-column" name="sp" class="form-control" placeholder="S.P." value="{{ old('sp') }}" />
-                                                </div>
-                                            </div>
-
-                                            <div class="col-md-6 col-12">
-                                                <div class="mb-1">
-                                                    <label class="form-label" for="first-name-column">Order Limit*</label>
-                                                    <input type="text" id="first-name-column" name="order_limit" class="form-control" placeholder="Order Limit" value="{{ old('order_limit') }}" />
-                                                </div>
-                                            </div>
-
-                                            <div class="col-md-6 col-12">
-                                                <div class="mb-1">
-                                                    <label class="form-label" for="first-name-column">Quantity*</label>
-                                                    <input type="text" id="first-name-column" name="quantity" class="form-control" placeholder="Quantity" value="{{ old('quantity') }}" />
-                                                </div>
-                                            </div>
-                                            
-                                            <div class="col-md-6 col-12">
-                                                <div class="mb-1">
-                                                    <label class="form-label" for="first-name-column">Unit*</label>
-                                                    <input type="text" id="first-name-column" name="unit" class="form-control" placeholder="Unit" value="{{ old('unit') }}" />
-                                                </div>
-                                            </div>
-                                            
-                                            <div class="col-md-6 col-12">
-                                                <div class="mb-1">
-                                                    <label class="form-label" for="first-name-column">Packing Quantity*</label>
-                                                    <input type="text" id="first-name-column" name="packing_quantity" class="form-control" placeholder="Packing Quantity" value="{{ old('packing_quantity') }}" />
+                                                    <label class="form-label"  for="last-name-column">Status</label>
+                                                    <select class="form-select" name="status" id="basicSelect">
+                                                        <option value="Active">Active</option>
+                                                        <option value="Inactive">Inactive</option>
+                                                    </select>
                                                 </div>
                                             </div>
                                             

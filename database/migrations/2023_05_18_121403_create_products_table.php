@@ -17,14 +17,7 @@ return new class extends Migration
             $table->id();
             $table->bigInteger('user_id');
             $table->string('name',50);
-            $table->bigInteger('stock');
             $table->bigInteger('category_id');
-            $table->float('mrp');
-            $table->float('sp');
-            $table->bigInteger('order_limit');
-            $table->bigInteger('quantity');
-            $table->string('unit')->nullable();
-            $table->bigInteger('packing_quantity');
             $table->enum('status', ['Active', 'Inactive'])->default('Active');
             $table->longtext('detail')->nullable();
             $table->longtext('images')->nullable();

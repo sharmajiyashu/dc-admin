@@ -54,11 +54,7 @@
                                                 <th>Sr.no</th>
                                                 <th>Name</th>
                                                 <th>Category</th>
-                                                <th>mrp</th>
-                                                <th>sp</th>
-                                                <th>stock</th>
                                                 <th>status</th>
-                                                <th>packing quantity</th>
                                                 <th>Created Date</th>
                                                 <th>Action</th>
                                             </tr>
@@ -70,16 +66,11 @@
                                                 <th scope="row">{{ $i }}</th>
                                                 <td><strong>{{ $val->name }}</strong></td>
                                                 <td>{{ $val->category_name }}</td>
-                                                <td>{{ $val->mrp }}</td>
-                                                <td>{{ $val->sp }}</td>
-                                                <td>{{ $val->stock }}</td>
                                                 <td class="{{$val->status}} text-bold">{{ $val->status }}</td>
-                                                <td>{{ $val->packing_quantity }}</td>
                                                 <td>{{ date('d-M-y H:i:s',strtotime($val->created_at)) }}</td>
                                                 <td>
                                                     <a  href="{{route('products.edit',$val->id)}}">
                                                         <i data-feather="edit-2" class="me-50"></i>
-                                                        {{-- <span>Edit</span> --}}
                                                     </a>
 
                                                     <a href="#" class="text-danger" data-bs-toggle="modal" data-bs-target="#danger_ke"><i data-feather="trash" class="me-50"></i></a>
