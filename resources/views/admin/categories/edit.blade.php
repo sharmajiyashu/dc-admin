@@ -14,7 +14,7 @@
                 <div class="content-header-left col-md-9 col-12 mb-2">
                     <div class="row breadcrumbs-top">
                         <div class="col-12">
-                            <h2 class="content-header-title float-start mb-0">category</h2>
+                            <h2 class="content-header-title float-start mb-0">Category</h2>
                             <div class="breadcrumb-wrapper">
                                 <ol class="breadcrumb">
                                     <li class="breadcrumb-item"><a href="{{ url('/')}}">Home</a>
@@ -58,7 +58,7 @@
                                         @method('PATCH')
                                     
                                         <div class="row">
-                                            <div class="col-md-12 col-12">
+                                            <div class="col-md-6 col-12">
                                                 <div class="mb-1">
                                                     <label class="form-label" for="first-name-column">Title</label>
                                                     <input type="text" id="first-name-column" name="title" class="form-control" placeholder="Title" value="{{ $category->title }}" />
@@ -73,12 +73,12 @@
                                                     </select>
                                                 </div>
                                             </div>
-                                            <div class="col-md-6 col-12">
+                                            {{-- <div class="col-md-6 col-12">
                                                 <div class="mb-1">
                                                     <label class="form-label" for="first-name-column">Packing Quantity</label>
                                                     <input type="text" id="first-name-column" name="packing_quantity" class="form-control" placeholder="Packing Quantity" value="{{ $category->packing_quantity }}" />
                                                 </div>
-                                            </div>
+                                            </div> --}}
                                             
                                             
                                             <div class="col-12">

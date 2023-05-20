@@ -6,9 +6,11 @@
 <style>
     .Active{
         color: green;
+        font-weight: 900;
     }
     .Inactive{
         color: red;
+        font-weight: 900;
     }
 </style>
 
@@ -54,7 +56,7 @@
                                                 <th>Sr.no</th>
                                                 <th>title</th>
                                                 <th>status</th>
-                                                <th>packing quantity</th>
+                                                {{-- <th>packing quantity</th> --}}
                                                 <th>Created Date</th>
                                                 <th>Action</th>
                                             </tr>
@@ -66,7 +68,7 @@
                                                 <th scope="row">{{ $i }}</th>
                                                 <td><strong>{{ $val->title }}</strong></td>
                                                 <td class="{{$val->status}} text-bold">{{ $val->status }}</td>
-                                                <td>{{ $val->packing_quantity }}</td>
+                                                {{-- <td>{{ $val->packing_quantity }}</td> --}}
                                                 <td>{{ date('d-M-y H:i:s',strtotime($val->created_at)) }}</td>
                                                 <td>
                                                     <a  href="{{route('categories.edit',$val->id)}}">

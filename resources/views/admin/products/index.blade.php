@@ -6,9 +6,11 @@
 <style>
     .Active{
         color: green;
+        font-weight: 900;
     }
     .Inactive{
         color: red;
+        font-weight: 900;
     }
 </style>
 
