@@ -19,9 +19,9 @@
                                 <ol class="breadcrumb">
                                     <li class="breadcrumb-item"><a href="{{ url('/')}}">Home</a>
                                     </li>
-                                    <li class="breadcrumb-item"><a href="{{ route('products.index') }}">products</a>
+                                    <li class="breadcrumb-item"><a href="{{ route('products.index') }}">Products</a>
                                     </li>
-                                    <li class="breadcrumb-item active"><a href="#">Edit</a>
+                                    <li class="breadcrumb-item active">Edit
                                     </li>
                                 </ol>
                             </div>
@@ -51,7 +51,7 @@
                                     <h4 class="card-title">Update</h4>
                                 </div>
                                 <div class="card-body">
-                                    <form class="form" action="{{ route('products.update',$product->id) }}" method="POST">
+                                    <form class="form" action="{{ route('products.update',$product->id) }}" method="POST" enctype="multipart/form-data">
                                         {{ csrf_field() }}
                                         @method('PATCH')
 
@@ -75,6 +75,8 @@
                                                 </div>
                                             </div>
 
+                                            
+
                                             <div class="col-md-6 col-12">
                                                 <div class="mb-1">
                                                     <label class="form-label"  for="last-name-column">Status</label>
@@ -82,6 +84,45 @@
                                                         <option value="Active"  {{ (isset($product->status) && $product->status == 'Active') ? 'selected' : '' }}>Active</option>
                                                         <option value="Inactive" {{ (isset($product->status) && $product->status == 'Inactive') ? 'selected' : '' }}>Inactive</option>
                                                     </select>
+                                                </div>
+                                            </div>
+
+                                            <div class="col-md-12 col-12">
+                                                <div class="mb-1">
+                                                    <label class="form-label"  for="last-name-column">Images</label>
+                                                    <div class="row">
+                                                        @if (!empty($product->images))
+                                                            @foreach ($product->images as $item)
+                                                                <div class="col-md-1">
+                                                                    <div>
+                                                                        <i data-feather="trash" class="me-50" onclick="delete_image({{ $product->id }},'{{ $item }}')" style="color:red"></i>
+                                                                    </div>
+                                                                    <div><img src="{{ asset('public/images/products/'.$item) }}" alt="" width="100"></div>
+                                                                </div>
+                                                            @endforeach
+                                                        @endif
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div class="col-md-12" >
+                                                <div class="row" id="appentd_image" >
+
+                                                </div>
+                                            </div>
+                                            <script>
+                                                function append_image(){
+                                                    $("#appentd_image").append(`<div class="col-md-6 col-12">
+                                                        <div class="mb-1">
+                                                            <input type="file" name="image[]" class="form-control">
+                                                        </div>
+                                                    </div>`);
+                                                }
+                                            </script>
+
+                                            <div class="col-md-12">
+                                                <div class="mb-1">
+                                                    <a href="#" class="btn-danger" style="padding: 4px;" onclick="append_image()">Add More Image</a>
                                                 </div>
                                             </div>
                                             
@@ -110,4 +151,34 @@
         </div>
     </div>
     <!-- END: Content-->
+
+    <script>
+        function delete_image(id,name){
+            $('#product_image').val(name);
+            $('#danger_ke').modal('show');
+        }
+    </script>
+
+    <div class="modal fade modal-danger text-start" id="danger_ke" tabindex="-1" aria-labelledby="myModalLabel120" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="myModalLabel120">Delete Product</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        Are you Shure you want to delete image !
+                    </div>
+                    <form action="{{ route('delete-product-image') }}" method="POST">
+                        @csrf
+                        <input type="hidden" name="product_id" id="" value="{{ $product->id }}">
+                        <input type="hidden" name="image" id="product_image" value="">
+                        <div class="modal-footer">
+                            <button type="submit" class="btn btn-danger" data-bs-dismiss="modal">Delete</button>
+                        </div>
+                    </form>
+                </div>
+        </div>
+    </div>
 @endsection

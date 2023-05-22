@@ -29,7 +29,7 @@
                                 <ol class="breadcrumb">
                                     <li class="breadcrumb-item"><a href="{{url('/')}}">Home</a>
                                     </li>
-                                    <li class="breadcrumb-item"><a href="{{ route('categories.index') }}">categories</a>
+                                    <li class="breadcrumb-item"><a href="{{ route('categories.index') }}">Categories</a>
                                     </li>
                                     <li class="breadcrumb-item active">List
                                     </li>
@@ -68,18 +68,16 @@
                                                 <th scope="row">{{ $i }}</th>
                                                 <td><strong>{{ $val->title }}</strong></td>
                                                 <td class="{{$val->status}} text-bold">{{ $val->status }}</td>
-                                                {{-- <td>{{ $val->packing_quantity }}</td> --}}
                                                 <td>{{ date('d-M-y H:i:s',strtotime($val->created_at)) }}</td>
                                                 <td>
                                                     <a  href="{{route('categories.edit',$val->id)}}">
                                                         <i data-feather="edit-2" class="me-50"></i>
-                                                        {{-- <span>Edit</span> --}}
                                                     </a>
 
-                                                    <a href="#" class="text-danger" data-bs-toggle="modal" data-bs-target="#danger_ke"><i data-feather="trash" class="me-50"></i></a>
+                                                    <a href="#" class="text-danger" data-bs-toggle="modal" data-bs-target="#danger_ke{{ $val->id }}"><i data-feather="trash" class="me-50"></i></a>
 
                                                     <!-- Modal -->
-                                                    <div class="modal fade modal-danger text-start" id="danger_ke" tabindex="-1" aria-labelledby="myModalLabel120" aria-hidden="true">
+                                                    <div class="modal fade modal-danger text-start" id="danger_ke{{ $val->id }}" tabindex="-1" aria-labelledby="myModalLabel120" aria-hidden="true">
                                                         <div class="modal-dialog modal-dialog-centered">
                                                             
                                                                 <div class="modal-content">

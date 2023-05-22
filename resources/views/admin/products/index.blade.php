@@ -66,7 +66,67 @@
                                             @foreach($products as $key => $val)
                                             <tr>
                                                 <th scope="row">{{ $i }}</th>
-                                                <td><strong>{{ $val->name }}</strong></td>
+                                                <td>
+                                                    {{-- <a  href="{{route('products.edit',$val->id)}}">
+                                                        <i data-feather="edit-2" class="me-50"></i>
+                                                    </a> --}}
+
+                                                    <a href="#" class="text-primary" data-bs-toggle="modal" data-bs-target="#danger_ke{{ $val->id }}"><strong>{{ $val->name }}</strong></a>
+
+                                                    <!-- Modal -->
+                                                    <div class="modal fade modal-dark text-start" id="danger_ke{{ $val->id }}" tabindex="-1" aria-labelledby="myModalLabel120" aria-hidden="true">
+                                                        <div class="modal-dialog modal-dialog-centered modal-lg">
+                                                            
+                                                                <div class="modal-content">
+                                                                    <div class="modal-header">
+                                                                        <h3 class="modal-title" id="myModalLabel120">Product Detail</h3>
+                                                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                                    </div>
+                                                                    <div class="modal-body">
+                                                                        <ul class="list-unstyled">
+                                                                            <li class="mb-75">
+                                                                                <span class="fw-bolder me-25">Product Name :</span>
+                                                                                <span class="text-bold">{{ $val->name }}</span>
+                                                                            </li>
+                                                                            <li class="mb-75">
+                                                                                <span class="fw-bolder me-25">Category :</span>
+                                                                                <span>{{ $val->category_name }}</span>
+                                                                            </li>
+                                                                            <li class="mb-75">
+                                                                                <span class="fw-bolder me-25">Status :</span>
+                                                                                <span class="{{$val->status}} text-bold">{{ $val->status }}</span>
+                                                                            </li>
+                                                                            <li class="mb-75">
+                                                                                <span class="fw-bolder me-25">Created Date :</span>
+                                                                                <span>{{ $val->created_at }}</span>
+                                                                            </li>
+                                                                            <li class="mb-75">
+                                                                                <span class="fw-bolder me-25">Description :</span>
+                                                                                <span>{{ $val->detail }}</span>
+                                                                            </li>
+
+                                                                            <li class="mb-75">
+                                                                                <span class="fw-bolder me-25">Images :</span>
+                                                                                <div class="row">
+                                                                                    @if (!empty($val->images))
+                                                                                        @php
+                                                                                            $products = json_decode($val->images);
+                                                                                        @endphp
+                                                                                        @foreach ($products as $item)
+                                                                                            <div class="col-md-2">
+                                                                                                <img src="{{ asset('public/images/products/'.$item) }}" alt="" width="100">
+                                                                                            </div>
+                                                                                        @endforeach
+                                                                                    @endif
+                                                                                </div>
+                                                                            </li>
+                                                                          </ul>
+                                                                    </div>
+                                                                    
+                                                                </div>
+                                                        </div>
+                                                    </div>
+                                                </td>
                                                 <td>{{ $val->category_name }}</td>
                                                 <td class="{{$val->status}} text-bold">{{ $val->status }}</td>
                                                 <td>{{ date('d-M-y H:i:s',strtotime($val->created_at)) }}</td>
@@ -75,10 +135,10 @@
                                                         <i data-feather="edit-2" class="me-50"></i>
                                                     </a>
 
-                                                    <a href="#" class="text-danger" data-bs-toggle="modal" data-bs-target="#danger_ke"><i data-feather="trash" class="me-50"></i></a>
+                                                    <a href="#" class="text-danger" data-bs-toggle="modal" data-bs-target="#danger_ke{{ $val->id }}"><i data-feather="trash" class="me-50"></i></a>
 
                                                     <!-- Modal -->
-                                                    <div class="modal fade modal-danger text-start" id="danger_ke" tabindex="-1" aria-labelledby="myModalLabel120" aria-hidden="true">
+                                                    <div class="modal fade modal-danger text-start" id="danger_ke{{ $val->id }}" tabindex="-1" aria-labelledby="myModalLabel120" aria-hidden="true">
                                                         <div class="modal-dialog modal-dialog-centered">
                                                             
                                                                 <div class="modal-content">

@@ -19,9 +19,9 @@
                                 <ol class="breadcrumb">
                                     <li class="breadcrumb-item"><a href="{{ url('/')}}">Home</a>
                                     </li>
-                                    <li class="breadcrumb-item"><a href="{{ route('products.index') }}">products</a>
+                                    <li class="breadcrumb-item"><a href="{{ route('products.index') }}">Products</a>
                                     </li>
-                                    <li class="breadcrumb-item active"><a href="#">Add</a>
+                                    <li class="breadcrumb-item active">Add
                                     </li>
                                 </ol>
                             </div>
@@ -51,7 +51,7 @@
                                     <h4 class="card-title">Create</h4>
                                 </div>
                                 <div class="card-body">
-                                    <form class="form" action="{{ route('products.store') }}" method="POST">
+                                    <form class="form" action="{{ route('products.store') }}" method="POST" enctype="multipart/form-data">
                                     {{ csrf_field() }}
                                     
                                         <div class="row">
@@ -84,6 +84,36 @@
                                                     </select>
                                                 </div>
                                             </div>
+
+                                            <div class="col-md-6 col-12">
+                                                <div class="mb-1">
+                                                    <label class="form-label"  for="last-name-column">Image</label>
+                                                    <input type="file" name="image[]" class="form-control">
+                                                </div>
+                                            </div>
+
+                                            <div class="col-md-12" >
+                                                <div class="row" id="appentd_image" >
+
+                                                </div>
+                                            </div>
+
+                                            <div class="col-md-6">
+                                                <div class="mb-1">
+                                                    <a href="#" class="btn-danger" style="padding: 4px;" onclick="append_image()">Add More Image</a>
+                                                </div>
+                                            </div>
+
+                                            <script>
+                                                function append_image(){
+                                                    $("#appentd_image").append(`<div class="col-md-6 col-12">
+                                                        <div class="mb-1">
+                                                            <label class="form-label"  for="last-name-column">Image</label>
+                                                            <input type="file" name="image[]" class="form-control">
+                                                        </div>
+                                                    </div>`);
+                                                }
+                                            </script>
                                             
                                             <div class="col-md-12 col-12">
                                                 <div class="mb-1">

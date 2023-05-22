@@ -22,9 +22,11 @@ Route::group(['middleware' => 'AdminAuth'], function () {
     Route::get('/', function () {
         return view('admin.dashboard');
     });
+    Route::resource('categories',CategoryController::class);
+    Route::resource('products',ProductController::class);
+    Route::post('delete-image', [ProductController::class, 'delete_product_image'])->name('delete-product-image');
 
 });
-Route::resource('categories',CategoryController::class);
-Route::resource('products',ProductController::class);
+
 Route::get('login', [LoginController::class, 'index'])->name('admin.login');
 Route::post('check-login', [LoginController::class, 'check_login'])->name('check-login');

@@ -19,9 +19,9 @@
                                 <ol class="breadcrumb">
                                     <li class="breadcrumb-item"><a href="{{ url('admin')}}">Home</a>
                                     </li>
-                                    <li class="breadcrumb-item"><a href="{{ route('categories.index') }}">categories</a>
+                                    <li class="breadcrumb-item"><a href="{{ route('categories.index') }}">Categories</a>
                                     </li>
-                                    <li class="breadcrumb-item active"><a href="#">Add</a>
+                                    <li class="breadcrumb-item active">Add
                                     </li>
                                 </ol>
                             </div>
