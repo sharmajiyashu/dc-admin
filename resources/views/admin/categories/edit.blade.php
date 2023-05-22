@@ -53,7 +53,7 @@
                                 <div class="card-body">
                                     
 
-                                    <form class="form" action="{{ route('categories.update',$category->id) }}" method="POST">
+                                    <form class="form" action="{{ route('categories.update',$category->id) }}" method="POST" enctype="multipart/form-data">
                                         {{ csrf_field() }}
                                         @method('PATCH')
                                     
@@ -73,12 +73,23 @@
                                                     </select>
                                                 </div>
                                             </div>
-                                            {{-- <div class="col-md-6 col-12">
+                                            <div class="col-md-6 col-12">
                                                 <div class="mb-1">
-                                                    <label class="form-label" for="first-name-column">Packing Quantity</label>
-                                                    <input type="text" id="first-name-column" name="packing_quantity" class="form-control" placeholder="Packing Quantity" value="{{ $category->packing_quantity }}" />
+                                                    <label class="form-label" for="first-name-column">Icon</label>
+                                                    <div>
+                                                        <img src="{{ asset('public/images/categories/'.$category->image) }}" alt="">
+                                                    </div>
                                                 </div>
-                                            </div> --}}
+                                            </div>
+
+                                            <div class="col-md-6 col-12">
+                                                <div class="mb-1">
+                                                    <label class="form-label" for="first-name-column">Update Icon</label>
+                                                    <div>
+                                                        <input type="file" name="image" class="form-control">
+                                                    </div>
+                                                </div>
+                                            </div>
                                             
                                             
                                             <div class="col-12">

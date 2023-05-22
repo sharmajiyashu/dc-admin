@@ -51,16 +51,24 @@
                                     <h4 class="card-title">Create</h4>
                                 </div>
                                 <div class="card-body">
-                                    <form class="form" action="{{ route('categories.store') }}" method="POST">
+                                    <form class="form" action="{{ route('categories.store') }}" method="POST" enctype="multipart/form-data">
                                     {{ csrf_field() }}
                                     
                                         <div class="row">
-                                            <div class="col-md-6 col-12">
+                                            <div class="col-md-12 col-12">
                                                 <div class="mb-1">
                                                     <label class="form-label" for="first-name-column">Title</label>
                                                     <input type="text" id="first-name-column" name="title" class="form-control" placeholder="Title" value="{{ old('title') }}" />
                                                 </div>
                                             </div>
+
+                                            <div class="col-md-6 col-12">
+                                                <div class="mb-1">
+                                                    <label class="form-label"  for="last-name-column">Icon size(30/30)</label>
+                                                    <input type="file" name="image" class="form-control">
+                                                </div>
+                                            </div>
+
                                             <div class="col-md-6 col-12">
                                                 <div class="mb-1">
                                                     <label class="form-label"  for="last-name-column">Status</label>

@@ -14,7 +14,7 @@
                 <section id="dashboard-ecommerce">
                     <div class="row match-height">
                         <!-- Medal Card -->
-                        <div class="col-lg-4 col-12">
+                        {{-- <div class="col-lg-4 col-12">
                             <div class="row match-height">
                                 <!-- Bar Chart - Orders -->
                                 <div class="col-lg-6 col-md-3 col-6">
@@ -62,11 +62,11 @@
                                 </div>
                                 <!--/ Earnings Card -->
                             </div>
-                        </div>
+                        </div> --}}
                         <!--/ Medal Card -->
 
                         <!-- Statistics Card -->
-                        <div class="col-xl-8 col-md-6 col-12">
+                        <div class="col-xl-12 col-md-6 col-12">
                             <div class="card card-statistics">
                                 <div class="card-header">
                                     <h4 class="card-title">Statistics</h4>
@@ -80,12 +80,12 @@
                                             <div class="d-flex flex-row">
                                                 <div class="avatar bg-light-primary me-2">
                                                     <div class="avatar-content">
-                                                        <i data-feather="trending-up" class="avatar-icon"></i>
+                                                        <i data-feather="user" class="avatar-icon"></i>
                                                     </div>
                                                 </div>
                                                 <div class="my-auto">
-                                                    <h4 class="fw-bolder mb-0">230k</h4>
-                                                    <p class="card-text font-small-3 mb-0">Sales</p>
+                                                    <h4 class="fw-bolder mb-0">0</h4>
+                                                    <p class="card-text font-small-3 mb-0">Vandors</p>
                                                 </div>
                                             </div>
                                         </div>
@@ -97,7 +97,7 @@
                                                     </div>
                                                 </div>
                                                 <div class="my-auto">
-                                                    <h4 class="fw-bolder mb-0">8.549k</h4>
+                                                    <h4 class="fw-bolder mb-0">0</h4>
                                                     <p class="card-text font-small-3 mb-0">Customers</p>
                                                 </div>
                                             </div>
@@ -110,7 +110,7 @@
                                                     </div>
                                                 </div>
                                                 <div class="my-auto">
-                                                    <h4 class="fw-bolder mb-0">1.423k</h4>
+                                                    <h4 class="fw-bolder mb-0">{{ $total_product }}</h4>
                                                     <p class="card-text font-small-3 mb-0">Products</p>
                                                 </div>
                                             </div>
@@ -119,12 +119,12 @@
                                             <div class="d-flex flex-row">
                                                 <div class="avatar bg-light-success me-2">
                                                     <div class="avatar-content">
-                                                        <i data-feather="dollar-sign" class="avatar-icon"></i>
+                                                        <i data-feather="box" class="avatar-icon"></i>
                                                     </div>
                                                 </div>
                                                 <div class="my-auto">
-                                                    <h4 class="fw-bolder mb-0">$9745</h4>
-                                                    <p class="card-text font-small-3 mb-0">Revenue</p>
+                                                    <h4 class="fw-bolder mb-0">{{ $total_category }}</h4>
+                                                    <p class="card-text font-small-3 mb-0">Categories</p>
                                                 </div>
                                             </div>
                                         </div>

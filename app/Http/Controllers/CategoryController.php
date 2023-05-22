@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Category;
 use App\Http\Requests\StoreCategoryRequest;
 use App\Http\Requests\UpdateCategoryRequest;
+use Intervention\Image\ImageManagerStatic as Image;
 
 class CategoryController extends Controller
 {
@@ -37,8 +38,15 @@ class CategoryController extends Controller
      */
     public function store(StoreCategoryRequest $request)
     {
+        if($request->hasFile('image')) {
+            $image       = $request->file('image');
+            $filename    = $image->getClientOriginalName();
+            $image_resize = Image::make($image->getRealPath());              
+            $image_resize->resize(30,30);
+            $image_resize->save(public_path('images/categories/'.$filename));
+        }
         $data = $request->validated();
-        $data['packing_quantity'] = $request->packing_quantity;
+        $data['image'] = isset($filename) ? $filename : '';
         Category::create($data);
         return redirect()->route('categories.index')->with('success','Category Create Success');
     }
@@ -75,7 +83,15 @@ class CategoryController extends Controller
     public function update(UpdateCategoryRequest $request, Category $category)
     {
         $data = $request->validated();
-        $data['packing_quantity'] = $request->packing_quantity;
+        if($request->hasFile('image')) {
+            $image       = $request->file('image');
+            $filename    = $image->getClientOriginalName();
+            $image_resize = Image::make($image->getRealPath());              
+            $image_resize->resize(30,30);
+            $image_resize->save(public_path('images/categories/'.$filename));
+            $data['image'] = $filename;
+        }
+        
         $category->update($data);
         return redirect()->route('categories.index')->with('success','Category Update Success');
     }

@@ -54,6 +54,7 @@
                                         <thead>
                                             <tr>
                                                 <th>Sr.no</th>
+                                                <th>icon</th>
                                                 <th>title</th>
                                                 <th>status</th>
                                                 {{-- <th>packing quantity</th> --}}
@@ -66,6 +67,7 @@
                                             @foreach($categories as $key => $val)
                                             <tr>
                                                 <th scope="row">{{ $i }}</th>
+                                                <td><img src="{{ asset('public/images/categories/'.$val->image) }}" alt=""></td>
                                                 <td><strong>{{ $val->title }}</strong></td>
                                                 <td class="{{$val->status}} text-bold">{{ $val->status }}</td>
                                                 <td>{{ date('d-M-y H:i:s',strtotime($val->created_at)) }}</td>

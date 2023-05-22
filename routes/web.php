@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\LoginController;
+use App\Http\Controllers\Controller;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\ProductController;
 
@@ -19,9 +20,7 @@ use App\Http\Controllers\ProductController;
 
 Route::group(['middleware' => 'AdminAuth'], function () {
 
-    Route::get('/', function () {
-        return view('admin.dashboard');
-    });
+    Route::get('/',[Controller::class,'dashboard'])->name('/');
     Route::resource('categories',CategoryController::class);
     Route::resource('products',ProductController::class);
     Route::post('delete-image', [ProductController::class, 'delete_product_image'])->name('delete-product-image');
@@ -29,4 +28,5 @@ Route::group(['middleware' => 'AdminAuth'], function () {
 });
 
 Route::get('login', [LoginController::class, 'index'])->name('admin.login');
+Route::get('logout', [LoginController::class, 'logout'])->name('admin.logout');
 Route::post('check-login', [LoginController::class, 'check_login'])->name('check-login');
