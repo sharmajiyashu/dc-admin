@@ -71,10 +71,10 @@
                                                         <i data-feather="edit-2" class="me-50"></i>
                                                     </a> --}}
 
-                                                    <a href="#" class="text-primary" data-bs-toggle="modal" data-bs-target="#danger_ke{{ $val->id }}"><strong>{{ $val->name }}</strong></a>
+                                                    <a href="#" class="text-primary" data-bs-toggle="modal" data-bs-target="#danger_k{{ $val->id }}"><strong>{{ $val->name }}</strong></a>
 
                                                     <!-- Modal -->
-                                                    <div class="modal fade modal-dark text-start" id="danger_ke{{ $val->id }}" tabindex="-1" aria-labelledby="myModalLabel120" aria-hidden="true">
+                                                    <div class="modal fade modal-dark text-start" id="danger_k{{ $val->id }}" tabindex="-1" aria-labelledby="myModalLabel120" aria-hidden="true">
                                                         <div class="modal-dialog modal-dialog-centered modal-lg">
                                                             
                                                                 <div class="modal-content">
