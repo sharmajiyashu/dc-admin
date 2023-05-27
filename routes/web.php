@@ -18,6 +18,14 @@ use App\Http\Controllers\ProductController;
 |
 */
 
+
+Route::get('/unauthrozed', function () {
+    return response()->json([
+                'statusCode' => 401,
+                'status' => 'unauthrozed',
+                'message' => 'Unauthrized user'
+            ]);        
+    })->name('login');
 Route::group(['middleware' => 'AdminAuth'], function () {
 
     Route::get('/',[Controller::class,'dashboard'])->name('/');

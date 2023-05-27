@@ -7,7 +7,7 @@ use App\Models\Category;
 use App\Http\Requests\StoreProductRequest;
 use App\Http\Requests\UpdateProductRequest;
 use Illuminate\Http\Request;
-use Auth;
+use Illuminate\Support\Facades\Auth;
 
 class ProductController extends Controller
 {
@@ -18,7 +18,9 @@ class ProductController extends Controller
      */
     public function index()
     {
-        $products = Product::join('categories','categories.id','=','products.category_id')->select('products.*','categories.title as category_name')->get();
+        // $products = Product::join('categories','categories.id','=','products.category_id')->select('products.*','categories.title as category_name')->get();
+        $products = Product::with('category')->orderBy('id','desc')->get();
+        // dd($products[0]->category->title);
         return view('admin.products.index',compact('products'));
     }
 

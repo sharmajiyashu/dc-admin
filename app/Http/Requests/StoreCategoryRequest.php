@@ -25,8 +25,14 @@ class StoreCategoryRequest extends FormRequest
     {
         return [
             'title'=>'required',
-            'status'=> 'required',
-            'image'=> 'required',
+            'status'=> 'required|In:Inactive,Active',
+            'image'=> 'required|mimes:png,jpg',
+        ];
+    }
+
+    function messages()
+    {   return [
+                'title:required' => 'This Field is required'                
         ];
     }
 }

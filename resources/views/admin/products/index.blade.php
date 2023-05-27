@@ -90,7 +90,7 @@
                                                                             </li>
                                                                             <li class="mb-75">
                                                                                 <span class="fw-bolder me-25">Category :</span>
-                                                                                <span>{{ $val->category_name }}</span>
+                                                                                <span>{{ $val->category->title }}</span>
                                                                             </li>
                                                                             <li class="mb-75">
                                                                                 <span class="fw-bolder me-25">Status :</span>
@@ -127,7 +127,7 @@
                                                         </div>
                                                     </div>
                                                 </td>
-                                                <td>{{ $val->category_name }}</td>
+                                                <td>{{ $val->category->title }}</td>
                                                 <td class="{{$val->status}} text-bold">{{ $val->status }}</td>
                                                 <td>{{ date('d-M-y H:i:s',strtotime($val->created_at)) }}</td>
                                                 <td>
