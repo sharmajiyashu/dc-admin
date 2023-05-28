@@ -19,6 +19,7 @@ class CustomerController extends Controller
             $customer = Customer::updateOrCreate(['mobile' => $request->mobile]);
             $otp = rand(1000,9999);
             $customer->otp = $otp;
+            $customer->is_register = '0';
             $customer->save();
             $token =  $customer->createToken($customer->mobile)->plainTextToken;
             $token = explode('|',$token)[1];
@@ -32,7 +33,8 @@ class CustomerController extends Controller
         try{
             if($request->hasFile('image')) {
                 $image       = $request->file('image');
-                $filename    = $image->getClientOriginalName();
+                $extension = $image->getClientOriginalExtension();
+                $filename = uniqid().'.'.$extension;
                 $image_resize = Image::make($image->getRealPath());              
                 $image_resize->save(public_path('images/customers/'.$filename));
             }
@@ -40,7 +42,7 @@ class CustomerController extends Controller
             $data['image'] = isset($filename) ? $filename : '';
             $data['dob'] = date('Y-m-d H:i:s',strtotime($request->dob));
             $data['otp_verify'] = 'yes';
-            $data['is_register'] = 'yes';
+            $data['is_register'] = '1';
             $data['role_id'] = Role::$customer;
             Customer::where('id',$request->user()->id)->update($data);
             return $this->sendSuccess('CUSTOMER DETAIL UPLOAD SUCCESSFULLY',['data' => $request->user()]);

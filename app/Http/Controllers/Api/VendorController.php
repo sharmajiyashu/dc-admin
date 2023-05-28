@@ -17,14 +17,15 @@ class VendorController extends Controller
             $data = $request->validated();
             if($request->hasFile('image')) {
                 $image       = $request->file('image');
-                $filename    = $image->getClientOriginalName();
+                $extension = $image->getClientOriginalExtension();
+                $filename = uniqid().'.'.$extension;
                 $image_resize = Image::make($image->getRealPath());              
                 $image_resize->save(public_path('images/vandors/'.$filename));
                 $data['image'] = isset($filename) ? $filename : '';
             }
             $data['dob'] = date('Y-m-d H:i:s',strtotime($request->dob));
             $data['otp_verify'] = 'yes';
-            $data['is_register'] = 'yes';
+            $data['is_register'] = '1';
             $data['role_id'] = Role::$vendor;
             Vendor::where('id',$request->user()->id)->update($data);
             return $this->sendSuccess('Vandor DETAIL UPLOAD SUCCESSFULLY',['data' => $request->user()]);
