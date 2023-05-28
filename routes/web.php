@@ -26,6 +26,8 @@ Route::get('/unauthrozed', function () {
                 'message' => 'Unauthrized user'
             ]);        
     })->name('login');
+
+    
 Route::group(['middleware' => 'AdminAuth'], function () {
 
     Route::get('/',[Controller::class,'dashboard'])->name('/');

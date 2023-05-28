@@ -10,7 +10,7 @@ class Role extends Model
     use HasFactory;
 
     static $admin = 1;
-    static $vandor = 2;
+    static $vendor = 2;
     static $customer = 3;
     
 }

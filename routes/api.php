@@ -4,6 +4,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\ApiController;
 use App\Http\Controllers\Api\CustomerController;
+use App\Http\Controllers\Api\VendorController;
 
 /*
 |--------------------------------------------------------------------------
@@ -21,6 +22,10 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     
 });
 
+Route::group(['middleware' => 'auth:sanctum'], function () {
+    Route::post('customer_update_details',[CustomerController::class,'CustomersUpdateDetail']);
+    Route::post('vendors_update_details',[VendorController::class,'VendorsUpdateDetail']);
+});
 Route::post('customer_register_login_mobile',[CustomerController::class,'customerRegisterLoginMobile']);
-Route::get('checkmobile', [ApiController::class, 'checkmobile'])->name('checkmobile');
-Route::post('CustomerRegister', [ApiController::class, 'CustomerRegister'])->name('CustomerRegister');
+
+
