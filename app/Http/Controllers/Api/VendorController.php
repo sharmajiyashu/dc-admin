@@ -24,7 +24,6 @@ class VendorController extends Controller
                 $data['image'] = isset($filename) ? $filename : '';
             }
             $data['dob'] = date('Y-m-d H:i:s',strtotime($request->dob));
-            $data['otp_verify'] = 'yes';
             $data['is_register'] = '1';
             $data['role_id'] = Role::$vendor;
             Vendor::where('id',$request->user()->id)->update($data);
