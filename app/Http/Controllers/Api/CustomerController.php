@@ -17,17 +17,10 @@ class CustomerController extends Controller
     use ApiResponse;
     function customerRegisterLoginMobile(CustomerRegisterLoginMobileRequest $request){
         try{
-            $customer = Customer::updateOrCreate(['mobile' => $request->mobile]);
+            $customer = Customer::updateOrCreate(['mobile' => $request->mobile,'role_id' => Role::$customer]);
             // $otp = rand(1000,9999);
             $otp = 1234;
             $customer->otp = $otp;
-            if($customer->role_id == ''){
-                $customer->role_id = $request->role_id;
-                $customer->is_register = '0';
-            }elseif($customer->role_id != $request->role_id){
-                $data = Role::where('id',$customer->role_id)->first();
-                return $this->sendFailed('You Are Already As '.$data->name,200);
-            }
             $customer->save();
             return $this->sendSuccess('USER OTP SENT SUCCESSFULLY',['is_register' => $customer->is_register,'otp' => $otp,'user_id' => $customer->id]);
         }catch(\Throwable $e){
@@ -61,7 +54,6 @@ class CustomerController extends Controller
             $data['image'] = isset($filename) ? $filename : '';
             $data['dob'] = date('Y-m-d H:i:s',strtotime($request->dob));
             $data['is_register'] = '1';
-            $data['role_id'] = Role::$customer;
             Customer::where('id',$request->user()->id)->update($data);
             return $this->sendSuccess('CUSTOMER DETAIL UPLOAD SUCCESSFULLY',['data' => $request->user()]);
         }catch(\Throwable $e){

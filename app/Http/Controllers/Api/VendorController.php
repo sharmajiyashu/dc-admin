@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api;
 use App\Http\Requests\VendorsUpdateDetail;
+use App\Http\Requests\VendorRegisterLoginMobileRequest;
 use Intervention\Image\ImageManagerStatic as Image;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
@@ -12,6 +13,20 @@ use App\Traits\ApiResponse;
 class VendorController extends Controller
 {
     use ApiResponse;
+
+    function VendorRegisterLoginMobile(VendorRegisterLoginMobileRequest $request){
+        try{
+            $customer = Vendor::updateOrCreate(['mobile' => $request->mobile,'role_id' => Role::$vendor]);
+            // $otp = rand(1000,9999);
+            $otp = 1234;
+            $customer->otp = $otp;
+            $customer->save();
+            return $this->sendSuccess('USER OTP SENT SUCCESSFULLY',['is_register' => $customer->is_register,'otp' => $otp,'user_id' => $customer->id]);
+        }catch(\Throwable $e){
+            return $this->sendFailed($e->getMessage(). ' On Line '. $e->getLine(),200);
+        }
+    }
+
     function VendorsUpdateDetail(VendorsUpdateDetail $request){
         try{
             $data = $request->validated();
@@ -25,7 +40,6 @@ class VendorController extends Controller
             }
             $data['dob'] = date('Y-m-d H:i:s',strtotime($request->dob));
             $data['is_register'] = '1';
-            $data['role_id'] = Role::$vendor;
             Vendor::where('id',$request->user()->id)->update($data);
             return $this->sendSuccess('Vandor DETAIL UPLOAD SUCCESSFULLY',['data' => $request->user()]);
         }catch(\Throwable $e){

@@ -42,8 +42,11 @@
                 </ul> --}}
             </li>
 
-            {{-- <li class=" nav-item"><a class="d-flex align-items-center" href="app-file-manager.html"><i data-feather="save"></i><span class="menu-title text-truncate" data-i18n="File Manager">File Manager</span></a>
-            </li> --}}
+            <li class="nav-item"><a class="d-flex align-items-center" href="{{ route('vendors.index') }}"><i data-feather="user"></i><span class="menu-title text-truncate" data-i18n="File Manager">Vendor</span></a>
+            </li>
+
+            <li class="nav-item"><a class="d-flex align-items-center" href="{{ route('customers.index') }}"><i data-feather="user"></i><span class="menu-title text-truncate" data-i18n="File Manager">Customer</span></a>
+            </li>
             
            
             

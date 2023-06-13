@@ -5,6 +5,8 @@ use App\Http\Controllers\LoginController;
 use App\Http\Controllers\Controller;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\ProductController;
+use App\Http\Controllers\VendorController;
+use App\Http\Controllers\CustomerController;
 
 
 /*
@@ -33,6 +35,8 @@ Route::group(['middleware' => 'AdminAuth'], function () {
     Route::get('/',[Controller::class,'dashboard'])->name('/');
     Route::resource('categories',CategoryController::class);
     Route::resource('products',ProductController::class);
+    Route::resource('vendors',VendorController::class);
+    Route::resource('customers',CustomerController::class);
     Route::post('delete-image', [ProductController::class, 'delete_product_image'])->name('delete-product-image');
 
 });
