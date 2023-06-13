@@ -18,9 +18,7 @@ class ProductController extends Controller
      */
     public function index()
     {
-        // $products = Product::join('categories','categories.id','=','products.category_id')->select('products.*','categories.title as category_name')->get();
         $products = Product::with('category')->orderBy('id','desc')->get();
-        // dd($products[0]->category->title);
         return view('admin.products.index',compact('products'));
     }
 
@@ -49,7 +47,7 @@ class ProductController extends Controller
         if(!empty($request->image)){    
             $image = [];
             foreach($request->image as $key=>$val){ 
-                $image_name = $val->getClientOriginalName().'.'.time().rand(1,100);
+                $image_name = time().rand(1,100).'-'.$val->getClientOriginalName();
                 $val->move(public_path('images/products'), $image_name);
                 $image[] = $image_name;
             }
@@ -101,7 +99,7 @@ class ProductController extends Controller
         if(!empty($request->image)){    
             $image = json_decode($product->images);
             foreach($request->image as $key=>$val){ 
-                $image_name = $val->getClientOriginalName().'.'.time().rand(1,100);
+                $image_name = time().rand(1,100).'-'.$val->getClientOriginalName();
                 $val->move(public_path('images/products'), $image_name);
                 $image[] = $image_name;
             }

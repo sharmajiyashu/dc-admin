@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\ApiController;
 use App\Http\Controllers\Api\CustomerController;
 use App\Http\Controllers\Api\VendorController;
+use App\Http\Controllers\Api\ProductController;
 
 /*
 |--------------------------------------------------------------------------
@@ -25,9 +26,11 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 Route::group(['middleware' => 'auth:sanctum'], function () {
     Route::post('customer_update_details',[CustomerController::class,'CustomersUpdateDetail']);
     Route::post('vendors_update_details',[VendorController::class,'VendorsUpdateDetail']);
+    Route::post('addProduct',[ProductController::class,'addProduct']);
 });
 Route::post('customer_register_login_mobile',[CustomerController::class,'customerRegisterLoginMobile']);
 Route::post('vendor_register_login_mobile',[VendorController::class,'VendorRegisterLoginMobile']);
 Route::post('verify_otp',[CustomerController::class,'VarifyOtp']);
+
 
 
