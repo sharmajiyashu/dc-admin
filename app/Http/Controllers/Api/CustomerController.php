@@ -21,8 +21,13 @@ class CustomerController extends Controller
             // $otp = rand(1000,9999);
             $otp = 1234;
             $customer->otp = $otp;
-            $customer->is_register = '0';
-            $customer->role_id = $request->role_id;
+            if($customer->role_id == ''){
+                $customer->role_id = $request->role_id;
+                $customer->is_register = '0';
+            }elseif($customer->role_id != $request->role_id){
+                $data = Role::where('id',$customer->role_id)->first();
+                return $this->sendFailed('You Are Already As '.$data->name,200);
+            }
             $customer->save();
             return $this->sendSuccess('USER OTP SENT SUCCESSFULLY',['is_register' => $customer->is_register,'otp' => $otp,'user_id' => $customer->id]);
         }catch(\Throwable $e){

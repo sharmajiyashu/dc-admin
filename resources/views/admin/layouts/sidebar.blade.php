@@ -6,7 +6,7 @@
     <div class="navbar-header">
         <ul class="nav navbar-nav flex-row">
             <li class="nav-item me-auto"><a class="navbar-brand" href="../../../html/ltr/vertical-menu-template/index.html">
-                    <h2 class="brand-text">DC-JEWELRY</h2>
+                    <h2 class="brand-text">Jewellery Dukan</h2>
                 </a></li>
             <li class="nav-item nav-toggle"><a class="nav-link modern-nav-toggle pe-0" data-bs-toggle="collapse"><i class="d-block d-xl-none text-primary toggle-icon font-medium-4" data-feather="x"></i><i class="d-none d-xl-block collapse-toggle-icon font-medium-4  text-primary" data-feather="disc" data-ticon="disc"></i></a></li>
         </ul>
@@ -24,22 +24,22 @@
             </li>
             
             
-            <li class=" nav-item"><a class="d-flex align-items-center" href="#"><i data-feather="file-text"></i><span class="menu-title text-truncate" data-i18n="Invoice">Category</span></a>
-                <ul class="menu-content">
+            <li class=" nav-item"><a class="d-flex align-items-center" href="{{ route('categories.index') }}"><i data-feather="file-text"></i><span class="menu-title text-truncate" data-i18n="Invoice">Category</span></a>
+                {{-- <ul class="menu-content">
                     <li><a class="d-flex align-items-center" href="{{ route('categories.index') }}"><i data-feather="circle"></i><span class="menu-item text-truncate" data-i18n="List">List</span></a>
                     </li>
                     <li><a class="d-flex align-items-center" href="{{ route('categories.create') }}"><i data-feather="circle"></i><span class="menu-item text-truncate" data-i18n="Preview">Create</span></a>
                     </li>
-                </ul>
+                </ul> --}}
             </li>
 
-            <li class=" nav-item"><a class="d-flex align-items-center" href="#"><i data-feather="file-text"></i><span class="menu-title text-truncate" data-i18n="Invoice">Product</span></a>
-                <ul class="menu-content">
+            <li class=" nav-item"><a class="d-flex align-items-center" href="{{ route('products.index') }}"><i data-feather="file-text"></i><span class="menu-title text-truncate" data-i18n="Invoice">Product</span></a>
+                {{-- <ul class="menu-content">
                     <li><a class="d-flex align-items-center" href="{{ route('products.index') }}"><i data-feather="circle"></i><span class="menu-item text-truncate" data-i18n="List">List</span></a>
                     </li>
                     <li><a class="d-flex align-items-center" href="{{ route('products.create') }}"><i data-feather="circle"></i><span class="menu-item text-truncate" data-i18n="Preview">Create</span></a>
                     </li>
-                </ul>
+                </ul> --}}
             </li>
 
             {{-- <li class=" nav-item"><a class="d-flex align-items-center" href="app-file-manager.html"><i data-feather="save"></i><span class="menu-title text-truncate" data-i18n="File Manager">File Manager</span></a>

@@ -72,11 +72,12 @@
                                 @endif
 
 
-                                <h4 class="card-title mb-1">Welcome to DC-JEWELRY! 👋</h4>
+                                <h4 class="card-title mb-1">Welcome to Jewellery Dukan! 👋</h4>
                                 <p class="card-text mb-2">Please sign-in to your account by using email or password</p>
 
                                 <form class="auth-login-form mt-2" action="{{route('check-login')}}" method="POST">
                                     {{ csrf_field()}}
+                                    
                                     <div class="mb-1">
                                         <label for="login-email" class="form-label">Email</label>
                                         <input type="text" class="form-control" id="email" name="email" placeholder="john@example.com" aria-describedby="login-email" tabindex="1" autofocus />

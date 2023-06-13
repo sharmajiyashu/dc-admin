@@ -4,6 +4,11 @@
 @extends('admin.layouts.app')
 
 @section('content')
+<style>
+    .error{
+        color:red;
+    }
+</style>
 
  <!-- BEGIN: Content-->
  <div class="app-content content ">
@@ -57,14 +62,14 @@
                                         <div class="row">
                                             <div class="col-md-12 col-12">
                                                 <div class="mb-1">
-                                                    <label class="form-label" for="first-name-column">Title</label>
+                                                    <label class="form-label" for="first-name-column">Title <span class="error">*</span></label>
                                                     <input type="text" id="first-name-column" name="title" class="form-control" placeholder="Title" value="{{ old('title') }}" />
                                                 </div>
                                             </div>
 
                                             <div class="col-md-6 col-12">
                                                 <div class="mb-1">
-                                                    <label class="form-label"  for="last-name-column">Icon size(30/30)</label>
+                                                    <label class="form-label"  for="last-name-column">Icon size(30/30) <span class="error">*</span></label>
                                                     <input type="file" name="image" class="form-control">
                                                 </div>
                                             </div>
