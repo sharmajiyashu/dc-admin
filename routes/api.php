@@ -26,7 +26,10 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 Route::group(['middleware' => 'auth:sanctum'], function () {
     Route::post('customer_update_details',[CustomerController::class,'CustomersUpdateDetail']);
     Route::post('vendors_update_details',[VendorController::class,'VendorsUpdateDetail']);
-    Route::post('addProduct',[ProductController::class,'addProduct']);
+    Route::post('create_update_product',[ProductController::class,'CreateUpdateProduct']);
+    Route::post('get_vendor_products',[ProductController::class,'GetVendorProducts']);
+    Route::post('get_admin_products',[ProductController::class,'GetAdminProducts']);
+    Route::post('get_all_categories',[ProductController::class,'GetAllCategories']);
 });
 Route::post('customer_register_login_mobile',[CustomerController::class,'customerRegisterLoginMobile']);
 Route::post('vendor_register_login_mobile',[VendorController::class,'VendorRegisterLoginMobile']);

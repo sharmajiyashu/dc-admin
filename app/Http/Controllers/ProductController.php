@@ -48,6 +48,7 @@ class ProductController extends Controller
             $image = [];
             foreach($request->image as $key=>$val){ 
                 $image_name = time().rand(1,100).'-'.$val->getClientOriginalName();
+                $image_name = preg_replace('/\s+/', '', $image_name);
                 $val->move(public_path('images/products'), $image_name);
                 $image[] = $image_name;
             }
@@ -100,6 +101,7 @@ class ProductController extends Controller
             $image = json_decode($product->images);
             foreach($request->image as $key=>$val){ 
                 $image_name = time().rand(1,100).'-'.$val->getClientOriginalName();
+                $image_name = preg_replace('/\s+/', '', $image_name);
                 $val->move(public_path('images/products'), $image_name);
                 $image[] = $image_name;
             }
