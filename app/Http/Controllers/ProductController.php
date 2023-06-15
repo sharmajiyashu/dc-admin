@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Product;
 use App\Models\Category;
+use App\Models\Role;
 use App\Http\Requests\StoreProductRequest;
 use App\Http\Requests\UpdateProductRequest;
 use Illuminate\Http\Request;
@@ -18,7 +19,8 @@ class ProductController extends Controller
      */
     public function index()
     {
-        $products = Product::with('category')->orderBy('id','desc')->get();
+        // $products = Product::with('category')->orderBy('id','desc')->get();
+        $products = Product::select('products.*')->join('users','users.id','=','products.user_id')->join('roles','roles.id','=','users.role_id')->where(['users.role_id'=> Role::$admin,'products.status' => 'Active'])->with('category')->orderBy('id','desc')->get();
         return view('admin.products.index',compact('products'));
     }
 
