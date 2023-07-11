@@ -17,4 +17,9 @@ class Product extends Model
 
     static $limited = '1';
     static $unlimited = '0';
+
+    static $active = 'Active';
+    static $inactive = 'Inactive';
+
+    
 }

@@ -14,6 +14,9 @@ use App\Models\Vendor;
 use App\Models\WishCart;
 use App\Traits\ApiResponse;
 use Illuminate\Support\Str;
+use App\Http\Requests\ChangeStatusApi;
+use App\Models\Slab;
+use App\Models\StoreLink;
 
 class VendorController extends Controller
 {
@@ -92,6 +95,43 @@ class VendorController extends Controller
 
     function CategoryData($id){
         return Category::where('id',$id)->first();
+    }
+
+    public function ChangeStatus(ChangeStatusApi $request){
+        try{
+
+            if(!empty($request->product_id)){
+                $product = Product::where('id',$request->product_id)->first();
+                if($product->status == Product::$active){
+                    Product::where('id',$request->product_id)->update(['status' => Product::$inactive]);
+                }else{
+                    Product::where('id',$request->product_id)->update(['status' => Product::$active]);
+                }
+            }
+
+            if(!empty($request->slab_id)){
+                $slab = Slab::where('id',$request->slab_id)->first();
+                if($slab->status == Slab::$active){
+                    Slab::where('id',$request->slab_id)->update(['status' => Slab::$inactive]);
+                }else{
+                    Slab::where('id',$request->slab_id)->update(['status' => Slab::$active]);
+                }
+            }
+
+            if(!empty($request->link_id)){
+                $store_link = StoreLink::where('id',$request->link_id)->first();
+                if($slab->status == StoreLink::$active){
+                    StoreLink::where('id',$request->link_id)->update(['status' => Slab::$inactive]);
+                }else{
+                    StoreLink::where('id',$request->link_id)->update(['status' => Slab::$active]);
+                }
+            }
+
+            return $this->sendSuccess('STATUS CHANGE SUCCESSFULLY');
+
+        }catch(\Throwable $e){
+            return $this->sendFailed($e->getMessage(). ' On Line '. $e->getLine(),200);
+        }
     }
 
 

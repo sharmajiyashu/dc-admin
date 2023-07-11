@@ -11,5 +11,8 @@ class StoreLink extends Model
 
     protected $fillable = ['user_id','store_code' ,'vendor_id','status','in_add'];
 
+    static $active = '1';
+    static $inactive = '2';
+
     
 }

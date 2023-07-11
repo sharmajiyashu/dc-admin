@@ -12,6 +12,7 @@ class Slab extends Model
     protected $fillable = ['user_id','name','status','is_default','days'];
 
 
+    static $active = '1';
+    static $inactive = '2';
 
-    
 }
