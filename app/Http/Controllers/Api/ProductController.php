@@ -216,4 +216,62 @@ class ProductController extends Controller
         return Category::where('id',$id)->first();
     }
 
+    public function AddBulkProduct(Request $request){
+        try{
+            $data = $request->all();
+            $total_create = 0;
+            $total_update = 0;
+            foreach($data as $key=>$val){
+                $product = new Product();
+                $product->name = $val['name'];
+                $product->category_id = $val['category_id'];
+                $product->sp = $val['sp'];
+                $product->mrp = $val['mrp'];
+                $product->stock = $val['stock'];
+                $product->order_limit = $val['order_limit'];
+                $product->quantity = $val['quantity'];
+                $product->packing_quantity = $val['packing_quantity'];
+                $product->user_id = $request->user()->id;
+                $product->unit = $val['unit'];
+
+                $images = [];
+                $image = $val['image'];
+
+                if(!empty($image)){
+                    $image_name = time().rand(1,100).'-'.$image->getClientOriginalName();
+                    $image_name = preg_replace('/\s+/', '', $image_name);
+                    $val->move(public_path('images/products'), $image_name);
+                    $images[] = $image_name;
+                }
+
+                if (!empty($val['id'])) {
+                    $product = Product::find($val['id']); // Retrieve the existing record
+                    $product->update([
+                        'name' => $val['name'],
+                        'category_id' => $val['category_id'],
+                        'sp' => $val['sp'],
+                        'mrp' => $val['mrp'],
+                        'stock' => $val['stock'],
+                        'order_limit' => $val['order_limit'],
+                        'quantity' => $val['quantity'],
+                        'packing_quantity' => $val['packing_quantity'],
+                        'user_id' => $request->user()->id,
+                        'unit' => $val['unit'],
+                    ]);
+                    $total_update ++;
+                } else {
+                    $product->save();
+                    $total_create ++;
+                }
+
+
+
+
+            }
+            return $this->sendSuccess('PRODUCT '.$total_create.' CREATE ,'.$total_update.' UPDATE SUCCESSFULLY','');
+        }catch(\Throwable $e){
+            return $this->sendFailed($e->getMessage(). ' On Line '. $e->getLine(),200);
+        }
+    }
+
 }

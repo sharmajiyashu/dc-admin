@@ -26,7 +26,8 @@ class AddCustomersByMobileApi extends FormRequest
     public function rules()
     {
         return [
-            'mobile' => 'required|digits:10|numeric'
+            'mobile' => 'required|digits:10|numeric',
+            'slab_id' => 'nullable|exists:slabs,id|numeric'
         ];
     }
 

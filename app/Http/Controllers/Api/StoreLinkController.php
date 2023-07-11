@@ -14,6 +14,7 @@ use App\Http\Requests\UpdateStoreStatusApi;
 use App\Http\Requests\CustomersListApi;
 use App\Http\Requests\AddCustomersByMobileApi;
 use App\Models\Role;
+use App\Models\Slab;
 
 class StoreLinkController extends Controller
 {
@@ -106,17 +107,25 @@ class StoreLinkController extends Controller
         try{
             if($request->user()->role_id == Role::$vendor){
                 $customer = Vendor::where('mobile' ,$request->mobile)->where('role_id',Role::$customer)->first();
+                $slab_check = Slab::where('id',$request->slab_id)->where('user_id',$request->user()->id)->first();
+                if(!empty($slab_check)){
+                    $slab_id = $slab_check->id;
+                }else{
+                    $slab_id = Slab::where('is_default','1')->first();
+                    $slab_id = isset($slab_id->id) ? $slab_id->id :'';
+                }
+
                 if(!empty($customer)){
                     if(StoreLink::where(['user_id' => $customer->id , 'vendor_id' => $request->user()->id])->first()){
                         return $this->sendFailed('THE REQUEST IS ALREADY SUBMITTED',200);
                     }else{
-                        $store = StoreLink::create(['vendor_id' => $request->user()->id ,'user_id' => $customer->id,'store_code' => $request->user()->store_code,'status' => '1','in_add' => '1']);
+                        $store = StoreLink::create(['vendor_id' => $request->user()->id ,'user_id' => $customer->id,'store_code' => $request->user()->store_code,'status' => '1','in_add' => '1' ,'slab_id' => $slab_id]);
                         Vendor::where('id',$customer->id)->update(['active_store_code' => $request->user()->store_code]);
                         return $this->sendSuccess('SENT REQUEST SUCCESS SUCCESSFULLY', $store);
                     }
                 }else{
                     $customer = Customer::create(['mobile'=>$request->mobile ,'role_id' => Role::$customer ,'active_store_code' => $request->user()->store_code]);
-                    $store = StoreLink::create(['vendor_id' => $request->user()->id,'user_id' => $customer->id,'store_code' => $request->user()->store_code ,'status' => '1','in_add' => '1']);
+                    $store = StoreLink::create(['vendor_id' => $request->user()->id,'user_id' => $customer->id,'store_code' => $request->user()->store_code ,'status' => '1','in_add' => '1' ,'slab_id' => $slab_id]);
                     return $this->sendSuccess('SENT REQUEST SUCCESS SUCCESSFULLY', $store);
                 }
             }else{

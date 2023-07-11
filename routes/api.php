@@ -75,6 +75,7 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
     Route::post('change_order_status',[OrderController::class,'ChangeOrderStatus']);
     Route::post('delete_order_by_date',[OrderController::class,'DeleteByDate']);
 
+    Route::post('add_bulk_product',[ProductController::class,'AddBulkProduct']);
 
 });
 Route::post('customer_register_login_mobile',[CustomerController::class,'customerRegisterLoginMobile']);
