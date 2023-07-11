@@ -28,21 +28,22 @@ class CreateUpdateProductApi extends FormRequest
         return [
             'name' => 'required',
             'category_id' => 'required|exists:categories,id',
-            'sp' => 'required|numeric',
+            'sp' => 'nullable|numeric',
             'mrp' => 'required|numeric',
-            'order_limit' => 'required|numeric',
-            'quantity' => 'required|numeric',
-            'packing_quantity' => 'required|numeric',
-            'stock' => 'required|numeric',
+            'order_limit' => 'nullable|numeric',
+            'quantity' => 'nullable|numeric',
+            'packing_quantity' => 'nullable|numeric',
+            'stock' => 'nullable|numeric',
         ];
     }
 
     public function failedValidation(Validator $validator)
     {
         throw new HttpResponseException(response()->json([
-            'success'   => false,
-            'message'   => 'Validation errors',
-            'data'      => $validator->errors()->first()
+            'ResponseCode' => 200,
+            'Status'   => false,
+            'Message'   => 'Validation errors',
+            'Data'      => $validator->errors()->first()
         ]));
 
     }

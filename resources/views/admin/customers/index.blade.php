@@ -50,10 +50,11 @@
                                     {{-- <a href="{{route('customers.create')}}" class=" btn btn-info btn-gradient round  ">Add Category</a> --}}
                                 </div>
                                 <div class="card-datatable">
-                                    <table class="datatables-ajax table table-responsive">
+                                    <table class="datatables-ajax table table-responsive datatable_data">
                                         <thead>
                                             <tr>
                                                 <th>Sr.no</th>
+                                                <th>Image</th>
                                                 <th>Name</th>
                                                 <th>Mobile</th>
                                                 <th>Gender</th>
@@ -67,66 +68,10 @@
                                             @foreach($customers as $key => $val)
                                             <tr>
                                                 <th scope="row">{{ $i }}</th>
+                                                <td><img src="{{ asset('public/images/users/'.$val->image) }}" id="account-upload-img" class="uploadedAvatar rounded me-50" alt="profile image" height="100" width="100" /></td>
                                                 <td>
-                                                    {{-- <strong>{{ $val->name }}</strong> --}}
-                                                    <a href="#" data-bs-toggle="modal"
-                                                            data-bs-target="#order_detail_{{ $val->id }}"><strong>{{ $val->name }}</strong></a>
-
-                                                    <div class="modal fade text-start"
-                                                            id="order_detail_{{ $val->id }}" tabindex="-1"
-                                                            aria-labelledby="myModalLabel17" aria-hidden="true">
-                                                            <div class="modal-dialog modal-dialog-centered">
-                                                                <div class="modal-content">
-                                                                    <div class="modal-header">
-                                                                        <h4 class="modal-title" id="myModalLabel17">
-                                                                          Customer Detail</h4>
-
-                                                                        <button type="button" class="btn-close"
-                                                                            data-bs-dismiss="modal"
-                                                                            aria-label="Close"></button>
-                                                                    </div>
-                                                                    <div class="modal-body" style="    font-size: 14px;">
-                                                                
-                                                                        <div class="info-container">
-                                                                            <ul class="list-unstyled">
-                                                                                <li class="mb-75">
-                                                                                    <span class="fw-bolder me-25">Name:</span>
-                                                                                    <span>{{ $val->name }}</span>
-                                                                                </li>
-                                                                                <li class="mb-75">
-                                                                                    <span class="fw-bolder me-25">Mobile:</span>
-                                                                                    <span>{{ $val->mobile }}</span>
-                                                                                </li>
-                                                                                <li class="mb-75">
-                                                                                    <span class="fw-bolder me-25">Gender:</span>
-                                                                                    <span>{{ $val->gender }}</span>
-                                                                                </li>
-                                                                                <li class="mb-75">
-                                                                                    <span class="fw-bolder me-25">DOB:</span>
-                                                                                    <span>{{ $val->dob }}</span>
-                                                                                </li>
-                                                                                <li class="mb-75">
-                                                                                    <span class="fw-bolder me-25">State:</span>
-                                                                                    <span>{{ $val->state }}</span>
-                                                                                </li>
-                                                                                <li class="mb-75">
-                                                                                    <span class="fw-bolder me-25">City:</span>
-                                                                                    <span>{{ $val->city }}</span>
-                                                                                </li>
-                                                                                <li class="mb-75">
-                                                                                    <span class="fw-bolder me-25">Address:</span>
-                                                                                    <span>{{ $val->address }}</span>
-                                                                                </li>
-                                                                            </ul>
-                                                                        </div>
-
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                
-                                                
-                                                
+                                                    
+                                                    <a href="{{ route('customers.show',$val->id) }}"><strong>{{ $val->name }}</strong></a>
                                                 </td>
                                                 <td>{{ $val->mobile }}</td>
                                                 <td>{{ $val->gender }}</td>

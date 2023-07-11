@@ -27,16 +27,19 @@ class VarifyOtp extends FormRequest
     {
         return [
             'user_id' => 'required|exists:users,id',
-            'otp' => 'required',
+            'otp' => 'nullable|digits:4',
+            'pin' => 'nullable|digits:4',
+            
         ];
     }
 
     public function failedValidation(Validator $validator)
     {
         throw new HttpResponseException(response()->json([
-            'success'   => false,
-            'message'   => 'Validation errors',
-            'data'      => $validator->errors()->first()
+            'ResponseCode' => 200,
+            'Status'   => false,
+            'Message'   => 'Validation errors',
+            'Data'      => $validator->errors()->first()
         ]));
 
     }

@@ -6,6 +6,10 @@ use App\Http\Controllers\Api\ApiController;
 use App\Http\Controllers\Api\CustomerController;
 use App\Http\Controllers\Api\VendorController;
 use App\Http\Controllers\Api\ProductController;
+use App\Http\Controllers\Api\CartController;
+use App\Http\Controllers\Api\OrderController;
+use App\Http\Controllers\Api\StoreLinkController;
+use App\Http\Controllers\Api\SlabController;
 
 /*
 |--------------------------------------------------------------------------
@@ -27,9 +31,51 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
     Route::post('customer_update_details',[CustomerController::class,'CustomersUpdateDetail']);
     Route::post('vendors_update_details',[VendorController::class,'VendorsUpdateDetail']);
     Route::post('create_update_product',[ProductController::class,'CreateUpdateProduct']);
+    Route::post('delete_product',[ProductController::class,'DeleteProduct']);
     Route::post('get_vendor_products',[ProductController::class,'GetVendorProducts']);
     Route::post('get_admin_products',[ProductController::class,'GetAdminProducts']);
     Route::post('get_all_categories',[ProductController::class,'GetAllCategories']);
+    Route::post('add_product_in_cart',[CartController::class,'AddProductInCart']);
+    Route::post('cart_items',[CartController::class,'CartItem']);
+    Route::post('remove_cart_item',[CartController::class,'RemoveCartItem']);
+    Route::post('decrement_cart_quantity',[CartController::class,'DecrementCartQuantity']);
+    Route::post('create_order',[OrderController::class,'CreateOrder']);
+    Route::post('get_products',[ProductController::class,'GetProduct']);
+    Route::post('new_arrival_products',[ProductController::class,'NewArrivalProducts']);
+    Route::post('customer_order_history',[OrderController::class,'CustomerOrderHistory']);
+    Route::post('customer_order_detail',[OrderController::class,'CustomerOrderDetail']);
+    Route::post('send_request_to_store',[StoreLinkController::class,'SentRequest']);
+    Route::post('delete_store_request',[StoreLinkController::class,'DeleteRequest']);
+    Route::get('store_request_list',[StoreLinkController::class,'ListRequest']);
+
+    Route::post('customers_list',[StoreLinkController::class,'CustomersList']);
+    Route::post('change_store_status',[StoreLinkController::class,'ChangeRequestStatus']);
+    Route::post('link_customers_by_mobile',[StoreLinkController::class,'AddCustomersByMobile']);
+    Route::post('update_active_store',[StoreLinkController::class,'UpdateActiveStore']);
+    Route::post('upload_profile_image',[CustomerController::class,'UploadImage']);
+
+    Route::get('vendor_orders_history',[OrderController::class,'VendorOrderHistory']);
+    Route::post('vendor_orders_detail',[OrderController::class,'VendorOrderDetail']);
+
+    Route::post('get_product_by_name',[ProductController::class,'GetProductByName']);
+
+    Route::get('view_profile',[CustomerController::class,'ViewProfile']);
+
+    Route::post('create_update_slab',[SlabController::class,'CreateUpdate']);
+    Route::get('get_slabs',[SlabController::class,'GetSlab']);
+
+
+    Route::get('get_in_add_customers',[StoreLinkController::class,'GetInAddCustomer']);
+    Route::post('remove_add_in_customers',[StoreLinkController::class,'RemoveAdInCustomers']);
+
+    Route::get('vendor_wishlist_items',[VendorController::class,'WithListItem']);
+    Route::post('add_customer_in_slab',[SlabController::class,'AddCustomerInSlab']);
+    Route::post('get_slab_customer',[SlabController::class,'GetSlabCustomer']);
+
+    Route::post('change_order_status',[OrderController::class,'ChangeOrderStatus']);
+    Route::post('delete_order_by_date',[OrderController::class,'DeleteByDate']);
+
+
 });
 Route::post('customer_register_login_mobile',[CustomerController::class,'customerRegisterLoginMobile']);
 Route::post('vendor_register_login_mobile',[VendorController::class,'VendorRegisterLoginMobile']);

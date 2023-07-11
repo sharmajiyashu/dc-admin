@@ -50,10 +50,11 @@
                                     <a href="{{route('products.create')}}" class=" btn btn-info btn-gradient round  ">Add Product</a>
                                 </div>
                                 <div class="card-datatable">
-                                    <table class="datatables-ajax table table-responsive">
+                                    <table class="datatables-ajax table table-responsive datatable_data">
                                         <thead>
                                             <tr>
                                                 <th>Sr.no</th>
+                                                <th>Image</th>
                                                 <th>Name</th>
                                                 <th>Category</th>
                                                 <th>status</th>
@@ -66,10 +67,9 @@
                                             @foreach($products as $key => $val)
                                             <tr>
                                                 <th scope="row">{{ $i }}</th>
+                                                <td><img src="{{ asset('public/images/products/'.$val->image) }}" alt="" width="100"></td>
                                                 <td>
-                                                    {{-- <a  href="{{route('products.edit',$val->id)}}">
-                                                        <i data-feather="edit-2" class="me-50"></i>
-                                                    </a> --}}
+                                                    
 
                                                     <a href="#" class="text-primary" data-bs-toggle="modal" data-bs-target="#danger_k{{ $val->id }}"><strong>{{ $val->name }}</strong></a>
 
@@ -127,7 +127,7 @@
                                                         </div>
                                                     </div>
                                                 </td>
-                                                <td>{{ isset($val->category->title)  ? $val->category->title :'' }}</td>
+                                                <td>{{ isset($val->category_name)  ? $val->category_name :'' }}</td>
                                                 <td class="{{$val->status}} text-bold">{{ $val->status }}</td>
                                                 <td>{{ date('d-M-y H:i:s',strtotime($val->created_at)) }}</td>
                                                 <td>

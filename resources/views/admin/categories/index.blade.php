@@ -50,7 +50,7 @@
                                     <a href="{{route('categories.create')}}" class=" btn btn-info btn-gradient round  ">Add Category</a>
                                 </div>
                                 <div class="card-datatable">
-                                    <table class="datatables-ajax table table-responsive">
+                                    <table class="datatables-ajax table table-responsive datatable_data">
                                         <thead>
                                             <tr>
                                                 <th>Sr.no</th>
@@ -67,7 +67,7 @@
                                             @foreach($categories as $key => $val)
                                             <tr>
                                                 <th scope="row">{{ $i }}</th>
-                                                <td><img src="{{ asset('public/images/categories/'.$val->image) }}" alt=""></td>
+                                                <td><img src="{{ asset('public/images/categories/'.$val->image) }}" alt="" width="100"></td>
                                                 <td><strong>{{ $val->title }}</strong></td>
                                                 <td class="{{$val->status}} text-bold">{{ $val->status }}</td>
                                                 <td>{{ date('d-M-y H:i:s',strtotime($val->created_at)) }}</td>

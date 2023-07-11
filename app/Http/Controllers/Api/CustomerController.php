@@ -6,8 +6,11 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\CustomerRegisterLoginMobileRequest;
 use App\Http\Requests\CustomersUpdateDetail;
 use App\Http\Requests\VarifyOtp;
+use App\Http\Requests\UploadApi;
 use App\Models\Customer;
 use App\Models\Role;
+use App\Models\Product;
+use App\Models\Vendor;
 use App\Traits\ApiResponse;
 use Illuminate\Http\Request;
 use Intervention\Image\ImageManagerStatic as Image;
@@ -22,22 +25,31 @@ class CustomerController extends Controller
             $otp = 1234;
             $customer->otp = $otp;
             $customer->save();
-            return $this->sendSuccess('USER OTP SENT SUCCESSFULLY',['is_register' => $customer->is_register,'otp' => $otp,'user_id' => $customer->id]);
+            return $this->sendSuccess('USER OTP SENT SUCCESSFULLY',['is_register' => $customer->is_register,'otp' => $otp,'user_id' => $customer->id,'pin' => $customer->pin]);
         }catch(\Throwable $e){
             return $this->sendFailed($e->getMessage(). ' On Line '. $e->getLine(),200);
         }
     }
 
     function VarifyOtp(VarifyOtp $request){
-        $customer = Customer::where(['otp'=>$request->otp,'id'=>$request->user_id])->first();
+        if(!empty($request->otp)){
+            $customer = Customer::where(['otp'=>$request->otp,'id'=>$request->user_id])->first();
+            $type = 'OTP';
+        }elseif(!empty($request->pin)){
+            $customer = Customer::where(['pin'=>$request->pin,'id'=>$request->user_id])->first();
+            $type = 'PIN';
+        }else{
+            return $this->sendFailed('PLEASE ENTER PIN AND OTP',200);
+        }
+        $total_product = Product::where('user_id',$request->user_id)->count();
         if(!empty($customer)){
             $customer->otp_verify = '1';
             $customer->save();
             $token =  $customer->createToken($customer->mobile)->plainTextToken;
             $token = explode('|',$token)[1];
-            return $this->sendSuccess(' OTP VERIFIED SUCCESSFULLY',['is_register' => $customer->is_register,'user_id' => $customer->id,'accessToken' => $token]);
+            return $this->sendSuccess($type.' VERIFIED SUCCESSFULLY',['is_register' => $customer->is_register,'user_id' => $customer->id,'active_store_code' => $customer->active_store_code,'total_product' => $total_product,'accessToken' => $token]);
         }else{
-            return $this->sendFailed('INVALID OTP',200);
+            return $this->sendFailed('INVALID '.$type,200);
         }
     }
 
@@ -54,12 +66,40 @@ class CustomerController extends Controller
             $data['image'] = isset($filename) ? $filename : '';
             $data['dob'] = date('Y-m-d H:i:s',strtotime($request->dob));
             $data['is_register'] = '1';
+            $data['pin'] = $request->pin;
             Customer::where('id',$request->user()->id)->update($data);
-            return $this->sendSuccess('CUSTOMER DETAIL UPLOAD SUCCESSFULLY',['data' => $request->user()]);
+            $customer = Customer::where('id',$request->user()->id)->first();
+            return $this->sendSuccess('CUSTOMER DETAIL UPLOAD SUCCESSFULLY',$customer);
         }catch(\Throwable $e){
             return $this->sendFailed($e->getMessage(). ' On Line '. $e->getLine(),200);
         }
     }
 
+    public function UploadImage(UploadApi $request){
+        try{
+            if($request->hasFile('image')) {
+                $image       = $request->file('image');
+                $image_name = time().rand(1,100).'-'.$image->getClientOriginalName();
+                $image_name = preg_replace('/\s+/', '', $image_name);
+                $image->move(public_path('images/users'), $image_name);   
+                
+                Vendor::where('id',$request->user()->id)->update(['image' => $image_name]);
+                return $this->sendSuccess('UPLOAD IMAGE SUCCESSFULLY',['image' => asset('public/images/users/'.$image_name)]);
+            }else{
+                return $this->sendFailed('IMAGE IS INVALID',200);
+            }
+        }catch(\Throwable $e){
+            return $this->sendFailed($e->getMessage(). ' On Line '. $e->getLine(),200);
+        }
+    }
+
+    public function ViewProfile(Request $request){
+        try{
+            $request->user()->image = asset('public/images/users/'.$request->user()->image);
+            return $this->sendSuccess('DETAIL FETCH SUCCESS',$request->user());
+        }catch(\Throwable $e){
+            return $this->sendFailed($e->getMessage(). ' On Line '. $e->getLine(),200);
+        }
+    }
 
 }

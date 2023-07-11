@@ -1,0 +1,349 @@
+[19-Jun-2023 14:36:56 UTC] PHP Warning:  include(/home1/molni2j8/staging.premad.in/dc-dukaan/vendor/composer/../../app/Http/Kernel.php): Failed to open stream: No such file or directory in /home1/molni2j8/staging.premad.in/dc-dukaan/vendor/composer/ClassLoader.php on line 582
+[19-Jun-2023 14:36:56 UTC] PHP Warning:  include(): Failed opening '/home1/molni2j8/staging.premad.in/dc-dukaan/vendor/composer/../../app/Http/Kernel.php' for inclusion (include_path='.:/opt/cpanel/ea-php81/root/usr/share/pear') in /home1/molni2j8/staging.premad.in/dc-dukaan/vendor/composer/ClassLoader.php on line 582
+[19-Jun-2023 14:36:56 UTC] PHP Fatal error:  Uncaught ReflectionException: Class "App\Http\Kernel" does not exist in /home1/molni2j8/staging.premad.in/dc-dukaan/vendor/laravel/framework/src/Illuminate/Container/Container.php:889
+Stack trace:
+#0 /home1/molni2j8/staging.premad.in/dc-dukaan/vendor/laravel/framework/src/Illuminate/Container/Container.php(889): ReflectionClass->__construct('App\\Http\\Kernel')
+#1 /home1/molni2j8/staging.premad.in/dc-dukaan/vendor/laravel/framework/src/Illuminate/Container/Container.php(770): Illuminate\Container\Container->build('App\\Http\\Kernel')
+#2 /home1/molni2j8/staging.premad.in/dc-dukaan/vendor/laravel/framework/src/Illuminate/Foundation/Application.php(856): Illuminate\Container\Container->resolve('App\\Http\\Kernel', Array, false)
+#3 /home1/molni2j8/staging.premad.in/dc-dukaan/vendor/laravel/framework/src/Illuminate/Container/Container.php(296): Illuminate\Foundation\Application->resolve('App\\Http\\Kernel', Array, false)
+#4 /home1/molni2j8/staging.premad.in/dc-dukaan/vendor/laravel/framework/src/Illuminate/Container/Container.php(885): Illuminate\Container\Container->Illuminate\Container\{closure}(Object(Illuminate\Foundation\Application), Array)
+#5 /home1/molni2j8/staging.premad.in/dc-dukaan/vendor/laravel/framework/src/Illuminate/Container/Container.php(770): Illuminate\Container\Container->build(Object(Closure))
+#6 /home1/molni2j8/staging.premad.in/dc-dukaan/vendor/laravel/framework/src/Illuminate/Foundation/Application.php(856): Illuminate\Container\Container->resolve('Illuminate\\Cont...', Array, true)
+#7 /home1/molni2j8/staging.premad.in/dc-dukaan/vendor/laravel/framework/src/Illuminate/Container/Container.php(706): Illuminate\Foundation\Application->resolve('Illuminate\\Cont...', Array)
+#8 /home1/molni2j8/staging.premad.in/dc-dukaan/vendor/laravel/framework/src/Illuminate/Foundation/Application.php(841): Illuminate\Container\Container->make('Illuminate\\Cont...', Array)
+#9 /home1/molni2j8/staging.premad.in/dc-dukaan/index.php(49): Illuminate\Foundation\Application->make('Illuminate\\Cont...')
+#10 {main}
+
+Next Illuminate\Contracts\Container\BindingResolutionException: Target class [App\Http\Kernel] does not exist. in /home1/molni2j8/staging.premad.in/dc-dukaan/vendor/laravel/framework/src/Illuminate/Container/Container.php:891
+Stack trace:
+#0 /home1/molni2j8/staging.premad.in/dc-dukaan/vendor/laravel/framework/src/Illuminate/Container/Container.php(770): Illuminate\Container\Container->build('App\\Http\\Kernel')
+#1 /home1/molni2j8/staging.premad.in/dc-dukaan/vendor/laravel/framework/src/Illuminate/Foundation/Application.php(856): Illuminate\Container\Container->resolve('App\\Http\\Kernel', Array, false)
+#2 /home1/molni2j8/staging.premad.in/dc-dukaan/vendor/laravel/framework/src/Illuminate/Container/Container.php(296): Illuminate\Foundation\Application->resolve('App\\Http\\Kernel', Array, false)
+#3 /home1/molni2j8/staging.premad.in/dc-dukaan/vendor/laravel/framework/src/Illuminate/Container/Container.php(885): Illuminate\Container\Container->Illuminate\Container\{closure}(Object(Illuminate\Foundation\Application), Array)
+#4 /home1/molni2j8/staging.premad.in/dc-dukaan/vendor/laravel/framework/src/Illuminate/Container/Container.php(770): Illuminate\Container\Container->build(Object(Closure))
+#5 /home1/molni2j8/staging.premad.in/dc-dukaan/vendor/laravel/framework/src/Illuminate/Foundation/Application.php(856): Illuminate\Container\Container->resolve('Illuminate\\Cont...', Array, true)
+#6 /home1/molni2j8/staging.premad.in/dc-dukaan/vendor/laravel/framework/src/Illuminate/Container/Container.php(706): Illuminate\Foundation\Application->resolve('Illuminate\\Cont...', Array)
+#7 /home1/molni2j8/staging.premad.in/dc-dukaan/vendor/laravel/framework/src/Illuminate/Foundation/Application.php(841): Illuminate\Container\Container->make('Illuminate\\Cont...', Array)
+#8 /home1/molni2j8/staging.premad.in/dc-dukaan/index.php(49): Illuminate\Foundation\Application->make('Illuminate\\Cont...')
+#9 {main}
+  thrown in /home1/molni2j8/staging.premad.in/dc-dukaan/vendor/laravel/framework/src/Illuminate/Container/Container.php on line 891
+[19-Jun-2023 14:37:20 UTC] PHP Warning:  include(/home1/molni2j8/staging.premad.in/dc-dukaan/vendor/composer/../../app/Http/Kernel.php): Failed to open stream: No such file or directory in /home1/molni2j8/staging.premad.in/dc-dukaan/vendor/composer/ClassLoader.php on line 582
+[19-Jun-2023 14:37:20 UTC] PHP Warning:  include(): Failed opening '/home1/molni2j8/staging.premad.in/dc-dukaan/vendor/composer/../../app/Http/Kernel.php' for inclusion (include_path='.:/opt/cpanel/ea-php81/root/usr/share/pear') in /home1/molni2j8/staging.premad.in/dc-dukaan/vendor/composer/ClassLoader.php on line 582
+[19-Jun-2023 14:37:20 UTC] PHP Fatal error:  Uncaught ReflectionException: Class "App\Http\Kernel" does not exist in /home1/molni2j8/staging.premad.in/dc-dukaan/vendor/laravel/framework/src/Illuminate/Container/Container.php:889
+Stack trace:
+#0 /home1/molni2j8/staging.premad.in/dc-dukaan/vendor/laravel/framework/src/Illuminate/Container/Container.php(889): ReflectionClass->__construct('App\\Http\\Kernel')
+#1 /home1/molni2j8/staging.premad.in/dc-dukaan/vendor/laravel/framework/src/Illuminate/Container/Container.php(770): Illuminate\Container\Container->build('App\\Http\\Kernel')
+#2 /home1/molni2j8/staging.premad.in/dc-dukaan/vendor/laravel/framework/src/Illuminate/Foundation/Application.php(856): Illuminate\Container\Container->resolve('App\\Http\\Kernel', Array, false)
+#3 /home1/molni2j8/staging.premad.in/dc-dukaan/vendor/laravel/framework/src/Illuminate/Container/Container.php(296): Illuminate\Foundation\Application->resolve('App\\Http\\Kernel', Array, false)
+#4 /home1/molni2j8/staging.premad.in/dc-dukaan/vendor/laravel/framework/src/Illuminate/Container/Container.php(885): Illuminate\Container\Container->Illuminate\Container\{closure}(Object(Illuminate\Foundation\Application), Array)
+#5 /home1/molni2j8/staging.premad.in/dc-dukaan/vendor/laravel/framework/src/Illuminate/Container/Container.php(770): Illuminate\Container\Container->build(Object(Closure))
+#6 /home1/molni2j8/staging.premad.in/dc-dukaan/vendor/laravel/framework/src/Illuminate/Foundation/Application.php(856): Illuminate\Container\Container->resolve('Illuminate\\Cont...', Array, true)
+#7 /home1/molni2j8/staging.premad.in/dc-dukaan/vendor/laravel/framework/src/Illuminate/Container/Container.php(706): Illuminate\Foundation\Application->resolve('Illuminate\\Cont...', Array)
+#8 /home1/molni2j8/staging.premad.in/dc-dukaan/vendor/laravel/framework/src/Illuminate/Foundation/Application.php(841): Illuminate\Container\Container->make('Illuminate\\Cont...', Array)
+#9 /home1/molni2j8/staging.premad.in/dc-dukaan/index.php(49): Illuminate\Foundation\Application->make('Illuminate\\Cont...')
+#10 {main}
+
+Next Illuminate\Contracts\Container\BindingResolutionException: Target class [App\Http\Kernel] does not exist. in /home1/molni2j8/staging.premad.in/dc-dukaan/vendor/laravel/framework/src/Illuminate/Container/Container.php:891
+Stack trace:
+#0 /home1/molni2j8/staging.premad.in/dc-dukaan/vendor/laravel/framework/src/Illuminate/Container/Container.php(770): Illuminate\Container\Container->build('App\\Http\\Kernel')
+#1 /home1/molni2j8/staging.premad.in/dc-dukaan/vendor/laravel/framework/src/Illuminate/Foundation/Application.php(856): Illuminate\Container\Container->resolve('App\\Http\\Kernel', Array, false)
+#2 /home1/molni2j8/staging.premad.in/dc-dukaan/vendor/laravel/framework/src/Illuminate/Container/Container.php(296): Illuminate\Foundation\Application->resolve('App\\Http\\Kernel', Array, false)
+#3 /home1/molni2j8/staging.premad.in/dc-dukaan/vendor/laravel/framework/src/Illuminate/Container/Container.php(885): Illuminate\Container\Container->Illuminate\Container\{closure}(Object(Illuminate\Foundation\Application), Array)
+#4 /home1/molni2j8/staging.premad.in/dc-dukaan/vendor/laravel/framework/src/Illuminate/Container/Container.php(770): Illuminate\Container\Container->build(Object(Closure))
+#5 /home1/molni2j8/staging.premad.in/dc-dukaan/vendor/laravel/framework/src/Illuminate/Foundation/Application.php(856): Illuminate\Container\Container->resolve('Illuminate\\Cont...', Array, true)
+#6 /home1/molni2j8/staging.premad.in/dc-dukaan/vendor/laravel/framework/src/Illuminate/Container/Container.php(706): Illuminate\Foundation\Application->resolve('Illuminate\\Cont...', Array)
+#7 /home1/molni2j8/staging.premad.in/dc-dukaan/vendor/laravel/framework/src/Illuminate/Foundation/Application.php(841): Illuminate\Container\Container->make('Illuminate\\Cont...', Array)
+#8 /home1/molni2j8/staging.premad.in/dc-dukaan/index.php(49): Illuminate\Foundation\Application->make('Illuminate\\Cont...')
+#9 {main}
+  thrown in /home1/molni2j8/staging.premad.in/dc-dukaan/vendor/laravel/framework/src/Illuminate/Container/Container.php on line 891
+[20-Jun-2023 15:21:06 UTC] PHP Warning:  include(/home1/molni2j8/staging.premad.in/dc-dukaan/vendor/composer/../../app/Http/Kernel.php): Failed to open stream: No such file or directory in /home1/molni2j8/staging.premad.in/dc-dukaan/vendor/composer/ClassLoader.php on line 582
+[20-Jun-2023 15:21:06 UTC] PHP Warning:  include(): Failed opening '/home1/molni2j8/staging.premad.in/dc-dukaan/vendor/composer/../../app/Http/Kernel.php' for inclusion (include_path='.:/opt/cpanel/ea-php81/root/usr/share/pear') in /home1/molni2j8/staging.premad.in/dc-dukaan/vendor/composer/ClassLoader.php on line 582
+[20-Jun-2023 15:21:06 UTC] PHP Fatal error:  Uncaught ReflectionException: Class "App\Http\Kernel" does not exist in /home1/molni2j8/staging.premad.in/dc-dukaan/vendor/laravel/framework/src/Illuminate/Container/Container.php:889
+Stack trace:
+#0 /home1/molni2j8/staging.premad.in/dc-dukaan/vendor/laravel/framework/src/Illuminate/Container/Container.php(889): ReflectionClass->__construct('App\\Http\\Kernel')
+#1 /home1/molni2j8/staging.premad.in/dc-dukaan/vendor/laravel/framework/src/Illuminate/Container/Container.php(770): Illuminate\Container\Container->build('App\\Http\\Kernel')
+#2 /home1/molni2j8/staging.premad.in/dc-dukaan/vendor/laravel/framework/src/Illuminate/Foundation/Application.php(856): Illuminate\Container\Container->resolve('App\\Http\\Kernel', Array, false)
+#3 /home1/molni2j8/staging.premad.in/dc-dukaan/vendor/laravel/framework/src/Illuminate/Container/Container.php(296): Illuminate\Foundation\Application->resolve('App\\Http\\Kernel', Array, false)
+#4 /home1/molni2j8/staging.premad.in/dc-dukaan/vendor/laravel/framework/src/Illuminate/Container/Container.php(885): Illuminate\Container\Container->Illuminate\Container\{closure}(Object(Illuminate\Foundation\Application), Array)
+#5 /home1/molni2j8/staging.premad.in/dc-dukaan/vendor/laravel/framework/src/Illuminate/Container/Container.php(770): Illuminate\Container\Container->build(Object(Closure))
+#6 /home1/molni2j8/staging.premad.in/dc-dukaan/vendor/laravel/framework/src/Illuminate/Foundation/Application.php(856): Illuminate\Container\Container->resolve('Illuminate\\Cont...', Array, true)
+#7 /home1/molni2j8/staging.premad.in/dc-dukaan/vendor/laravel/framework/src/Illuminate/Container/Container.php(706): Illuminate\Foundation\Application->resolve('Illuminate\\Cont...', Array)
+#8 /home1/molni2j8/staging.premad.in/dc-dukaan/vendor/laravel/framework/src/Illuminate/Foundation/Application.php(841): Illuminate\Container\Container->make('Illuminate\\Cont...', Array)
+#9 /home1/molni2j8/staging.premad.in/dc-dukaan/index.php(49): Illuminate\Foundation\Application->make('Illuminate\\Cont...')
+#10 {main}
+
+Next Illuminate\Contracts\Container\BindingResolutionException: Target class [App\Http\Kernel] does not exist. in /home1/molni2j8/staging.premad.in/dc-dukaan/vendor/laravel/framework/src/Illuminate/Container/Container.php:891
+Stack trace:
+#0 /home1/molni2j8/staging.premad.in/dc-dukaan/vendor/laravel/framework/src/Illuminate/Container/Container.php(770): Illuminate\Container\Container->build('App\\Http\\Kernel')
+#1 /home1/molni2j8/staging.premad.in/dc-dukaan/vendor/laravel/framework/src/Illuminate/Foundation/Application.php(856): Illuminate\Container\Container->resolve('App\\Http\\Kernel', Array, false)
+#2 /home1/molni2j8/staging.premad.in/dc-dukaan/vendor/laravel/framework/src/Illuminate/Container/Container.php(296): Illuminate\Foundation\Application->resolve('App\\Http\\Kernel', Array, false)
+#3 /home1/molni2j8/staging.premad.in/dc-dukaan/vendor/laravel/framework/src/Illuminate/Container/Container.php(885): Illuminate\Container\Container->Illuminate\Container\{closure}(Object(Illuminate\Foundation\Application), Array)
+#4 /home1/molni2j8/staging.premad.in/dc-dukaan/vendor/laravel/framework/src/Illuminate/Container/Container.php(770): Illuminate\Container\Container->build(Object(Closure))
+#5 /home1/molni2j8/staging.premad.in/dc-dukaan/vendor/laravel/framework/src/Illuminate/Foundation/Application.php(856): Illuminate\Container\Container->resolve('Illuminate\\Cont...', Array, true)
+#6 /home1/molni2j8/staging.premad.in/dc-dukaan/vendor/laravel/framework/src/Illuminate/Container/Container.php(706): Illuminate\Foundation\Application->resolve('Illuminate\\Cont...', Array)
+#7 /home1/molni2j8/staging.premad.in/dc-dukaan/vendor/laravel/framework/src/Illuminate/Foundation/Application.php(841): Illuminate\Container\Container->make('Illuminate\\Cont...', Array)
+#8 /home1/molni2j8/staging.premad.in/dc-dukaan/index.php(49): Illuminate\Foundation\Application->make('Illuminate\\Cont...')
+#9 {main}
+  thrown in /home1/molni2j8/staging.premad.in/dc-dukaan/vendor/laravel/framework/src/Illuminate/Container/Container.php on line 891
+[23-Jun-2023 08:09:06 UTC] PHP Fatal error:  Cannot use isset() on the result of an expression (you can use "null !== expression" instead) in /home1/molni2j8/staging.premad.in/dc-dukaan/app/Http/Controllers/Api/ProductController.php on line 174
+[23-Jun-2023 09:59:20 UTC] PHP Warning:  include(/home1/molni2j8/staging.premad.in/dc-dukaan/vendor/composer/../../app/Http/Kernel.php): Failed to open stream: No such file or directory in /home1/molni2j8/staging.premad.in/dc-dukaan/vendor/composer/ClassLoader.php on line 582
+[23-Jun-2023 09:59:20 UTC] PHP Warning:  include(): Failed opening '/home1/molni2j8/staging.premad.in/dc-dukaan/vendor/composer/../../app/Http/Kernel.php' for inclusion (include_path='.:/opt/cpanel/ea-php81/root/usr/share/pear') in /home1/molni2j8/staging.premad.in/dc-dukaan/vendor/composer/ClassLoader.php on line 582
+[23-Jun-2023 09:59:20 UTC] PHP Warning:  include(/home1/molni2j8/staging.premad.in/dc-dukaan/vendor/composer/../../app/Http/Kernel.php): Failed to open stream: No such file or directory in /home1/molni2j8/staging.premad.in/dc-dukaan/vendor/composer/ClassLoader.php on line 582
+[23-Jun-2023 09:59:20 UTC] PHP Warning:  include(): Failed opening '/home1/molni2j8/staging.premad.in/dc-dukaan/vendor/composer/../../app/Http/Kernel.php' for inclusion (include_path='.:/opt/cpanel/ea-php81/root/usr/share/pear') in /home1/molni2j8/staging.premad.in/dc-dukaan/vendor/composer/ClassLoader.php on line 582
+[23-Jun-2023 09:59:20 UTC] PHP Fatal error:  Uncaught ReflectionException: Class "App\Http\Kernel" does not exist in /home1/molni2j8/staging.premad.in/dc-dukaan/vendor/laravel/framework/src/Illuminate/Container/Container.php:889
+Stack trace:
+#0 /home1/molni2j8/staging.premad.in/dc-dukaan/vendor/laravel/framework/src/Illuminate/Container/Container.php(889): ReflectionClass->__construct('App\\Http\\Kernel')
+#1 /home1/molni2j8/staging.premad.in/dc-dukaan/vendor/laravel/framework/src/Illuminate/Container/Container.php(770): Illuminate\Container\Container->build('App\\Http\\Kernel')
+#2 /home1/molni2j8/staging.premad.in/dc-dukaan/vendor/laravel/framework/src/Illuminate/Foundation/Application.php(856): Illuminate\Container\Container->resolve('App\\Http\\Kernel', Array, false)
+#3 /home1/molni2j8/staging.premad.in/dc-dukaan/vendor/laravel/framework/src/Illuminate/Container/Container.php(296): Illuminate\Foundation\Application->resolve('App\\Http\\Kernel', Array, false)
+#4 /home1/molni2j8/staging.premad.in/dc-dukaan/vendor/laravel/framework/src/Illuminate/Container/Container.php(885): Illuminate\Container\Container->Illuminate\Container\{closure}(Object(Illuminate\Foundation\Application), Array)
+#5 /home1/molni2j8/staging.premad.in/dc-dukaan/vendor/laravel/framework/src/Illuminate/Container/Container.php(770): Illuminate\Container\Container->build(Object(Closure))
+#6 /home1/molni2j8/staging.premad.in/dc-dukaan/vendor/laravel/framework/src/Illuminate/Foundation/Application.php(856): Illuminate\Container\Container->resolve('Illuminate\\Cont...', Array, true)
+#7 /home1/molni2j8/staging.premad.in/dc-dukaan/vendor/laravel/framework/src/Illuminate/Container/Container.php(706): Illuminate\Foundation\Application->resolve('Illuminate\\Cont...', Array)
+#8 /home1/molni2j8/staging.premad.in/dc-dukaan/vendor/laravel/framework/src/Illuminate/Foundation/Application.php(841): Illuminate\Container\Container->make('Illuminate\\Cont...', Array)
+#9 /home1/molni2j8/staging.premad.in/dc-dukaan/index.php(49): Illuminate\Foundation\Application->make('Illuminate\\Cont...')
+#10 {main}
+
+Next Illuminate\Contracts\Container\BindingResolutionException: Target class [App\Http\Kernel] does not exist. in /home1/molni2j8/staging.premad.in/dc-dukaan/vendor/laravel/framework/src/Illuminate/Container/Container.php:891
+Stack trace:
+#0 /home1/molni2j8/staging.premad.in/dc-dukaan/vendor/laravel/framework/src/Illuminate/Container/Container.php(770): Illuminate\Container\Container->build('App\\Http\\Kernel')
+#1 /home1/molni2j8/staging.premad.in/dc-dukaan/vendor/laravel/framework/src/Illuminate/Foundation/Application.php(856): Illuminate\Container\Container->resolve('App\\Http\\Kernel', Array, false)
+#2 /home1/molni2j8/staging.premad.in/dc-dukaan/vendor/laravel/framework/src/Illuminate/Container/Container.php(296): Illuminate\Foundation\Application->resolve('App\\Http\\Kernel', Array, false)
+#3 /home1/molni2j8/staging.premad.in/dc-dukaan/vendor/laravel/framework/src/Illuminate/Container/Container.php(885): Illuminate\Container\Container->Illuminate\Container\{closure}(Object(Illuminate\Foundation\Application), Array)
+#4 /home1/molni2j8/staging.premad.in/dc-dukaan/vendor/laravel/framework/src/Illuminate/Container/Container.php(770): Illuminate\Container\Container->build(Object(Closure))
+#5 /home1/molni2j8/staging.premad.in/dc-dukaan/vendor/laravel/framework/src/Illuminate/Foundation/Application.php(856): Illuminate\Container\Container->resolve('Illuminate\\Cont...', Array, true)
+#6 /home1/molni2j8/staging.premad.in/dc-dukaan/vendor/laravel/framework/src/Illuminate/Container/Container.php(706): Illuminate\Foundation\Application->resolve('Illuminate\\Cont...', Array)
+#7 /home1/molni2j8/staging.premad.in/dc-dukaan/vendor/laravel/framework/src/Illuminate/Foundation/Application.php(841): Illuminate\Container\Container->make('Illuminate\\Cont...', Array)
+#8 /home1/molni2j8/staging.premad.in/dc-dukaan/index.php(49): Illuminate\Foundation\Application->make('Illuminate\\Cont...')
+#9 {main}
+  thrown in /home1/molni2j8/staging.premad.in/dc-dukaan/vendor/laravel/framework/src/Illuminate/Container/Container.php on line 891
+[23-Jun-2023 09:59:20 UTC] PHP Fatal error:  Uncaught ReflectionException: Class "App\Http\Kernel" does not exist in /home1/molni2j8/staging.premad.in/dc-dukaan/vendor/laravel/framework/src/Illuminate/Container/Container.php:889
+Stack trace:
+#0 /home1/molni2j8/staging.premad.in/dc-dukaan/vendor/laravel/framework/src/Illuminate/Container/Container.php(889): ReflectionClass->__construct('App\\Http\\Kernel')
+#1 /home1/molni2j8/staging.premad.in/dc-dukaan/vendor/laravel/framework/src/Illuminate/Container/Container.php(770): Illuminate\Container\Container->build('App\\Http\\Kernel')
+#2 /home1/molni2j8/staging.premad.in/dc-dukaan/vendor/laravel/framework/src/Illuminate/Foundation/Application.php(856): Illuminate\Container\Container->resolve('App\\Http\\Kernel', Array, false)
+#3 /home1/molni2j8/staging.premad.in/dc-dukaan/vendor/laravel/framework/src/Illuminate/Container/Container.php(296): Illuminate\Foundation\Application->resolve('App\\Http\\Kernel', Array, false)
+#4 /home1/molni2j8/staging.premad.in/dc-dukaan/vendor/laravel/framework/src/Illuminate/Container/Container.php(885): Illuminate\Container\Container->Illuminate\Container\{closure}(Object(Illuminate\Foundation\Application), Array)
+#5 /home1/molni2j8/staging.premad.in/dc-dukaan/vendor/laravel/framework/src/Illuminate/Container/Container.php(770): Illuminate\Container\Container->build(Object(Closure))
+#6 /home1/molni2j8/staging.premad.in/dc-dukaan/vendor/laravel/framework/src/Illuminate/Foundation/Application.php(856): Illuminate\Container\Container->resolve('Illuminate\\Cont...', Array, true)
+#7 /home1/molni2j8/staging.premad.in/dc-dukaan/vendor/laravel/framework/src/Illuminate/Container/Container.php(706): Illuminate\Foundation\Application->resolve('Illuminate\\Cont...', Array)
+#8 /home1/molni2j8/staging.premad.in/dc-dukaan/vendor/laravel/framework/src/Illuminate/Foundation/Application.php(841): Illuminate\Container\Container->make('Illuminate\\Cont...', Array)
+#9 /home1/molni2j8/staging.premad.in/dc-dukaan/index.php(49): Illuminate\Foundation\Application->make('Illuminate\\Cont...')
+#10 {main}
+
+Next Illuminate\Contracts\Container\BindingResolutionException: Target class [App\Http\Kernel] does not exist. in /home1/molni2j8/staging.premad.in/dc-dukaan/vendor/laravel/framework/src/Illuminate/Container/Container.php:891
+Stack trace:
+#0 /home1/molni2j8/staging.premad.in/dc-dukaan/vendor/laravel/framework/src/Illuminate/Container/Container.php(770): Illuminate\Container\Container->build('App\\Http\\Kernel')
+#1 /home1/molni2j8/staging.premad.in/dc-dukaan/vendor/laravel/framework/src/Illuminate/Foundation/Application.php(856): Illuminate\Container\Container->resolve('App\\Http\\Kernel', Array, false)
+#2 /home1/molni2j8/staging.premad.in/dc-dukaan/vendor/laravel/framework/src/Illuminate/Container/Container.php(296): Illuminate\Foundation\Application->resolve('App\\Http\\Kernel', Array, false)
+#3 /home1/molni2j8/staging.premad.in/dc-dukaan/vendor/laravel/framework/src/Illuminate/Container/Container.php(885): Illuminate\Container\Container->Illuminate\Container\{closure}(Object(Illuminate\Foundation\Application), Array)
+#4 /home1/molni2j8/staging.premad.in/dc-dukaan/vendor/laravel/framework/src/Illuminate/Container/Container.php(770): Illuminate\Container\Container->build(Object(Closure))
+#5 /home1/molni2j8/staging.premad.in/dc-dukaan/vendor/laravel/framework/src/Illuminate/Foundation/Application.php(856): Illuminate\Container\Container->resolve('Illuminate\\Cont...', Array, true)
+#6 /home1/molni2j8/staging.premad.in/dc-dukaan/vendor/laravel/framework/src/Illuminate/Container/Container.php(706): Illuminate\Foundation\Application->resolve('Illuminate\\Cont...', Array)
+#7 /home1/molni2j8/staging.premad.in/dc-dukaan/vendor/laravel/framework/src/Illuminate/Foundation/Application.php(841): Illuminate\Container\Container->make('Illuminate\\Cont...', Array)
+#8 /home1/molni2j8/staging.premad.in/dc-dukaan/index.php(49): Illuminate\Foundation\Application->make('Illuminate\\Cont...')
+#9 {main}
+  thrown in /home1/molni2j8/staging.premad.in/dc-dukaan/vendor/laravel/framework/src/Illuminate/Container/Container.php on line 891
+[23-Jun-2023 09:59:20 UTC] PHP Warning:  include(/home1/molni2j8/staging.premad.in/dc-dukaan/vendor/composer/../../app/Http/Kernel.php): Failed to open stream: No such file or directory in /home1/molni2j8/staging.premad.in/dc-dukaan/vendor/composer/ClassLoader.php on line 582
+[23-Jun-2023 09:59:20 UTC] PHP Warning:  include(): Failed opening '/home1/molni2j8/staging.premad.in/dc-dukaan/vendor/composer/../../app/Http/Kernel.php' for inclusion (include_path='.:/opt/cpanel/ea-php81/root/usr/share/pear') in /home1/molni2j8/staging.premad.in/dc-dukaan/vendor/composer/ClassLoader.php on line 582
+[23-Jun-2023 09:59:20 UTC] PHP Fatal error:  Uncaught ReflectionException: Class "App\Http\Kernel" does not exist in /home1/molni2j8/staging.premad.in/dc-dukaan/vendor/laravel/framework/src/Illuminate/Container/Container.php:889
+Stack trace:
+#0 /home1/molni2j8/staging.premad.in/dc-dukaan/vendor/laravel/framework/src/Illuminate/Container/Container.php(889): ReflectionClass->__construct('App\\Http\\Kernel')
+#1 /home1/molni2j8/staging.premad.in/dc-dukaan/vendor/laravel/framework/src/Illuminate/Container/Container.php(770): Illuminate\Container\Container->build('App\\Http\\Kernel')
+#2 /home1/molni2j8/staging.premad.in/dc-dukaan/vendor/laravel/framework/src/Illuminate/Foundation/Application.php(856): Illuminate\Container\Container->resolve('App\\Http\\Kernel', Array, false)
+#3 /home1/molni2j8/staging.premad.in/dc-dukaan/vendor/laravel/framework/src/Illuminate/Container/Container.php(296): Illuminate\Foundation\Application->resolve('App\\Http\\Kernel', Array, false)
+#4 /home1/molni2j8/staging.premad.in/dc-dukaan/vendor/laravel/framework/src/Illuminate/Container/Container.php(885): Illuminate\Container\Container->Illuminate\Container\{closure}(Object(Illuminate\Foundation\Application), Array)
+#5 /home1/molni2j8/staging.premad.in/dc-dukaan/vendor/laravel/framework/src/Illuminate/Container/Container.php(770): Illuminate\Container\Container->build(Object(Closure))
+#6 /home1/molni2j8/staging.premad.in/dc-dukaan/vendor/laravel/framework/src/Illuminate/Foundation/Application.php(856): Illuminate\Container\Container->resolve('Illuminate\\Cont...', Array, true)
+#7 /home1/molni2j8/staging.premad.in/dc-dukaan/vendor/laravel/framework/src/Illuminate/Container/Container.php(706): Illuminate\Foundation\Application->resolve('Illuminate\\Cont...', Array)
+#8 /home1/molni2j8/staging.premad.in/dc-dukaan/vendor/laravel/framework/src/Illuminate/Foundation/Application.php(841): Illuminate\Container\Container->make('Illuminate\\Cont...', Array)
+#9 /home1/molni2j8/staging.premad.in/dc-dukaan/index.php(49): Illuminate\Foundation\Application->make('Illuminate\\Cont...')
+#10 {main}
+
+Next Illuminate\Contracts\Container\BindingResolutionException: Target class [App\Http\Kernel] does not exist. in /home1/molni2j8/staging.premad.in/dc-dukaan/vendor/laravel/framework/src/Illuminate/Container/Container.php:891
+Stack trace:
+#0 /home1/molni2j8/staging.premad.in/dc-dukaan/vendor/laravel/framework/src/Illuminate/Container/Container.php(770): Illuminate\Container\Container->build('App\\Http\\Kernel')
+#1 /home1/molni2j8/staging.premad.in/dc-dukaan/vendor/laravel/framework/src/Illuminate/Foundation/Application.php(856): Illuminate\Container\Container->resolve('App\\Http\\Kernel', Array, false)
+#2 /home1/molni2j8/staging.premad.in/dc-dukaan/vendor/laravel/framework/src/Illuminate/Container/Container.php(296): Illuminate\Foundation\Application->resolve('App\\Http\\Kernel', Array, false)
+#3 /home1/molni2j8/staging.premad.in/dc-dukaan/vendor/laravel/framework/src/Illuminate/Container/Container.php(885): Illuminate\Container\Container->Illuminate\Container\{closure}(Object(Illuminate\Foundation\Application), Array)
+#4 /home1/molni2j8/staging.premad.in/dc-dukaan/vendor/laravel/framework/src/Illuminate/Container/Container.php(770): Illuminate\Container\Container->build(Object(Closure))
+#5 /home1/molni2j8/staging.premad.in/dc-dukaan/vendor/laravel/framework/src/Illuminate/Foundation/Application.php(856): Illuminate\Container\Container->resolve('Illuminate\\Cont...', Array, true)
+#6 /home1/molni2j8/staging.premad.in/dc-dukaan/vendor/laravel/framework/src/Illuminate/Container/Container.php(706): Illuminate\Foundation\Application->resolve('Illuminate\\Cont...', Array)
+#7 /home1/molni2j8/staging.premad.in/dc-dukaan/vendor/laravel/framework/src/Illuminate/Foundation/Application.php(841): Illuminate\Container\Container->make('Illuminate\\Cont...', Array)
+#8 /home1/molni2j8/staging.premad.in/dc-dukaan/index.php(49): Illuminate\Foundation\Application->make('Illuminate\\Cont...')
+#9 {main}
+  thrown in /home1/molni2j8/staging.premad.in/dc-dukaan/vendor/laravel/framework/src/Illuminate/Container/Container.php on line 891
+[23-Jun-2023 09:59:49 UTC] PHP Warning:  include(/home1/molni2j8/staging.premad.in/dc-dukaan/vendor/composer/../../app/Http/Kernel.php): Failed to open stream: No such file or directory in /home1/molni2j8/staging.premad.in/dc-dukaan/vendor/composer/ClassLoader.php on line 582
+[23-Jun-2023 09:59:49 UTC] PHP Warning:  include(/home1/molni2j8/staging.premad.in/dc-dukaan/vendor/composer/../../app/Http/Kernel.php): Failed to open stream: No such file or directory in /home1/molni2j8/staging.premad.in/dc-dukaan/vendor/composer/ClassLoader.php on line 582
+[23-Jun-2023 09:59:49 UTC] PHP Warning:  include(): Failed opening '/home1/molni2j8/staging.premad.in/dc-dukaan/vendor/composer/../../app/Http/Kernel.php' for inclusion (include_path='.:/opt/cpanel/ea-php81/root/usr/share/pear') in /home1/molni2j8/staging.premad.in/dc-dukaan/vendor/composer/ClassLoader.php on line 582
+[23-Jun-2023 09:59:49 UTC] PHP Warning:  include(): Failed opening '/home1/molni2j8/staging.premad.in/dc-dukaan/vendor/composer/../../app/Http/Kernel.php' for inclusion (include_path='.:/opt/cpanel/ea-php81/root/usr/share/pear') in /home1/molni2j8/staging.premad.in/dc-dukaan/vendor/composer/ClassLoader.php on line 582
+[23-Jun-2023 09:59:49 UTC] PHP Fatal error:  Uncaught ReflectionException: Class "App\Http\Kernel" does not exist in /home1/molni2j8/staging.premad.in/dc-dukaan/vendor/laravel/framework/src/Illuminate/Container/Container.php:889
+Stack trace:
+#0 /home1/molni2j8/staging.premad.in/dc-dukaan/vendor/laravel/framework/src/Illuminate/Container/Container.php(889): ReflectionClass->__construct('App\\Http\\Kernel')
+#1 /home1/molni2j8/staging.premad.in/dc-dukaan/vendor/laravel/framework/src/Illuminate/Container/Container.php(770): Illuminate\Container\Container->build('App\\Http\\Kernel')
+#2 /home1/molni2j8/staging.premad.in/dc-dukaan/vendor/laravel/framework/src/Illuminate/Foundation/Application.php(856): Illuminate\Container\Container->resolve('App\\Http\\Kernel', Array, false)
+#3 /home1/molni2j8/staging.premad.in/dc-dukaan/vendor/laravel/framework/src/Illuminate/Container/Container.php(296): Illuminate\Foundation\Application->resolve('App\\Http\\Kernel', Array, false)
+#4 /home1/molni2j8/staging.premad.in/dc-dukaan/vendor/laravel/framework/src/Illuminate/Container/Container.php(885): Illuminate\Container\Container->Illuminate\Container\{closure}(Object(Illuminate\Foundation\Application), Array)
+#5 /home1/molni2j8/staging.premad.in/dc-dukaan/vendor/laravel/framework/src/Illuminate/Container/Container.php(770): Illuminate\Container\Container->build(Object(Closure))
+#6 /home1/molni2j8/staging.premad.in/dc-dukaan/vendor/laravel/framework/src/Illuminate/Foundation/Application.php(856): Illuminate\Container\Container->resolve('Illuminate\\Cont...', Array, true)
+#7 /home1/molni2j8/staging.premad.in/dc-dukaan/vendor/laravel/framework/src/Illuminate/Container/Container.php(706): Illuminate\Foundation\Application->resolve('Illuminate\\Cont...', Array)
+#8 /home1/molni2j8/staging.premad.in/dc-dukaan/vendor/laravel/framework/src/Illuminate/Foundation/Application.php(841): Illuminate\Container\Container->make('Illuminate\\Cont...', Array)
+#9 /home1/molni2j8/staging.premad.in/dc-dukaan/index.php(49): Illuminate\Foundation\Application->make('Illuminate\\Cont...')
+#10 {main}
+
+Next Illuminate\Contracts\Container\BindingResolutionException: Target class [App\Http\Kernel] does not exist. in /home1/molni2j8/staging.premad.in/dc-dukaan/vendor/laravel/framework/src/Illuminate/Container/Container.php:891
+Stack trace:
+#0 /home1/molni2j8/staging.premad.in/dc-dukaan/vendor/laravel/framework/src/Illuminate/Container/Container.php(770): Illuminate\Container\Container->build('App\\Http\\Kernel')
+#1 /home1/molni2j8/staging.premad.in/dc-dukaan/vendor/laravel/framework/src/Illuminate/Foundation/Application.php(856): Illuminate\Container\Container->resolve('App\\Http\\Kernel', Array, false)
+#2 /home1/molni2j8/staging.premad.in/dc-dukaan/vendor/laravel/framework/src/Illuminate/Container/Container.php(296): Illuminate\Foundation\Application->resolve('App\\Http\\Kernel', Array, false)
+#3 /home1/molni2j8/staging.premad.in/dc-dukaan/vendor/laravel/framework/src/Illuminate/Container/Container.php(885): Illuminate\Container\Container->Illuminate\Container\{closure}(Object(Illuminate\Foundation\Application), Array)
+#4 /home1/molni2j8/staging.premad.in/dc-dukaan/vendor/laravel/framework/src/Illuminate/Container/Container.php(770): Illuminate\Container\Container->build(Object(Closure))
+#5 /home1/molni2j8/staging.premad.in/dc-dukaan/vendor/laravel/framework/src/Illuminate/Foundation/Application.php(856): Illuminate\Container\Container->resolve('Illuminate\\Cont...', Array, true)
+#6 /home1/molni2j8/staging.premad.in/dc-dukaan/vendor/laravel/framework/src/Illuminate/Container/Container.php(706): Illuminate\Foundation\Application->resolve('Illuminate\\Cont...', Array)
+#7 /home1/molni2j8/staging.premad.in/dc-dukaan/vendor/laravel/framework/src/Illuminate/Foundation/Application.php(841): Illuminate\Container\Container->make('Illuminate\\Cont...', Array)
+#8 /home1/molni2j8/staging.premad.in/dc-dukaan/index.php(49): Illuminate\Foundation\Application->make('Illuminate\\Cont...')
+#9 {main}
+  thrown in /home1/molni2j8/staging.premad.in/dc-dukaan/vendor/laravel/framework/src/Illuminate/Container/Container.php on line 891
+[23-Jun-2023 09:59:49 UTC] PHP Fatal error:  Uncaught ReflectionException: Class "App\Http\Kernel" does not exist in /home1/molni2j8/staging.premad.in/dc-dukaan/vendor/laravel/framework/src/Illuminate/Container/Container.php:889
+Stack trace:
+#0 /home1/molni2j8/staging.premad.in/dc-dukaan/vendor/laravel/framework/src/Illuminate/Container/Container.php(889): ReflectionClass->__construct('App\\Http\\Kernel')
+#1 /home1/molni2j8/staging.premad.in/dc-dukaan/vendor/laravel/framework/src/Illuminate/Container/Container.php(770): Illuminate\Container\Container->build('App\\Http\\Kernel')
+#2 /home1/molni2j8/staging.premad.in/dc-dukaan/vendor/laravel/framework/src/Illuminate/Foundation/Application.php(856): Illuminate\Container\Container->resolve('App\\Http\\Kernel', Array, false)
+#3 /home1/molni2j8/staging.premad.in/dc-dukaan/vendor/laravel/framework/src/Illuminate/Container/Container.php(296): Illuminate\Foundation\Application->resolve('App\\Http\\Kernel', Array, false)
+#4 /home1/molni2j8/staging.premad.in/dc-dukaan/vendor/laravel/framework/src/Illuminate/Container/Container.php(885): Illuminate\Container\Container->Illuminate\Container\{closure}(Object(Illuminate\Foundation\Application), Array)
+#5 /home1/molni2j8/staging.premad.in/dc-dukaan/vendor/laravel/framework/src/Illuminate/Container/Container.php(770): Illuminate\Container\Container->build(Object(Closure))
+#6 /home1/molni2j8/staging.premad.in/dc-dukaan/vendor/laravel/framework/src/Illuminate/Foundation/Application.php(856): Illuminate\Container\Container->resolve('Illuminate\\Cont...', Array, true)
+#7 /home1/molni2j8/staging.premad.in/dc-dukaan/vendor/laravel/framework/src/Illuminate/Container/Container.php(706): Illuminate\Foundation\Application->resolve('Illuminate\\Cont...', Array)
+#8 /home1/molni2j8/staging.premad.in/dc-dukaan/vendor/laravel/framework/src/Illuminate/Foundation/Application.php(841): Illuminate\Container\Container->make('Illuminate\\Cont...', Array)
+#9 /home1/molni2j8/staging.premad.in/dc-dukaan/index.php(49): Illuminate\Foundation\Application->make('Illuminate\\Cont...')
+#10 {main}
+
+Next Illuminate\Contracts\Container\BindingResolutionException: Target class [App\Http\Kernel] does not exist. in /home1/molni2j8/staging.premad.in/dc-dukaan/vendor/laravel/framework/src/Illuminate/Container/Container.php:891
+Stack trace:
+#0 /home1/molni2j8/staging.premad.in/dc-dukaan/vendor/laravel/framework/src/Illuminate/Container/Container.php(770): Illuminate\Container\Container->build('App\\Http\\Kernel')
+#1 /home1/molni2j8/staging.premad.in/dc-dukaan/vendor/laravel/framework/src/Illuminate/Foundation/Application.php(856): Illuminate\Container\Container->resolve('App\\Http\\Kernel', Array, false)
+#2 /home1/molni2j8/staging.premad.in/dc-dukaan/vendor/laravel/framework/src/Illuminate/Container/Container.php(296): Illuminate\Foundation\Application->resolve('App\\Http\\Kernel', Array, false)
+#3 /home1/molni2j8/staging.premad.in/dc-dukaan/vendor/laravel/framework/src/Illuminate/Container/Container.php(885): Illuminate\Container\Container->Illuminate\Container\{closure}(Object(Illuminate\Foundation\Application), Array)
+#4 /home1/molni2j8/staging.premad.in/dc-dukaan/vendor/laravel/framework/src/Illuminate/Container/Container.php(770): Illuminate\Container\Container->build(Object(Closure))
+#5 /home1/molni2j8/staging.premad.in/dc-dukaan/vendor/laravel/framework/src/Illuminate/Foundation/Application.php(856): Illuminate\Container\Container->resolve('Illuminate\\Cont...', Array, true)
+#6 /home1/molni2j8/staging.premad.in/dc-dukaan/vendor/laravel/framework/src/Illuminate/Container/Container.php(706): Illuminate\Foundation\Application->resolve('Illuminate\\Cont...', Array)
+#7 /home1/molni2j8/staging.premad.in/dc-dukaan/vendor/laravel/framework/src/Illuminate/Foundation/Application.php(841): Illuminate\Container\Container->make('Illuminate\\Cont...', Array)
+#8 /home1/molni2j8/staging.premad.in/dc-dukaan/index.php(49): Illuminate\Foundation\Application->make('Illuminate\\Cont...')
+#9 {main}
+  thrown in /home1/molni2j8/staging.premad.in/dc-dukaan/vendor/laravel/framework/src/Illuminate/Container/Container.php on line 891
+[23-Jun-2023 09:59:49 UTC] PHP Warning:  include(/home1/molni2j8/staging.premad.in/dc-dukaan/vendor/composer/../../app/Http/Kernel.php): Failed to open stream: No such file or directory in /home1/molni2j8/staging.premad.in/dc-dukaan/vendor/composer/ClassLoader.php on line 582
+[23-Jun-2023 09:59:49 UTC] PHP Warning:  include(): Failed opening '/home1/molni2j8/staging.premad.in/dc-dukaan/vendor/composer/../../app/Http/Kernel.php' for inclusion (include_path='.:/opt/cpanel/ea-php81/root/usr/share/pear') in /home1/molni2j8/staging.premad.in/dc-dukaan/vendor/composer/ClassLoader.php on line 582
+[23-Jun-2023 09:59:49 UTC] PHP Fatal error:  Uncaught ReflectionException: Class "App\Http\Kernel" does not exist in /home1/molni2j8/staging.premad.in/dc-dukaan/vendor/laravel/framework/src/Illuminate/Container/Container.php:889
+Stack trace:
+#0 /home1/molni2j8/staging.premad.in/dc-dukaan/vendor/laravel/framework/src/Illuminate/Container/Container.php(889): ReflectionClass->__construct('App\\Http\\Kernel')
+#1 /home1/molni2j8/staging.premad.in/dc-dukaan/vendor/laravel/framework/src/Illuminate/Container/Container.php(770): Illuminate\Container\Container->build('App\\Http\\Kernel')
+#2 /home1/molni2j8/staging.premad.in/dc-dukaan/vendor/laravel/framework/src/Illuminate/Foundation/Application.php(856): Illuminate\Container\Container->resolve('App\\Http\\Kernel', Array, false)
+#3 /home1/molni2j8/staging.premad.in/dc-dukaan/vendor/laravel/framework/src/Illuminate/Container/Container.php(296): Illuminate\Foundation\Application->resolve('App\\Http\\Kernel', Array, false)
+#4 /home1/molni2j8/staging.premad.in/dc-dukaan/vendor/laravel/framework/src/Illuminate/Container/Container.php(885): Illuminate\Container\Container->Illuminate\Container\{closure}(Object(Illuminate\Foundation\Application), Array)
+#5 /home1/molni2j8/staging.premad.in/dc-dukaan/vendor/laravel/framework/src/Illuminate/Container/Container.php(770): Illuminate\Container\Container->build(Object(Closure))
+#6 /home1/molni2j8/staging.premad.in/dc-dukaan/vendor/laravel/framework/src/Illuminate/Foundation/Application.php(856): Illuminate\Container\Container->resolve('Illuminate\\Cont...', Array, true)
+#7 /home1/molni2j8/staging.premad.in/dc-dukaan/vendor/laravel/framework/src/Illuminate/Container/Container.php(706): Illuminate\Foundation\Application->resolve('Illuminate\\Cont...', Array)
+#8 /home1/molni2j8/staging.premad.in/dc-dukaan/vendor/laravel/framework/src/Illuminate/Foundation/Application.php(841): Illuminate\Container\Container->make('Illuminate\\Cont...', Array)
+#9 /home1/molni2j8/staging.premad.in/dc-dukaan/index.php(49): Illuminate\Foundation\Application->make('Illuminate\\Cont...')
+#10 {main}
+
+Next Illuminate\Contracts\Container\BindingResolutionException: Target class [App\Http\Kernel] does not exist. in /home1/molni2j8/staging.premad.in/dc-dukaan/vendor/laravel/framework/src/Illuminate/Container/Container.php:891
+Stack trace:
+#0 /home1/molni2j8/staging.premad.in/dc-dukaan/vendor/laravel/framework/src/Illuminate/Container/Container.php(770): Illuminate\Container\Container->build('App\\Http\\Kernel')
+#1 /home1/molni2j8/staging.premad.in/dc-dukaan/vendor/laravel/framework/src/Illuminate/Foundation/Application.php(856): Illuminate\Container\Container->resolve('App\\Http\\Kernel', Array, false)
+#2 /home1/molni2j8/staging.premad.in/dc-dukaan/vendor/laravel/framework/src/Illuminate/Container/Container.php(296): Illuminate\Foundation\Application->resolve('App\\Http\\Kernel', Array, false)
+#3 /home1/molni2j8/staging.premad.in/dc-dukaan/vendor/laravel/framework/src/Illuminate/Container/Container.php(885): Illuminate\Container\Container->Illuminate\Container\{closure}(Object(Illuminate\Foundation\Application), Array)
+#4 /home1/molni2j8/staging.premad.in/dc-dukaan/vendor/laravel/framework/src/Illuminate/Container/Container.php(770): Illuminate\Container\Container->build(Object(Closure))
+#5 /home1/molni2j8/staging.premad.in/dc-dukaan/vendor/laravel/framework/src/Illuminate/Foundation/Application.php(856): Illuminate\Container\Container->resolve('Illuminate\\Cont...', Array, true)
+#6 /home1/molni2j8/staging.premad.in/dc-dukaan/vendor/laravel/framework/src/Illuminate/Container/Container.php(706): Illuminate\Foundation\Application->resolve('Illuminate\\Cont...', Array)
+#7 /home1/molni2j8/staging.premad.in/dc-dukaan/vendor/laravel/framework/src/Illuminate/Foundation/Application.php(841): Illuminate\Container\Container->make('Illuminate\\Cont...', Array)
+#8 /home1/molni2j8/staging.premad.in/dc-dukaan/index.php(49): Illuminate\Foundation\Application->make('Illuminate\\Cont...')
+#9 {main}
+  thrown in /home1/molni2j8/staging.premad.in/dc-dukaan/vendor/laravel/framework/src/Illuminate/Container/Container.php on line 891
+[28-Jun-2023 10:12:37 UTC] PHP Warning:  include(/home1/molni2j8/staging.premad.in/dc-dukaan/vendor/composer/../../app/Http/Kernel.php): Failed to open stream: No such file or directory in /home1/molni2j8/staging.premad.in/dc-dukaan/vendor/composer/ClassLoader.php on line 582
+[28-Jun-2023 10:12:37 UTC] PHP Warning:  include(): Failed opening '/home1/molni2j8/staging.premad.in/dc-dukaan/vendor/composer/../../app/Http/Kernel.php' for inclusion (include_path='.:/opt/cpanel/ea-php81/root/usr/share/pear') in /home1/molni2j8/staging.premad.in/dc-dukaan/vendor/composer/ClassLoader.php on line 582
+[28-Jun-2023 10:12:37 UTC] PHP Fatal error:  Uncaught ReflectionException: Class "App\Http\Kernel" does not exist in /home1/molni2j8/staging.premad.in/dc-dukaan/vendor/laravel/framework/src/Illuminate/Container/Container.php:889
+Stack trace:
+#0 /home1/molni2j8/staging.premad.in/dc-dukaan/vendor/laravel/framework/src/Illuminate/Container/Container.php(889): ReflectionClass->__construct('App\\Http\\Kernel')
+#1 /home1/molni2j8/staging.premad.in/dc-dukaan/vendor/laravel/framework/src/Illuminate/Container/Container.php(770): Illuminate\Container\Container->build('App\\Http\\Kernel')
+#2 /home1/molni2j8/staging.premad.in/dc-dukaan/vendor/laravel/framework/src/Illuminate/Foundation/Application.php(856): Illuminate\Container\Container->resolve('App\\Http\\Kernel', Array, false)
+#3 /home1/molni2j8/staging.premad.in/dc-dukaan/vendor/laravel/framework/src/Illuminate/Container/Container.php(296): Illuminate\Foundation\Application->resolve('App\\Http\\Kernel', Array, false)
+#4 /home1/molni2j8/staging.premad.in/dc-dukaan/vendor/laravel/framework/src/Illuminate/Container/Container.php(885): Illuminate\Container\Container->Illuminate\Container\{closure}(Object(Illuminate\Foundation\Application), Array)
+#5 /home1/molni2j8/staging.premad.in/dc-dukaan/vendor/laravel/framework/src/Illuminate/Container/Container.php(770): Illuminate\Container\Container->build(Object(Closure))
+#6 /home1/molni2j8/staging.premad.in/dc-dukaan/vendor/laravel/framework/src/Illuminate/Foundation/Application.php(856): Illuminate\Container\Container->resolve('Illuminate\\Cont...', Array, true)
+#7 /home1/molni2j8/staging.premad.in/dc-dukaan/vendor/laravel/framework/src/Illuminate/Container/Container.php(706): Illuminate\Foundation\Application->resolve('Illuminate\\Cont...', Array)
+#8 /home1/molni2j8/staging.premad.in/dc-dukaan/vendor/laravel/framework/src/Illuminate/Foundation/Application.php(841): Illuminate\Container\Container->make('Illuminate\\Cont...', Array)
+#9 /home1/molni2j8/staging.premad.in/dc-dukaan/index.php(49): Illuminate\Foundation\Application->make('Illuminate\\Cont...')
+#10 {main}
+
+Next Illuminate\Contracts\Container\BindingResolutionException: Target class [App\Http\Kernel] does not exist. in /home1/molni2j8/staging.premad.in/dc-dukaan/vendor/laravel/framework/src/Illuminate/Container/Container.php:891
+Stack trace:
+#0 /home1/molni2j8/staging.premad.in/dc-dukaan/vendor/laravel/framework/src/Illuminate/Container/Container.php(770): Illuminate\Container\Container->build('App\\Http\\Kernel')
+#1 /home1/molni2j8/staging.premad.in/dc-dukaan/vendor/laravel/framework/src/Illuminate/Foundation/Application.php(856): Illuminate\Container\Container->resolve('App\\Http\\Kernel', Array, false)
+#2 /home1/molni2j8/staging.premad.in/dc-dukaan/vendor/laravel/framework/src/Illuminate/Container/Container.php(296): Illuminate\Foundation\Application->resolve('App\\Http\\Kernel', Array, false)
+#3 /home1/molni2j8/staging.premad.in/dc-dukaan/vendor/laravel/framework/src/Illuminate/Container/Container.php(885): Illuminate\Container\Container->Illuminate\Container\{closure}(Object(Illuminate\Foundation\Application), Array)
+#4 /home1/molni2j8/staging.premad.in/dc-dukaan/vendor/laravel/framework/src/Illuminate/Container/Container.php(770): Illuminate\Container\Container->build(Object(Closure))
+#5 /home1/molni2j8/staging.premad.in/dc-dukaan/vendor/laravel/framework/src/Illuminate/Foundation/Application.php(856): Illuminate\Container\Container->resolve('Illuminate\\Cont...', Array, true)
+#6 /home1/molni2j8/staging.premad.in/dc-dukaan/vendor/laravel/framework/src/Illuminate/Container/Container.php(706): Illuminate\Foundation\Application->resolve('Illuminate\\Cont...', Array)
+#7 /home1/molni2j8/staging.premad.in/dc-dukaan/vendor/laravel/framework/src/Illuminate/Foundation/Application.php(841): Illuminate\Container\Container->make('Illuminate\\Cont...', Array)
+#8 /home1/molni2j8/staging.premad.in/dc-dukaan/index.php(49): Illuminate\Foundation\Application->make('Illuminate\\Cont...')
+#9 {main}
+  thrown in /home1/molni2j8/staging.premad.in/dc-dukaan/vendor/laravel/framework/src/Illuminate/Container/Container.php on line 891
+[05-Jul-2023 12:06:57 UTC] PHP Warning:  include(/home1/molni2j8/staging.premad.in/dc-dukaan/vendor/composer/../../app/Http/Kernel.php): Failed to open stream: No such file or directory in /home1/molni2j8/staging.premad.in/dc-dukaan/vendor/composer/ClassLoader.php on line 582
+[05-Jul-2023 12:06:57 UTC] PHP Warning:  include(): Failed opening '/home1/molni2j8/staging.premad.in/dc-dukaan/vendor/composer/../../app/Http/Kernel.php' for inclusion (include_path='.:/opt/cpanel/ea-php81/root/usr/share/pear') in /home1/molni2j8/staging.premad.in/dc-dukaan/vendor/composer/ClassLoader.php on line 582
+[05-Jul-2023 12:06:57 UTC] PHP Fatal error:  Uncaught ReflectionException: Class "App\Http\Kernel" does not exist in /home1/molni2j8/staging.premad.in/dc-dukaan/vendor/laravel/framework/src/Illuminate/Container/Container.php:889
+Stack trace:
+#0 /home1/molni2j8/staging.premad.in/dc-dukaan/vendor/laravel/framework/src/Illuminate/Container/Container.php(889): ReflectionClass->__construct('App\\Http\\Kernel')
+#1 /home1/molni2j8/staging.premad.in/dc-dukaan/vendor/laravel/framework/src/Illuminate/Container/Container.php(770): Illuminate\Container\Container->build('App\\Http\\Kernel')
+#2 /home1/molni2j8/staging.premad.in/dc-dukaan/vendor/laravel/framework/src/Illuminate/Foundation/Application.php(856): Illuminate\Container\Container->resolve('App\\Http\\Kernel', Array, false)
+#3 /home1/molni2j8/staging.premad.in/dc-dukaan/vendor/laravel/framework/src/Illuminate/Container/Container.php(296): Illuminate\Foundation\Application->resolve('App\\Http\\Kernel', Array, false)
+#4 /home1/molni2j8/staging.premad.in/dc-dukaan/vendor/laravel/framework/src/Illuminate/Container/Container.php(885): Illuminate\Container\Container->Illuminate\Container\{closure}(Object(Illuminate\Foundation\Application), Array)
+#5 /home1/molni2j8/staging.premad.in/dc-dukaan/vendor/laravel/framework/src/Illuminate/Container/Container.php(770): Illuminate\Container\Container->build(Object(Closure))
+#6 /home1/molni2j8/staging.premad.in/dc-dukaan/vendor/laravel/framework/src/Illuminate/Foundation/Application.php(856): Illuminate\Container\Container->resolve('Illuminate\\Cont...', Array, true)
+#7 /home1/molni2j8/staging.premad.in/dc-dukaan/vendor/laravel/framework/src/Illuminate/Container/Container.php(706): Illuminate\Foundation\Application->resolve('Illuminate\\Cont...', Array)
+#8 /home1/molni2j8/staging.premad.in/dc-dukaan/vendor/laravel/framework/src/Illuminate/Foundation/Application.php(841): Illuminate\Container\Container->make('Illuminate\\Cont...', Array)
+#9 /home1/molni2j8/staging.premad.in/dc-dukaan/index.php(49): Illuminate\Foundation\Application->make('Illuminate\\Cont...')
+#10 {main}
+
+Next Illuminate\Contracts\Container\BindingResolutionException: Target class [App\Http\Kernel] does not exist. in /home1/molni2j8/staging.premad.in/dc-dukaan/vendor/laravel/framework/src/Illuminate/Container/Container.php:891
+Stack trace:
+#0 /home1/molni2j8/staging.premad.in/dc-dukaan/vendor/laravel/framework/src/Illuminate/Container/Container.php(770): Illuminate\Container\Container->build('App\\Http\\Kernel')
+#1 /home1/molni2j8/staging.premad.in/dc-dukaan/vendor/laravel/framework/src/Illuminate/Foundation/Application.php(856): Illuminate\Container\Container->resolve('App\\Http\\Kernel', Array, false)
+#2 /home1/molni2j8/staging.premad.in/dc-dukaan/vendor/laravel/framework/src/Illuminate/Container/Container.php(296): Illuminate\Foundation\Application->resolve('App\\Http\\Kernel', Array, false)
+#3 /home1/molni2j8/staging.premad.in/dc-dukaan/vendor/laravel/framework/src/Illuminate/Container/Container.php(885): Illuminate\Container\Container->Illuminate\Container\{closure}(Object(Illuminate\Foundation\Application), Array)
+#4 /home1/molni2j8/staging.premad.in/dc-dukaan/vendor/laravel/framework/src/Illuminate/Container/Container.php(770): Illuminate\Container\Container->build(Object(Closure))
+#5 /home1/molni2j8/staging.premad.in/dc-dukaan/vendor/laravel/framework/src/Illuminate/Foundation/Application.php(856): Illuminate\Container\Container->resolve('Illuminate\\Cont...', Array, true)
+#6 /home1/molni2j8/staging.premad.in/dc-dukaan/vendor/laravel/framework/src/Illuminate/Container/Container.php(706): Illuminate\Foundation\Application->resolve('Illuminate\\Cont...', Array)
+#7 /home1/molni2j8/staging.premad.in/dc-dukaan/vendor/laravel/framework/src/Illuminate/Foundation/Application.php(841): Illuminate\Container\Container->make('Illuminate\\Cont...', Array)
+#8 /home1/molni2j8/staging.premad.in/dc-dukaan/index.php(49): Illuminate\Foundation\Application->make('Illuminate\\Cont...')
+#9 {main}
+  thrown in /home1/molni2j8/staging.premad.in/dc-dukaan/vendor/laravel/framework/src/Illuminate/Container/Container.php on line 891
+[05-Jul-2023 12:06:57 UTC] PHP Warning:  include(/home1/molni2j8/staging.premad.in/dc-dukaan/vendor/composer/../../app/Http/Kernel.php): Failed to open stream: No such file or directory in /home1/molni2j8/staging.premad.in/dc-dukaan/vendor/composer/ClassLoader.php on line 582
+[05-Jul-2023 12:06:57 UTC] PHP Warning:  include(): Failed opening '/home1/molni2j8/staging.premad.in/dc-dukaan/vendor/composer/../../app/Http/Kernel.php' for inclusion (include_path='.:/opt/cpanel/ea-php81/root/usr/share/pear') in /home1/molni2j8/staging.premad.in/dc-dukaan/vendor/composer/ClassLoader.php on line 582
+[05-Jul-2023 12:06:57 UTC] PHP Fatal error:  Uncaught ReflectionException: Class "App\Http\Kernel" does not exist in /home1/molni2j8/staging.premad.in/dc-dukaan/vendor/laravel/framework/src/Illuminate/Container/Container.php:889
+Stack trace:
+#0 /home1/molni2j8/staging.premad.in/dc-dukaan/vendor/laravel/framework/src/Illuminate/Container/Container.php(889): ReflectionClass->__construct('App\\Http\\Kernel')
+#1 /home1/molni2j8/staging.premad.in/dc-dukaan/vendor/laravel/framework/src/Illuminate/Container/Container.php(770): Illuminate\Container\Container->build('App\\Http\\Kernel')
+#2 /home1/molni2j8/staging.premad.in/dc-dukaan/vendor/laravel/framework/src/Illuminate/Foundation/Application.php(856): Illuminate\Container\Container->resolve('App\\Http\\Kernel', Array, false)
+#3 /home1/molni2j8/staging.premad.in/dc-dukaan/vendor/laravel/framework/src/Illuminate/Container/Container.php(296): Illuminate\Foundation\Application->resolve('App\\Http\\Kernel', Array, false)
+#4 /home1/molni2j8/staging.premad.in/dc-dukaan/vendor/laravel/framework/src/Illuminate/Container/Container.php(885): Illuminate\Container\Container->Illuminate\Container\{closure}(Object(Illuminate\Foundation\Application), Array)
+#5 /home1/molni2j8/staging.premad.in/dc-dukaan/vendor/laravel/framework/src/Illuminate/Container/Container.php(770): Illuminate\Container\Container->build(Object(Closure))
+#6 /home1/molni2j8/staging.premad.in/dc-dukaan/vendor/laravel/framework/src/Illuminate/Foundation/Application.php(856): Illuminate\Container\Container->resolve('Illuminate\\Cont...', Array, true)
+#7 /home1/molni2j8/staging.premad.in/dc-dukaan/vendor/laravel/framework/src/Illuminate/Container/Container.php(706): Illuminate\Foundation\Application->resolve('Illuminate\\Cont...', Array)
+#8 /home1/molni2j8/staging.premad.in/dc-dukaan/vendor/laravel/framework/src/Illuminate/Foundation/Application.php(841): Illuminate\Container\Container->make('Illuminate\\Cont...', Array)
+#9 /home1/molni2j8/staging.premad.in/dc-dukaan/index.php(49): Illuminate\Foundation\Application->make('Illuminate\\Cont...')
+#10 {main}
+
+Next Illuminate\Contracts\Container\BindingResolutionException: Target class [App\Http\Kernel] does not exist. in /home1/molni2j8/staging.premad.in/dc-dukaan/vendor/laravel/framework/src/Illuminate/Container/Container.php:891
+Stack trace:
+#0 /home1/molni2j8/staging.premad.in/dc-dukaan/vendor/laravel/framework/src/Illuminate/Container/Container.php(770): Illuminate\Container\Container->build('App\\Http\\Kernel')
+#1 /home1/molni2j8/staging.premad.in/dc-dukaan/vendor/laravel/framework/src/Illuminate/Foundation/Application.php(856): Illuminate\Container\Container->resolve('App\\Http\\Kernel', Array, false)
+#2 /home1/molni2j8/staging.premad.in/dc-dukaan/vendor/laravel/framework/src/Illuminate/Container/Container.php(296): Illuminate\Foundation\Application->resolve('App\\Http\\Kernel', Array, false)
+#3 /home1/molni2j8/staging.premad.in/dc-dukaan/vendor/laravel/framework/src/Illuminate/Container/Container.php(885): Illuminate\Container\Container->Illuminate\Container\{closure}(Object(Illuminate\Foundation\Application), Array)
+#4 /home1/molni2j8/staging.premad.in/dc-dukaan/vendor/laravel/framework/src/Illuminate/Container/Container.php(770): Illuminate\Container\Container->build(Object(Closure))
+#5 /home1/molni2j8/staging.premad.in/dc-dukaan/vendor/laravel/framework/src/Illuminate/Foundation/Application.php(856): Illuminate\Container\Container->resolve('Illuminate\\Cont...', Array, true)
+#6 /home1/molni2j8/staging.premad.in/dc-dukaan/vendor/laravel/framework/src/Illuminate/Container/Container.php(706): Illuminate\Foundation\Application->resolve('Illuminate\\Cont...', Array)
+#7 /home1/molni2j8/staging.premad.in/dc-dukaan/vendor/laravel/framework/src/Illuminate/Foundation/Application.php(841): Illuminate\Container\Container->make('Illuminate\\Cont...', Array)
+#8 /home1/molni2j8/staging.premad.in/dc-dukaan/index.php(49): Illuminate\Foundation\Application->make('Illuminate\\Cont...')
+#9 {main}
+  thrown in /home1/molni2j8/staging.premad.in/dc-dukaan/vendor/laravel/framework/src/Illuminate/Container/Container.php on line 891

@@ -77,7 +77,7 @@
                                                 <div class="mb-1">
                                                     <label class="form-label" for="first-name-column">Icon</label>
                                                     <div>
-                                                        <img src="{{ asset('public/images/categories/'.$category->image) }}" alt="">
+                                                        <img src="{{ asset('public/images/categories/'.$category->image) }}" alt="" width="100">
                                                     </div>
                                                 </div>
                                             </div>

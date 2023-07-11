@@ -33,9 +33,10 @@ class VendorRegisterLoginMobileRequest extends FormRequest
     public function failedValidation(Validator $validator)
     {
         throw new HttpResponseException(response()->json([
-            'success'   => false,
-            'message'   => 'Validation errors',
-            'data'      => $validator->errors()->first()
+            'ResponseCode' => 200,
+            'Status'   => false,
+            'Message'   => 'Validation errors',
+            'Data'      => $validator->errors()->first()
         ]));
 
     }

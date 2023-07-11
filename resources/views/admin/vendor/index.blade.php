@@ -50,10 +50,11 @@
                                     {{-- <a href="{{route('vendors.create')}}" class=" btn btn-info btn-gradient round  ">Add Category</a> --}}
                                 </div>
                                 <div class="card-datatable">
-                                    <table class="datatables-ajax table table-responsive">
+                                    <table class="datatables-ajax table table-responsive datatable_data" > 
                                         <thead>
                                             <tr>
                                                 <th>Sr.no</th>
+                                                <th>Image</th>
                                                 <th>Name</th>
                                                 <th>Mobile</th>
                                                 <th>Gender</th>
@@ -67,12 +68,17 @@
                                             @foreach($vendors as $key => $val)
                                             <tr>
                                                 <th scope="row">{{ $i }}</th>
+                                                <td> <img src="{{ asset('public/images/users/'.$val->image) }}" id="account-upload-img" class="uploadedAvatar rounded me-50" alt="profile image" height="100" width="100" /></td>
                                                 <td>
+                                                   
                                                     {{-- <strong>{{ $val->name }}</strong> --}}
-                                                    <a href="#" data-bs-toggle="modal"
-                                                            data-bs-target="#order_detail_{{ $val->id }}"><strong>{{ $val->name }}</strong></a>
+                                                    <a href="{{ route('vendors.show',$val->id) }}" 
+                                                    {{-- data-bs-toggle="modal"data-bs-target="#order_detail_{{ $val->id }}" --}}
+                                                            >
+                                                            <strong>{{ $val->name }}</strong>
+                                                        </a>
 
-                                                    <div class="modal fade text-start"
+                                                    {{-- <div class="modal fade text-start"
                                                             id="order_detail_{{ $val->id }}" tabindex="-1"
                                                             aria-labelledby="myModalLabel17" aria-hidden="true">
                                                             <div class="modal-dialog modal-dialog-centered">
@@ -123,7 +129,7 @@
                                                                     </div>
                                                                 </div>
                                                             </div>
-                                                        </div>
+                                                    </div> --}}
                                                 
                                                 
                                                 

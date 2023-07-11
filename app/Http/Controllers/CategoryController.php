@@ -40,13 +40,12 @@ class CategoryController extends Controller
     {
         if($request->hasFile('image')) {
             $image       = $request->file('image');
-            $filename    = $image->getClientOriginalName();
-            $image_resize = Image::make($image->getRealPath());              
-            $image_resize->resize(30,30);
-            $image_resize->save(public_path('images/categories/'.$filename));
+            $image_name = time().rand(1,100).'-'.$image->getClientOriginalName();
+            $image_name = preg_replace('/\s+/', '', $image_name);
+            $image->move(public_path('images/categories/'.$image_name));
         }
         $data = $request->validated();
-        $data['image'] = isset($filename) ? $filename : '';
+        $data['image'] = isset($image_name) ? $image_name : '';
         Category::create($data);
         return redirect()->route('categories.index')->with('success','Category Create Success');
     }
@@ -84,12 +83,15 @@ class CategoryController extends Controller
     {
         $data = $request->validated();
         if($request->hasFile('image')) {
-            $image       = $request->file('image');
-            $filename    = $image->getClientOriginalName();
-            $image_resize = Image::make($image->getRealPath());              
-            $image_resize->resize(30,30);
-            $image_resize->save(public_path('images/categories/'.$filename));
-            $data['image'] = $filename;
+            // $image       = $request->file('image');
+            // $image_name = time().rand(1,100).'-'.$image->getClientOriginalName();
+            // $image_name = preg_replace('/\s+/', '', $image_name);
+            // $image->move(public_path('images/categories/'.$image_name));
+
+            $image_name = time().rand(1,100).'-'.$request->image->getClientOriginalName();
+            $image_name = preg_replace('/\s+/', '', $image_name);
+            $request->image->move(public_path('images/categories'), $image_name);
+            $data['image'] = $image_name;
         }
         
         $category->update($data);

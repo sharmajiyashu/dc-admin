@@ -88,7 +88,7 @@
                                             <div class="col-md-6 col-12">
                                                 <div class="mb-1">
                                                     <label class="form-label"  for="last-name-column">Image</label>
-                                                    <input type="file" name="image[]" class="form-control">
+                                                    <input type="file" name="image[]" class="form-control product_image">
                                                 </div>
                                             </div>
 
@@ -100,18 +100,34 @@
 
                                             <div class="col-md-6">
                                                 <div class="mb-1">
-                                                    <a href="#" class="btn-danger" style="padding: 4px;" onclick="append_image()">Add More Image</a>
+                                                    <a href="#" class="btn-danger" id="ADDMOREIMEGBUTTION" style="padding: 4px;" onclick="append_image()">Add More Image</a>
                                                 </div>
                                             </div>
 
                                             <script>
                                                 function append_image(){
-                                                    $("#appentd_image").append(`<div class="col-md-6 col-12">
-                                                        <div class="mb-1">
-                                                            <label class="form-label"  for="last-name-column">Image</label>
-                                                            <input type="file" name="image[]" class="form-control">
-                                                        </div>
-                                                    </div>`);
+
+                                                    const elements = document.querySelectorAll('.product_image');
+                                                    const count = elements.length;
+                                                    
+                                                    if(count > 3){
+                                                        
+                                                    }else{
+                                                        $("#appentd_image").append(`<div class="col-md-6 col-12">
+                                                            <div class="mb-1">
+                                                                <label class="form-label"  for="last-name-column">Image</label>
+                                                                <input type="file" name="image[]" class="form-control product_image">
+                                                            </div>
+                                                        </div>`);
+                                                    }   
+
+                                                    const elementss = document.querySelectorAll('.product_image');
+                                                    const counts = elementss.length;
+
+                                                    if(counts == 4){
+                                                        document.getElementById("ADDMOREIMEGBUTTION").style.display = "none";
+                                                    }
+                                                    
                                                 }
                                             </script>
                                             

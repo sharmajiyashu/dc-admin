@@ -76,7 +76,7 @@
                                 </div>
                                 <div class="card-body statistics-body">
                                     <div class="row">
-                                        <div class="col-xl-3 col-sm-6 col-12 mb-2 mb-xl-0">
+                                        <div class="col-xl-2 col-sm-6 col-12 mb-2 mb-xl-0">
                                             <div class="d-flex flex-row">
                                                 <div class="avatar bg-light-primary me-2">
                                                     <div class="avatar-content">
@@ -84,12 +84,12 @@
                                                     </div>
                                                 </div>
                                                 <div class="my-auto">
-                                                    <h4 class="fw-bolder mb-0">0</h4>
-                                                    <p class="card-text font-small-3 mb-0">Vandors</p>
+                                                    <h4 class="fw-bolder mb-0">{{ $total_vendors }}</h4>
+                                                    <p class="card-text font-small-3 mb-0"><a href="{{ route('vendors.index') }}">Vandors</a></p>
                                                 </div>
                                             </div>
                                         </div>
-                                        <div class="col-xl-3 col-sm-6 col-12 mb-2 mb-xl-0">
+                                        <div class="col-xl-2 col-sm-6 col-12 mb-2 mb-xl-0">
                                             <div class="d-flex flex-row">
                                                 <div class="avatar bg-light-info me-2">
                                                     <div class="avatar-content">
@@ -97,12 +97,12 @@
                                                     </div>
                                                 </div>
                                                 <div class="my-auto">
-                                                    <h4 class="fw-bolder mb-0">0</h4>
-                                                    <p class="card-text font-small-3 mb-0">Customers</p>
+                                                    <h4 class="fw-bolder mb-0">{{ $total_customers }}</h4>
+                                                    <p class="card-text font-small-3 mb-0"><a href="{{ route('customers.index') }}">Customers</a></p>
                                                 </div>
                                             </div>
                                         </div>
-                                        <div class="col-xl-3 col-sm-6 col-12 mb-2 mb-sm-0">
+                                        <div class="col-xl-2 col-sm-6 col-12 mb-2 mb-sm-0">
                                             <div class="d-flex flex-row">
                                                 <div class="avatar bg-light-danger me-2">
                                                     <div class="avatar-content">
@@ -111,11 +111,11 @@
                                                 </div>
                                                 <div class="my-auto">
                                                     <h4 class="fw-bolder mb-0">{{ $total_product }}</h4>
-                                                    <p class="card-text font-small-3 mb-0">Products</p>
+                                                    <p class="card-text font-small-3 mb-0"><a href="{{ route('products.index') }}">Products</a></p>
                                                 </div>
                                             </div>
                                         </div>
-                                        <div class="col-xl-3 col-sm-6 col-12">
+                                        <div class="col-xl-2 col-sm-6 col-12">
                                             <div class="d-flex flex-row">
                                                 <div class="avatar bg-light-success me-2">
                                                     <div class="avatar-content">
@@ -124,7 +124,21 @@
                                                 </div>
                                                 <div class="my-auto">
                                                     <h4 class="fw-bolder mb-0">{{ $total_category }}</h4>
-                                                    <p class="card-text font-small-3 mb-0">Categories</p>
+                                                    <p class="card-text font-small-3 mb-0"><a href="{{ route('categories.index') }}">Categories</a></p>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="col-xl-2 col-sm-6 col-12">
+                                            <div class="d-flex flex-row">
+                                                <div class="avatar bg-light-success me-2">
+                                                    <div class="avatar-content">
+                                                        <i data-feather="shopping-cart" class="avatar-icon"></i>
+                                                    </div>
+                                                </div>
+                                                <div class="my-auto">
+                                                    <h4 class="fw-bolder mb-0">{{ $total_orders }}</h4>
+                                                    <p class="card-text font-small-3 mb-0"><a href="{{ route('orders.index') }}">Orders</a></p>
                                                 </div>
                                             </div>
                                         </div>

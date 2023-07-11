@@ -39,7 +39,18 @@
     <!-- BEGIN: Custom CSS-->
     <link rel="stylesheet" type="text/css" href="{{ asset('public/admin/assets/css/style.css')}}">
     <!-- END: Custom CSS-->
-
+    <link rel="stylesheet" href="{{ asset('public/admin/assets/datatable/datatable.css') }}">
+    <style>
+        .card-datatable{
+            padding: 9px;
+        }
+        tr{
+            border-bottom: 1px solid rgb(105 94 94 / 20%) !important;
+        }
+        table.dataTable tbody tr.even {
+            background-color: #f3f2f7;
+        }
+    </style>
 </head>
 <!-- END: Head-->
 
@@ -61,6 +72,9 @@
     </footer>
     <button class="btn btn-primary btn-icon scroll-top" type="button"><i data-feather="arrow-up"></i></button>
     <!-- END: Footer-->
+
+
+    
 
 
     @include('admin.layouts.js')
