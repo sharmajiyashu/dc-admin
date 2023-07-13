@@ -7,6 +7,7 @@ use App\Http\Requests\CustomerRegisterLoginMobileRequest;
 use App\Http\Requests\CustomersUpdateDetail;
 use App\Http\Requests\VarifyOtp;
 use App\Http\Requests\UploadApi;
+use App\Models\Category;
 use App\Models\Customer;
 use App\Models\Role;
 use App\Models\Product;
@@ -41,8 +42,12 @@ class CustomerController extends Controller
         }else{
             return $this->sendFailed('PLEASE ENTER PIN AND OTP',200);
         }
+
+        
         $total_product = Product::where('user_id',$request->user_id)->count();
         if(!empty($customer)){
+            $this->GenerateVendorCategory($customer->id);
+            
             $customer->otp_verify = '1';
             $customer->save();
             $token =  $customer->createToken($customer->mobile)->plainTextToken;
@@ -50,6 +55,27 @@ class CustomerController extends Controller
             return $this->sendSuccess($type.' VERIFIED SUCCESSFULLY',['is_register' => $customer->is_register,'user_id' => $customer->id,'active_store_code' => $customer->active_store_code,'total_product' => $total_product,'accessToken' => $token]);
         }else{
             return $this->sendFailed('INVALID '.$type,200);
+        }
+    }
+
+    function GenerateVendorCategory($id){
+        $vendor = Vendor::where('id',$id)->Vendor()->status(Vendor::$active)->first();
+        if($vendor->is_register != 1){
+            $products = Category::where('is_admin','1')->get();
+            foreach($products as $key=>$val){
+                $check_category = Category::where('user_id',$vendor->id)->where('admin_id',$val->id)->count();
+                if($check_category == 0){
+                    $data = [
+                        'title' => $val->title,
+                        'image' => $val->image,
+                        'packing_quantity' => $val->packing_quantity,
+                        'status' => $val->status,
+                        'admin_id' => $val->id,
+                        'user_id' => $vendor->id,
+                    ];
+                    Category::create($data);
+                }
+            }
         }
     }
 

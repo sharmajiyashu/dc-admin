@@ -15,6 +15,7 @@ use App\Models\WishCart;
 use App\Traits\ApiResponse;
 use Illuminate\Support\Str;
 use App\Http\Requests\ChangeStatusApi;
+use App\Http\Requests\UpdateCategoryPackingApi;
 use App\Models\Slab;
 use App\Models\StoreLink;
 
@@ -42,7 +43,7 @@ class VendorController extends Controller
     function GenerateStoreCode(){
         $store_code = Str::upper(Str::random(7));
         if(Vendor::where('store_code',$store_code)->first()){
-            $this->generate_coupon();
+            $this->GenerateStoreCode();
         }else{
             return $store_code;
         }
@@ -120,15 +121,33 @@ class VendorController extends Controller
 
             if(!empty($request->link_id)){
                 $store_link = StoreLink::where('id',$request->link_id)->first();
-                if($slab->status == StoreLink::$active){
+                if($store_link->status == StoreLink::$active){
                     StoreLink::where('id',$request->link_id)->update(['status' => Slab::$inactive]);
                 }else{
                     StoreLink::where('id',$request->link_id)->update(['status' => Slab::$active]);
                 }
             }
 
+            if(!empty($request->category_id)){
+                $category = Category::where('id',$request->category_id)->first();
+                if($category->status == Category::$active){
+                    Category::where('id',$request->category_id)->update(['status' => Category::$inactive]);
+                }else{
+                    Category::where('id',$request->category_id)->update(['status' => Category::$active]);
+                }
+            }
+
             return $this->sendSuccess('STATUS CHANGE SUCCESSFULLY');
 
+        }catch(\Throwable $e){
+            return $this->sendFailed($e->getMessage(). ' On Line '. $e->getLine(),200);
+        }
+    }
+
+    public function UpdateCategoryPackage(UpdateCategoryPackingApi $request){
+        try{
+            Category::where('user_id',$request->user()->id)->where('id',$request->category_id)->update(['packing_quantity' => $request->packing_quantity]);
+            return $this->sendSuccess('PACKING QUANTITY CHANGE SUCCESSFULLY');
         }catch(\Throwable $e){
             return $this->sendFailed($e->getMessage(). ' On Line '. $e->getLine(),200);
         }

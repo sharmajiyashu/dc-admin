@@ -6,7 +6,7 @@ use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\Exceptions\HttpResponseException;
 use Illuminate\Contracts\Validation\Validator;
 
-class ChangeStatusApi extends FormRequest
+class UpdateCategoryPackingApi extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -26,12 +26,11 @@ class ChangeStatusApi extends FormRequest
     public function rules()
     {
         return [
-            'product_id' => 'nullable|exists:products,id',
-            'slab_id' => 'nullable|exists:slabs,id',
-            'link_id' => 'nullable|exists:store_links,id',
-            'category_id' => 'nullable|exists:categories,id'
+            'category_id' => 'required|exists:categories,id',
+            'packing_quantity' => 'required|numeric|min:1'
         ];
     }
+
 
     public function failedValidation(Validator $validator)
     {
@@ -43,4 +42,5 @@ class ChangeStatusApi extends FormRequest
         ]));
 
     }
+
 }

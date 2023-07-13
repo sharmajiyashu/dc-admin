@@ -12,6 +12,8 @@ use App\Http\Requests\GetVendorProductsApi;
 use App\Models\Vendor;
 use App\Traits\ApiResponse;
 use Illuminate\Support\Facades\Redis;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\File;
 
 class ProductController extends Controller
 {
@@ -112,7 +114,8 @@ class ProductController extends Controller
     public function GetAdminProducts(Request $request){
         try{
             if($request->user()->role_id == Role::$vendor){
-                $products = Product::select('products.name','products.detail','products.images','products.status')->join('users','users.id','=','products.user_id')->join('roles','roles.id','=','users.role_id')->where(['users.role_id'=> Role::$admin,'products.status' => 'Active'])->orderBy('products.id','DESC')->get();
+                // $products = Product::select('products.name','products.detail','products.images','products.status')->join('users','users.id','=','products.user_id')->join('roles','roles.id','=','users.role_id')->where(['users.role_id'=> Role::$admin,'products.status' => 'Active'])->orderBy('products.id','DESC')->get();
+                $products = Product::where(['is_admin' => '1' ,'status' => 'Active'])->orderBy('products.id','DESC')->get();
                 foreach($products as $key=>$val){
                     $images = json_decode($val['images']);
                     foreach($images as $k){
@@ -131,17 +134,27 @@ class ProductController extends Controller
 
     public function GetAllCategories(Request $request){
         try{
-            // if($request->user()->role_id == Role::$vendor){
-                $categories = Category::where('status','Active')->get();
+            if($request->role_id == Role::$customer){
+                $vendor = Vendor::where('store_code',$request->user()->active_store_code)->first();
+                if(!empty($vendor)){
+                    $categories = Category::where(['status' => Category::$active ,'is_delete' => '0' ,'user_id' => $vendor->id])->get();
+                }else{
+                    $categories = Category::where(['status' => Category::$active ,'is_delete' => '0' ,'user_id' => 00])->get();
+                }
+            }elseif($request->role_id == Role::$vendor){
+                $categories = Category::where(['is_delete' => '0' ,'user_id' => $request->user()->id])->get();
+            }   
+
+            if(!empty($categories)){
                 foreach($categories as $key=>$val){
                     if(!empty($val->image)){
                         $val['image'] = asset('public/images/categories/'.$val->image);
                     }
                 }
                 return $this->sendSuccess('CATEGORIES FETCH SUCCESSFULLY', $categories);
-            // }else{
-            //     return $this->sendFailed('This For Only Vendors',200);
-            // }
+            }else{
+                return $this->sendFailed('CATEGORIES NOT FOUND ',200);
+            }
         }catch(\Throwable $e){
             return $this->sendFailed($e->getMessage(). ' On Line '. $e->getLine(),200);
         }
@@ -172,7 +185,7 @@ class ProductController extends Controller
     public function NewArrivalProducts(CreateOrderApi $request){
         try{
             $vendor = Vendor::where('store_code',$request->user()->active_store_code)->first();
-            $products = Product::where(['user_id'=>$vendor->id,'status'=>'Active'])->orderBy('id','DESC')->limit(10)->get();
+            $products = Product::where(['user_id'=>$vendor->id,'status'=>'Active','is_delete' => '0'])->orderBy('id','DESC')->limit(10)->get();
             foreach($products as $key=>$val){
                 $images = json_decode($val['images']);
                 if(!empty($images)){
@@ -193,7 +206,8 @@ class ProductController extends Controller
 
     public function GetProductByName(Request $request){
         try{
-            $products = Product::select('products.name','products.detail','products.images','products.status','products.id','products.category_id')->join('users','users.id','=','products.user_id')->join('roles','roles.id','=','users.role_id')->where(['users.role_id'=> Role::$admin,'products.status' => 'Active'])->where('products.name',$request->name)->orderBy('products.id','DESC')->first();
+            
+            $products = Product::where(['is_admin' => '1' ,'status' => 'Active'])->where('products.name',$request->name)->orderBy('products.id','DESC')->first();
             if(!empty($products)){
                 $images = json_decode($products->images);
                 if(!empty($images)){
@@ -219,6 +233,8 @@ class ProductController extends Controller
     public function AddBulkProduct(Request $request){
         try{
             $data = $request->all();
+
+            // print_r($data);die;
             $total_create = 0;
             $total_update = 0;
             foreach($data as $key=>$val){
@@ -235,17 +251,30 @@ class ProductController extends Controller
                 $product->unit = $val['unit'];
 
                 $images = [];
-                $image = $val['image'];
+                // $image = $val['image'];
+                
+                if(!empty($val['image'])){
+                    $imageData = $val['image'];
+                    $exploded = explode(",", $imageData);
+                    $decoded = base64_decode($exploded[1]);
+                    $imageName = 'image_' . time() . '.png';
+                    $imagePath = public_path('images/products/' . $imageName);
 
-                if(!empty($image)){
-                    $image_name = time().rand(1,100).'-'.$image->getClientOriginalName();
-                    $image_name = preg_replace('/\s+/', '', $image_name);
-                    $val->move(public_path('images/products'), $image_name);
-                    $images[] = $image_name;
+                    File::put($imagePath,$decoded);
+                    $images[] = $imageName;
+                    $product->images = json_encode($images);
                 }
+                
 
                 if (!empty($val['id'])) {
                     $product = Product::find($val['id']); // Retrieve the existing record
+                    $images = json_decode($product->images);
+                    if(!empty($imageName)){
+                        $images[] = $imageName;
+                        $product->update([
+                            'images' => json_encode($images),
+                        ]);
+                    }
                     $product->update([
                         'name' => $val['name'],
                         'category_id' => $val['category_id'],
@@ -273,5 +302,5 @@ class ProductController extends Controller
             return $this->sendFailed($e->getMessage(). ' On Line '. $e->getLine(),200);
         }
     }
-
+    
 }

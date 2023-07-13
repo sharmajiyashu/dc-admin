@@ -20,8 +20,7 @@ class ProductController extends Controller
      */
     public function index()
     {
-        // $products = Product::with('category')->orderBy('id','desc')->get();
-        $products = Product::select('products.*')->join('users','users.id','=','products.user_id')->join('roles','roles.id','=','users.role_id')->where(['users.role_id'=> Role::$admin,'products.status' => 'Active'])->with('category')->orderBy('id','desc')->get();
+        $products = Product::where('is_admin','1')->with('category')->orderBy('id','desc')->get();
         foreach($products as $key=>$val){
             $images = json_decode($val->images);
             $val['image'] = isset($images[0]) ? $images[0] :'download.png';
@@ -54,6 +53,8 @@ class ProductController extends Controller
         $data = $request->validated();
         $data['detail'] = $request->detail;
         $data['user_id'] = Auth::user()->id;
+        $data['is_admin'] = '1';
+        
         if(!empty($request->image)){    
             $image = [];
             foreach($request->image as $key=>$val){ 

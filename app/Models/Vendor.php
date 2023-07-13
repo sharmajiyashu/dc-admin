@@ -10,5 +10,18 @@ class Vendor extends Model
     use HasFactory;
     protected $table = 'users';
     protected $fillable = ['mobile','name','gender','dob','state','city','address','pin','image','role_id','image'];
+
+    public function scopeVendor($query)
+    {
+        return $query->where('role_id',Role::$vendor);
+    }
+
+    public function scopeStatus($query, $args){
+        return $query->where('status',$args);
+    }
+
+    static $active = '1';
+    static $inactive = '0';
+    
     
 }

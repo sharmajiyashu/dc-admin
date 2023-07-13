@@ -9,12 +9,13 @@ trait ApiResponse
         $response = [
             'ResponseCode'  => 200,
             'Status'    => true,
-            'Message' => $message
+            'Message' => $message,
+            'Data' => $result
         ];
 
-        if (!empty($result)) {
-            $response['Data'] = $result;
-        }
+        // if (!empty($result)) {
+        //     // $response['Data'] = $result;
+        // }
         return response()->json($response, 200);
     }
 
