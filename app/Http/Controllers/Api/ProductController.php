@@ -33,6 +33,12 @@ class ProductController extends Controller
                     $data['is_limited'] = '0';
                 }
 
+                if(!empty($request->packing_quantity)){
+                    $data['packing_quantity'] = $request->packing_quantity;
+                }else{
+                    $data['packing_quantity'] = '1';
+                }
+
                 if(!empty($request->image)){ 
                     $image = [];
                     foreach($request->image as $key=>$val){ 
@@ -134,14 +140,14 @@ class ProductController extends Controller
 
     public function GetAllCategories(Request $request){
         try{
-            if($request->role_id == Role::$customer){
+            if($request->user()->role_id == Role::$customer){
                 $vendor = Vendor::where('store_code',$request->user()->active_store_code)->first();
                 if(!empty($vendor)){
                     $categories = Category::where(['status' => Category::$active ,'is_delete' => '0' ,'user_id' => $vendor->id])->get();
                 }else{
                     $categories = Category::where(['status' => Category::$active ,'is_delete' => '0' ,'user_id' => 00])->get();
                 }
-            }elseif($request->role_id == Role::$vendor){
+            }elseif($request->user()->role_id == Role::$vendor){
                 $categories = Category::where(['is_delete' => '0' ,'user_id' => $request->user()->id])->get();
             }   
 

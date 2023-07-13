@@ -9,7 +9,7 @@ class StoreLink extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['user_id','store_code' ,'vendor_id','status','in_add'];
+    protected $fillable = ['user_id','store_code' ,'vendor_id','status','in_add','slab_id'];
 
     static $active = '1';
     static $inactive = '2';

@@ -27,8 +27,8 @@ class DeleteOrderApi extends FormRequest
     {
         return [
             'order_id' => 'nullable|exists:orders,id',
-            'form_date' => 'nullable|date',
-            'to_date' => 'required_with:form_date'
+            'from_date' => 'nullable|date',
+            'to_date' => 'required_with:from_date'
         ];
     }
 

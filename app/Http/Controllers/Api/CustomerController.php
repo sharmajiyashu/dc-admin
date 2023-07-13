@@ -60,23 +60,26 @@ class CustomerController extends Controller
 
     function GenerateVendorCategory($id){
         $vendor = Vendor::where('id',$id)->Vendor()->status(Vendor::$active)->first();
-        if($vendor->is_register != 1){
-            $products = Category::where('is_admin','1')->get();
-            foreach($products as $key=>$val){
-                $check_category = Category::where('user_id',$vendor->id)->where('admin_id',$val->id)->count();
-                if($check_category == 0){
-                    $data = [
-                        'title' => $val->title,
-                        'image' => $val->image,
-                        'packing_quantity' => $val->packing_quantity,
-                        'status' => $val->status,
-                        'admin_id' => $val->id,
-                        'user_id' => $vendor->id,
-                    ];
-                    Category::create($data);
+        if(!empty($vendor)){
+            if($vendor->is_register != 1){
+                $products = Category::where('is_admin','1')->get();
+                foreach($products as $key=>$val){
+                    $check_category = Category::where('user_id',$vendor->id)->where('admin_id',$val->id)->count();
+                    if($check_category == 0){
+                        $data = [
+                            'title' => $val->title,
+                            'image' => $val->image,
+                            'packing_quantity' => $val->packing_quantity,
+                            'status' => $val->status,
+                            'admin_id' => $val->id,
+                            'user_id' => $vendor->id,
+                        ];
+                        Category::create($data);
+                    }
                 }
             }
         }
+        
     }
 
     function CustomersUpdateDetail(CustomersUpdateDetail $request){

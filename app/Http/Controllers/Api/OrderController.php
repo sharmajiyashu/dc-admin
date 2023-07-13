@@ -110,7 +110,7 @@ class OrderController extends Controller
     
     public function VendorOrderHistory(Request $request){
         try{
-            $orders = Order::where(['vendor_id' => $request->user()->id])->orderBy('id','DESC')->get();
+            $orders = Order::where(['vendor_id' => $request->user()->id])->where('is_delete','0')->orderBy('id','DESC')->get();
             foreach($orders as $key=>$val){
                 $user = Vendor::where('id',$val->user_id)->first();
                 $val['total_item'] = Cart::where('order_id',$val->id)->count();
@@ -180,13 +180,15 @@ class OrderController extends Controller
         try{
             if(!empty($request->order_id)){
                 Order::where('id',$request->order_id)->update(['is_delete' => '1']);
+                return $this->sendSuccess('ORDER DELETED SUCCESSFULLY');
             }
-            if(!empty($request->form_date) && !empty($request->to_date)){
-                $form_date = date('Y-m-d',strtotime($request->form_date));
+            if(!empty($request->from_date) && !empty($request->to_date)){
+                $from_date = date('Y-m-d',strtotime($request->from_date));
                 $to_date = date('Y-m-d',strtotime($request->to_date));
-                Order::whereDate('created_at','>=',$form_date)->whereDate('created_at','<=',$to_date)->update(['is_delete' => '1']);
+                Order::whereDate('created_at','>=',$from_date)->whereDate('created_at','<=',$to_date)->update(['is_delete' => '1']);
+                return $this->sendSuccess('ORDER DELETED SUCCESSFULLY');
             }
-            return $this->sendSuccess('ORDER DELETED SUCCESSFULLY');
+            return $this->sendFailed('PLEASE ENTER VALID INPUT ',200);
         }catch(\Throwable $e){
             return $this->sendFailed($e->getMessage(). ' On Line '. $e->getLine(),200);
         }        

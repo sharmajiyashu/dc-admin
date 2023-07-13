@@ -166,6 +166,7 @@ class CartController extends Controller
         }
         $product->images = isset($new_img)  ? $new_img :'';
         $product->category_name = isset($category->title)  ? $category->title :'';
+        // if(!empty())
         $product->category_image = asset('public/images/categories/'.$category->image);
         return $product;
     }
