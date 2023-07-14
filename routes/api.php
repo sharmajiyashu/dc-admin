@@ -53,6 +53,7 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
     Route::post('link_customers_by_mobile',[StoreLinkController::class,'AddCustomersByMobile']);
     Route::post('update_active_store',[StoreLinkController::class,'UpdateActiveStore']);
     Route::post('upload_profile_image',[CustomerController::class,'UploadImage']);
+    Route::post('upload_store_image',[VendorController::class,'UploadStoreImage']);
 
     Route::get('vendor_orders_history',[OrderController::class,'VendorOrderHistory']);
     Route::post('vendor_orders_detail',[OrderController::class,'VendorOrderDetail']);

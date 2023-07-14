@@ -125,6 +125,7 @@ class CustomerController extends Controller
     public function ViewProfile(Request $request){
         try{
             $request->user()->image = asset('public/images/users/'.$request->user()->image);
+            $request->user()->store_image = asset('public/images/users/'.$request->user()->store_image);
             return $this->sendSuccess('DETAIL FETCH SUCCESS',$request->user());
         }catch(\Throwable $e){
             return $this->sendFailed($e->getMessage(). ' On Line '. $e->getLine(),200);

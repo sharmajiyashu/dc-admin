@@ -16,6 +16,7 @@ use App\Traits\ApiResponse;
 use Illuminate\Support\Str;
 use App\Http\Requests\ChangeStatusApi;
 use App\Http\Requests\UpdateCategoryPackingApi;
+use App\Http\Requests\UploadApi;
 use App\Models\Slab;
 use App\Models\StoreLink;
 
@@ -148,6 +149,24 @@ class VendorController extends Controller
         try{
             Category::where('user_id',$request->user()->id)->where('id',$request->category_id)->update(['packing_quantity' => $request->packing_quantity]);
             return $this->sendSuccess('PACKING QUANTITY CHANGE SUCCESSFULLY');
+        }catch(\Throwable $e){
+            return $this->sendFailed($e->getMessage(). ' On Line '. $e->getLine(),200);
+        }
+    }
+
+    public function UploadStoreImage(UploadApi $request){
+        try{
+            if($request->hasFile('image')) {
+                $image       = $request->file('image');
+                $image_name = time().rand(1,100).'-'.$image->getClientOriginalName();
+                $image_name = preg_replace('/\s+/', '', $image_name);
+                $image->move(public_path('images/users'), $image_name);   
+                
+                Vendor::where('id',$request->user()->id)->update(['store_image' => $image_name]);
+                return $this->sendSuccess('UPLOAD IMAGE SUCCESSFULLY',['image' => asset('public/images/users/'.$image_name)]);
+            }else{
+                return $this->sendFailed('IMAGE IS INVALID',200);
+            }
         }catch(\Throwable $e){
             return $this->sendFailed($e->getMessage(). ' On Line '. $e->getLine(),200);
         }

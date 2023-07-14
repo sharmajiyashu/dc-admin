@@ -79,9 +79,11 @@ class StoreLinkController extends Controller
             $results = [];
             foreach($stores as $key=>$val){
                 $vendor = $this->GetVendorDetail($val->user_id);
+                $slab = Slab::where('id',$val->slab_id)->first();
                 $val->customer_name = isset($vendor->name)  ? $vendor->name :'';
                 $val->customer_mobile = isset($vendor->mobile)  ? $vendor->mobile :'';
                 $val->customer_city = isset($vendor->city)  ? $vendor->city :'';
+                $val->slab_name = isset($slab->name) ? $slab->name :'';
                 if($vendor->is_register != '1'){
                     unset($stores[$key]);
                 }else{
