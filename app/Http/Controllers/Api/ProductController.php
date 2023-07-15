@@ -244,58 +244,82 @@ class ProductController extends Controller
             $total_create = 0;
             $total_update = 0;
             foreach($data as $key=>$val){
-                $product = new Product();
-                $product->name = $val['name'];
-                $product->category_id = $val['category_id'];
-                $product->sp = $val['sp'];
-                $product->mrp = $val['mrp'];
-                $product->stock = $val['stock'];
-                $product->order_limit = $val['order_limit'];
-                $product->quantity = $val['quantity'];
-                $product->packing_quantity = $val['packing_quantity'];
-                $product->user_id = $request->user()->id;
-                $product->unit = $val['unit'];
+                $data = [
+                            'name' => $val['name'],
+                            'category_id' => $val['category_id'],
+                            'sp' => $val['sp'],
+                            'mrp' => $val['mrp'],
+                            'stock' => $val['stock'],
+                            'order_limit' => $val['order_limit'],
+                            'quantity' => $val['quantity'],
+                            'packing_quantity' => $val['packing_quantity'],
+                            'user_id' => $request->user()->id,
+                            'unit' => $val['unit'],
+                        ];
+
+                        if(empty($data['packing_quantity'])){
+                            $data['packing_quantity'] = 1;
+                        }
+
+                        if(empty($data['stock'])){
+                            $data['is_limited'] = '0';
+                        }else{
+                            $data['is_limited'] = '1';
+                        }
 
                 $images = [];
                 // $image = $val['image'];
                 
                 if(!empty($val['image'])){
+                    
                     $imageData = $val['image'];
                     $exploded = explode(",", $imageData);
                     $decoded = base64_decode($exploded[1]);
-                    $imageName = 'image_' . time() . '.png';
-                    $imagePath = public_path('images/products/' . $imageName);
 
-                    File::put($imagePath,$decoded);
-                    $images[] = $imageName;
-                    $product->images = json_encode($images);
+                    if ($decoded === false) {
+                        // base64 string is not valid
+                        // handle the error or return a response indicating invalid format
+                    } else {
+                        // base64 string is valid
+                        $imageName = 'image_' . time() . '.png';
+                        $imagePath = public_path('images/products/' . $imageName);
+                        File::put($imagePath, $decoded);
+                        $images[] = $imageName;
+                        $data['images'] = json_encode($images);
+                    }
+
                 }
                 
 
-                if (!empty($val['id'])) {
-                    $product = Product::find($val['id']); // Retrieve the existing record
-                    $images = json_decode($product->images);
-                    if(!empty($imageName)){
-                        $images[] = $imageName;
-                        $product->update([
-                            'images' => json_encode($images),
-                        ]);
+                if(!empty($val['id'])) {
+                    $product = Product::where('is_admin','!=','1')->find($val['id']); // Retrieve the existing record
+                    if(!empty($product)){
+                        $images = json_decode($product->images);
+                        if(!empty($imageName)){
+                            $images[] = $imageName;
+                            $product->update([
+                                'images' => json_encode($images),
+                            ]);
+                        }
+                        $product->update($data);
+                        $total_update ++;
                     }
-                    $product->update([
-                        'name' => $val['name'],
-                        'category_id' => $val['category_id'],
-                        'sp' => $val['sp'],
-                        'mrp' => $val['mrp'],
-                        'stock' => $val['stock'],
-                        'order_limit' => $val['order_limit'],
-                        'quantity' => $val['quantity'],
-                        'packing_quantity' => $val['packing_quantity'],
-                        'user_id' => $request->user()->id,
-                        'unit' => $val['unit'],
-                    ]);
-                    $total_update ++;
-                } else {
-                    $product->save();
+                }elseif(!empty($val['fetch_product_id'])){
+                    $product = Product::where('is_admin','1')->find($val['fetch_product_id']); // Retrieve the existing record
+                    if(!empty($product)){
+                        if(!empty($imageName)){
+                            $images = json_decode($product->images);
+                            $images[] = $imageName;
+                            $data['images'] = json_encode($images);
+                        }else{
+                            $data['images'] = $product->images;
+                        }
+                        $data['category_id'] = $product->category_id;
+                        Product::create($data);
+                        $total_create ++;
+                    }
+                }else{
+                    Product::create($data);
                     $total_create ++;
                 }
 

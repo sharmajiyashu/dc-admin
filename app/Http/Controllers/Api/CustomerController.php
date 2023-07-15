@@ -11,6 +11,7 @@ use App\Models\Category;
 use App\Models\Customer;
 use App\Models\Role;
 use App\Models\Product;
+use App\Models\User;
 use App\Models\Vendor;
 use App\Traits\ApiResponse;
 use Illuminate\Http\Request;
@@ -126,6 +127,14 @@ class CustomerController extends Controller
         try{
             $request->user()->image = asset('public/images/users/'.$request->user()->image);
             $request->user()->store_image = asset('public/images/users/'.$request->user()->store_image);
+
+            $vendor = Vendor::where('store_code',$request->user()->active_store_code)->first();
+            $request->user()->active_store_name = isset($vendor->store_name) ? $vendor->store_name :'';
+            if(!empty($vendor)){
+                $request->user()->active_store_image = asset('public/images/users/'.$vendor->store_image);
+            }else{
+                $request->user()->active_store_image = "";
+            }
             return $this->sendSuccess('DETAIL FETCH SUCCESS',$request->user());
         }catch(\Throwable $e){
             return $this->sendFailed($e->getMessage(). ' On Line '. $e->getLine(),200);
