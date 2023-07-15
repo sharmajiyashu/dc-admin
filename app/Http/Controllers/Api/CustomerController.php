@@ -15,6 +15,7 @@ use App\Models\User;
 use App\Models\Vendor;
 use App\Traits\ApiResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Intervention\Image\ImageManagerStatic as Image;
 
 class CustomerController extends Controller
@@ -136,6 +137,24 @@ class CustomerController extends Controller
                 $request->user()->active_store_image = "";
             }
             return $this->sendSuccess('DETAIL FETCH SUCCESS',$request->user());
+        }catch(\Throwable $e){
+            return $this->sendFailed($e->getMessage(). ' On Line '. $e->getLine(),200);
+        }
+    }
+
+    public function GetStates(){
+        try{
+            $states = DB::table('states')->select('id','name','iso2 as code')->orderBy('name','ASC')->get();
+            return $this->sendSuccess('STATES FETCH SUCCESSFULLY',$states);
+        }catch(\Throwable $e){
+            return $this->sendFailed($e->getMessage(). ' On Line '. $e->getLine(),200);
+        }
+    }
+
+    public function GetCities(Request $request){
+        try{
+            $states = DB::table('cities')->where('state_id',$request->state_id)->select('id','name')->orderBy('name','ASC')->get();
+            return $this->sendSuccess('CITIES FETCH SUCCESSFULLY',$states);
         }catch(\Throwable $e){
             return $this->sendFailed($e->getMessage(). ' On Line '. $e->getLine(),200);
         }

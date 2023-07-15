@@ -81,6 +81,9 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
     Route::post('change_status',[VendorController::class,'ChangeStatus']);
     Route::post('update_category_quantity',[VendorController::class,'UpdateCategoryPackage']);
 
+    Route::get('get_states',[CustomerController::class,'GetStates']);
+    Route::post('get_cities',[CustomerController::class,'GetCities']);
+
 });
 Route::post('customer_register_login_mobile',[CustomerController::class,'customerRegisterLoginMobile']);
 Route::post('vendor_register_login_mobile',[VendorController::class,'VendorRegisterLoginMobile']);

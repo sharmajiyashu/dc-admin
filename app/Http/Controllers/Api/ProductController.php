@@ -247,15 +247,19 @@ class ProductController extends Controller
                 $data = [
                             'name' => $val['name'],
                             'category_id' => $val['category_id'],
-                            'sp' => $val['sp'],
-                            'mrp' => $val['mrp'],
-                            'stock' => $val['stock'],
-                            'order_limit' => $val['order_limit'],
-                            'quantity' => $val['quantity'],
-                            'packing_quantity' => $val['packing_quantity'],
+                            'sp' => isset($val['sp']) ? $val['sp'] :'0',
+                            'mrp' => isset($val['mrp']) ? $val['mrp'] :'0',
+                            'stock' => isset($val['stock']) ? $val['stock'] :'0',
+                            'order_limit' => isset($val['order_limit']) ? $val['order_limit'] :'0',
+                            'quantity' => isset($val['quantity']) ? $val['quantity'] :'',
+                            'packing_quantity' => isset($val['packing_quantity']) ? $val['packing_quantity'] :'',
                             'user_id' => $request->user()->id,
-                            'unit' => $val['unit'],
+                            'unit' => isset($val['unit']) ? $val['unit'] :'',
                         ];
+
+                        if(empty($data['sp'])){
+                            $data['sp'] = $data['mrp'];
+                        }
 
                         if(empty($data['packing_quantity'])){
                             $data['packing_quantity'] = 1;
