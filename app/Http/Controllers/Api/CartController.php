@@ -23,7 +23,7 @@ class CartController extends Controller
         try{
             $product = Product::where('id',$request->product_id)->first();
             $vendor = Vendor::where('id',$product->user_id)->first();
-            
+
             if($request->quantity % $product->packing_quantity) {
                 return $this->sendFailed('PLEASE ENTER QUANTITY BY PACKING',200);
             }
@@ -33,7 +33,7 @@ class CartController extends Controller
 
 
             if($product->is_limited == Product::$limited){
-                
+
                 $wist_quantity = 0;
 
                 if($request->quantity > $product->stock){
@@ -64,7 +64,7 @@ class CartController extends Controller
                     $wist_cart['store_code'] = $vendor->store_code;
                     $wist_cart['vendor_id'] =$vendor->id;
                     $last_wist_cart = WishCart::where(['user_id' => $request->user()->id ,'product_id' => $request->product_id ,'status' => '0'])->first();
-                
+
                     if(empty($last_wist_cart)){
                         $quantity = $wist_quantity;
                         $wish_cart_total = $quantity * $product->sp;
@@ -83,7 +83,7 @@ class CartController extends Controller
                 }
 
             }
-            
+
 
             if($request->quantity > 0){
 
@@ -91,7 +91,7 @@ class CartController extends Controller
                     $remaining_stocks = $product->stock - $request->quantity;
                     Product::where('id',$product->id)->update(['stock' => $remaining_stocks]);
                 }
-                
+
                 $cart = $request->validated();
                 $cart['user_id'] = $request->user()->id;
                 $cart['product_id'] = $product->id;
@@ -99,7 +99,7 @@ class CartController extends Controller
                 $cart['p_mrp'] = $product->mrp;
                 $cart['status'] = '0';
                 $cart['store_code'] = $vendor->store_code;
-                $cart['vendor_id'] =$vendor->id; 
+                $cart['vendor_id'] =$vendor->id;
 
                 $last_cart = Cart::where(['user_id' => $request->user()->id ,'product_id' => $request->product_id ,'status' => '0'])->first();
                 if(empty($last_cart)){
@@ -144,6 +144,7 @@ class CartController extends Controller
                 $product = $this->getProductData($val->product_id);
                 $val->product_name = isset($product->name) ? $product->name :'';
                 $val->product_image = isset($product->images) ? $product->images :'';
+                $val->product_detail = isset($product->detail) ? $product->detail :'';
                 $val->packing_quantity = isset($product->packing_quantity) ? $product->packing_quantity :'';
                 $val->category_name = isset($product->category_name) ? $product->category_name :'';
                 $val->category_image = isset($product->category_image) ? $product->category_image :'';
@@ -217,7 +218,7 @@ class CartController extends Controller
                         }else{
                             WishCart::where('user_id',$request->user()->id)->where('product_id',$cart->product_id)->delete();
                         }
-                        
+
                         return $this->sendSuccess('DECREMENT CART QUANTITY SUCCESSFULLY','');
                     }
                 }
@@ -250,7 +251,21 @@ class CartController extends Controller
         Product::where('id',$product->id)->update(['stock' => $product->stock + $stock]);
     }
 
-    
+    public function RemoveAllItem(Request $request){
+        try{
+            $cart = Cart::where('user_id',$request->user()->id)->where('status','0');
+            if($cart->count() > 0){
+                $cart->delete();
+                return $this->sendSuccess('DELETE CART ITEM SUCCESSFULLY','');
+            }else{
+                return $this->sendFailed('CART ITEM IS EMPITY ',200);
+            }
+        }catch(\Throwable $e){
+            return $this->sendFailed($e->getMessage(). ' On Line '. $e->getLine(),200);
+        }
+    }
+
+
 
 
 }

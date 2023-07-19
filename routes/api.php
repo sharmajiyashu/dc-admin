@@ -24,7 +24,7 @@ use App\Http\Controllers\Api\SlabController;
 
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
-    
+
 });
 
 Route::group(['middleware' => 'auth:sanctum'], function () {
@@ -83,6 +83,8 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
 
     Route::get('get_states',[CustomerController::class,'GetStates']);
     Route::post('get_cities',[CustomerController::class,'GetCities']);
+
+    Route::get('remove_cart_items',[CartController::class,'RemoveAllItem']);
 
 });
 Route::post('customer_register_login_mobile',[CustomerController::class,'customerRegisterLoginMobile']);
