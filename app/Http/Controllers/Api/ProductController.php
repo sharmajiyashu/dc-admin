@@ -285,7 +285,8 @@ class ProductController extends Controller
                         // handle the error or return a response indicating invalid format
                     } else {
                         // base64 string is valid
-                        $imageName = 'image_' . time() . '.png';
+                        // $imageName = 'image_' . time() . '.png';
+                        $imageName = 'image_'.time() .rand(1,100).'.png';
                         $imagePath = public_path('images/products/' . $imageName);
                         File::put($imagePath, $decoded);
                         $images[] = $imageName;
