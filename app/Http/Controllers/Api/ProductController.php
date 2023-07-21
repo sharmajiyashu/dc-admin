@@ -9,6 +9,8 @@ use Illuminate\Http\Request;
 use App\Http\Requests\CreateUpdateProductApi;
 use App\Http\Requests\CreateOrderApi;
 use App\Http\Requests\GetVendorProductsApi;
+use App\Http\Requests\GetSlabCustomerApi;
+use App\Models\SlabLink;
 use App\Models\Vendor;
 use App\Traits\ApiResponse;
 use Illuminate\Support\Facades\Redis;
@@ -271,6 +273,11 @@ class ProductController extends Controller
                             $data['is_limited'] = '1';
                         }
 
+                        if(empty($data['quantity'])){
+                            $data['quantity'] = '1';
+                            
+                        }
+
                 $images = [];
                 // $image = $val['image'];
 
@@ -278,7 +285,8 @@ class ProductController extends Controller
 
                     $imageData = $val['image'];
                     $exploded = explode(",", $imageData);
-                    $decoded = base64_decode($exploded[1]);
+                    $exploded = isset($exploded[1]) ? $exploded[1] :'';
+                    $decoded = base64_decode($exploded);
 
                     if ($decoded === false) {
                         // base64 string is not valid
@@ -333,6 +341,30 @@ class ProductController extends Controller
 
             }
             return $this->sendSuccess('PRODUCT '.$total_create.' CREATE ,'.$total_update.' UPDATE SUCCESSFULLY','');
+        }catch(\Throwable $e){
+            return $this->sendFailed($e->getMessage(). ' On Line '. $e->getLine(),200);
+        }
+    }
+
+    public function GetSlabProduct(GetSlabCustomerApi $request){
+        try{
+            
+            // $products = Product::select('product.*')->join('')
+
+            $products = SlabLink::select('products.*')->join('products','products.id','=','slab_links.product_id')->where(['slab_links.user_id' => $request->user()->id ,'slab_links.slab_id' => $request->slab_id])->get();
+            foreach($products as $key=>$val){
+                $images = json_decode($val['images']);
+                if(!empty($images)){
+                    $img = [];
+                    foreach($images as $k){
+                        $img[] = asset('public/images/products/'.$k);
+                    }
+                    $val['images'] = $img;
+                }else{
+                    $val['images'] = '';
+                }
+            }
+            return $this->sendSuccess('PRODUCT FETCH SUCCESSFULLY', $products);
         }catch(\Throwable $e){
             return $this->sendFailed($e->getMessage(). ' On Line '. $e->getLine(),200);
         }

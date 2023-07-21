@@ -7,9 +7,11 @@ use App\Http\Requests\CreateUpdateSlabApi;
 use App\Http\Requests\AddCustomerInSlabApi;
 use App\Http\Requests\GetSlabCustomerApi;
 use App\Models\Customer;
+use App\Models\Product;
 use App\Models\Role;
 use Illuminate\Http\Request;
 use App\Models\Slab;
+use App\Models\SlabLink;
 use App\Models\StoreLink;
 use App\Traits\ApiResponse;
 
@@ -69,6 +71,32 @@ class SlabController extends Controller
             return $this->sendFailed($e->getMessage(). ' On Line '. $e->getLine(),200);
         }
     }
+
+    public function AddProductInSlab(Request $request){
+        try{
+            if(!empty($request->all())){
+                $total_added = 0;
+                foreach($request->all() as $key=>$val){
+                    $product = Product::where('id',$val['product_id'])->where('is_delete','!=','1')->where('is_admin','!=','1')->first();
+                    $slab = Slab::where('id',$val['slab_id'])->first();
+                    if(!empty($product) && !empty($slab)){
+                        $check = SlabLink::where(['product_id' => $product->id ,'slab_id' => $slab->id ,'user_id' => $request->user()->id])->count();
+                        if($check == 0){
+                            SlabLink::create(['product_id' => $product->id ,'slab_id' => $slab->id ,'user_id' => $request->user()->id]);
+                            $total_added ++;
+                        }
+                    }
+                }
+                return $this->sendSuccess($total_added.' PRODUCT ADDED INTO SLAB SUCCESSFULLY','');
+            }else{
+                return $this->sendFailed('Data Is Empty',200);
+            }
+        }catch(\Throwable $e){
+            return $this->sendFailed($e->getMessage(). ' On Line '. $e->getLine(),200);
+        }
+    }
+
+    
 
 
 
