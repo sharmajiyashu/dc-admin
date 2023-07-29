@@ -76,17 +76,35 @@ class SlabController extends Controller
         try{
             if(!empty($request->all())){
                 $total_added = 0;
-                foreach($request->all() as $key=>$val){
-                    $product = Product::where('id',$val['product_id'])->where('is_delete','!=','1')->where('is_admin','!=','1')->first();
-                    $slab = Slab::where('id',$val['slab_id'])->first();
-                    if(!empty($product) && !empty($slab)){
-                        $check = SlabLink::where(['product_id' => $product->id ,'slab_id' => $slab->id ,'user_id' => $request->user()->id])->count();
+                // foreach($request->all() as $key=>$val){
+                //     $product = Product::where('id',$val['product_id'])->where('is_delete','!=','1')->where('is_admin','!=','1')->first();
+                //     $slab = Slab::where('id',$val['slab_id'])->first();
+                //     if(!empty($product) && !empty($slab)){
+                //         $check = SlabLink::where(['product_id' => $product->id ,'slab_id' => $slab->id ,'user_id' => $request->user()->id])->count();
+                //         if($check == 0){
+                //             SlabLink::create(['product_id' => $product->id ,'slab_id' => $slab->id ,'user_id' => $request->user()->id]);
+                //             $total_added ++;
+                //         }
+                //     }
+                // }
+                $data = $request->all();
+                $product = $data['product_id'];
+                $slabs = $data['slab_id'];
+                foreach($product as $key=>$val){
+                    foreach($slabs as $k=>$v){
+                        $slab_id = $v;
+                        $product_id = $val;
+                        $check = SlabLink::where(['product_id' => $product_id ,'slab_id' => $slab_id ,'user_id' => $request->user()->id])->count();
                         if($check == 0){
-                            SlabLink::create(['product_id' => $product->id ,'slab_id' => $slab->id ,'user_id' => $request->user()->id]);
+                            SlabLink::create(['product_id' => $product_id ,'slab_id' => $slab_id ,'user_id' => $request->user()->id]);
                             $total_added ++;
                         }
                     }
                 }
+                // print_r($data['product_id']);die;
+
+
+                // print_r($request->all());die;
                 return $this->sendSuccess($total_added.' PRODUCT ADDED INTO SLAB SUCCESSFULLY','');
             }else{
                 return $this->sendFailed('Data Is Empty',200);
@@ -96,7 +114,7 @@ class SlabController extends Controller
         }
     }
 
-    
+
 
 
 
