@@ -14,6 +14,7 @@ use App\Models\Cart;
 use App\Traits\ApiResponse;
 use PhpParser\Node\Expr\FuncCall;
 use App\Http\Requests\DeleteOrderApi;
+use App\Models\WishCart;
 use Illuminate\Support\Str;
 
 class OrderController extends Controller
@@ -22,6 +23,7 @@ class OrderController extends Controller
     public function CreateOrder( CreateOrderApi $request){
         try{
             if(Cart::where(['user_id'=>$request->user()->id,'store_code' => $request->user()->active_store_code ,'status' => '0'])->first()){
+                $this->outOfCartPushToWish($request->user()->id,$request->user()->active_store_code);
                 $cart_total = Cart::where(['user_id'=>$request->user()->id,'store_code' => $request->user()->active_store_code ,'status' => '0'])->sum('total');
                 $vendor = Vendor::where('store_code',$request->user()->active_store_code)->first();
                 $order = new Order();
@@ -117,6 +119,8 @@ class OrderController extends Controller
                 $val['customer_name'] = isset($user->name) ? $user->name :'';
                 $val['product_image'] = $this->GetOneImage($val->id);
                 $val['order_history'] = route('order-history',$val['order_id']);
+                $vendor = Vendor::where('id',$val->vendor_id)->first();
+                $val['store_image'] = asset('public/images/users/'.$vendor->store_image);
             }
             return $this->sendSuccess('ORDER HISTORY FETCH SUCCESSFULLY', $orders);
         }catch(\Throwable $e){
@@ -192,6 +196,60 @@ class OrderController extends Controller
         }catch(\Throwable $e){
             return $this->sendFailed($e->getMessage(). ' On Line '. $e->getLine(),200);
         }        
+    }
+
+
+    function outOfCartPushToWish($user_id,$store_code){
+        $carts =  Cart::where(['user_id'=>$user_id,'store_code' => $store_code ,'status' => '0'])->get();
+        foreach($carts as $key=>$val){
+            $product_data =  Product::where('id',$val->product_id)->first();
+            if($product_data->is_limited == Product::$limited){
+                $product_stock = $product_data->stock;
+                if($product_stock < $val->quantity){
+                    $packing_stocks = 0;
+                    if($product_stock > 0){
+                        for($i = 1 ; $i<= $product_stock ; $i++){
+                            if($i % $product_data->packing_quantity) {
+                            }else{
+                                $packing_stocks = $i;
+                            }
+                        }
+                    }
+                    $remaining_stocks = $product_stock - $packing_stocks;
+                    $product_data->update(['stock' => $remaining_stocks]);
+                    $check_wish = WishCart::where(['user_id' => $val->user_id ,'product_id' => $val->product_id ,'status' => '0'])->first();
+                    $wish_quantity = $val->quantity - $packing_stocks;
+                    $with_cart = [
+                        'user_id' => $val->user_id,
+                        'product_id' => $val->product_id,
+                        'p_price' => $val->p_price,
+                        'p_mrp' => $val->p_mrp,
+                        'quantity' => $wish_quantity,
+                        'total' => $wish_quantity * $val->p_price,
+                        'order_id' => $val->order_id,
+                        'store_code' => $val->store_code,
+                        'vendor_id' => $val->vendor_id
+                    ];
+                    if(!empty($check_wish)){
+                        $with_cart['quantity'] = $check_wish->quantity + $wish_quantity;
+                        $with_cart['total'] = $with_cart['quantity'] * $with_cart['p_price'];
+                        WishCart::where('id',$check_wish->id)->update($with_cart);
+                    }else{
+                        WishCart::create($with_cart);
+                    }
+                    Cart::where('id',$val->id)->update(['quantity' => $packing_stocks , 'total' => $val->p_price * $packing_stocks]);
+                    if($packing_stocks < 1){
+                        Cart::where('id',$val->id)->delete();
+                    }
+                }else{
+                    $remaining_stocks = $product_stock - $val->quantity;
+                    $product_data->update(['stock' => $remaining_stocks]);
+                    if($val->quantity < 1){
+                        Cart::where('id',$val->id)->delete();
+                    }
+                }
+            }      
+        }
     }
 
 

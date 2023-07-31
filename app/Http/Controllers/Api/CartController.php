@@ -31,93 +31,30 @@ class CartController extends Controller
                 return $this->sendFailed('PLEASE ENTER MINIMUM QUANTITY '.$product->packing_quantity,200);
             }
 
+            $cart = $request->validated();
+            $cart['user_id'] = $request->user()->id;
+            $cart['product_id'] = $product->id;
+            $cart['p_price'] = $product->sp;
+            $cart['p_mrp'] = $product->mrp;
+            $cart['status'] = '0';
+            $cart['store_code'] = $vendor->store_code;
+            $cart['vendor_id'] =$vendor->id;
 
-            if($product->is_limited == Product::$limited){
-
-                $wist_quantity = 0;
-
-                if($request->quantity > $product->stock){
-                    $packing_stocks = 0;
-                    if($product->stock > 0){
-                        for($i = 1 ; $i<= $product->stock ; $i++){
-                            if($i % $product->packing_quantity) {
-                            }else{
-                                $packing_stocks = $i;
-                            }
-                        }
-                    }
-                    $remaining_stocks = $product->stock - $packing_stocks;
-                    if($remaining_stocks > 0){
-                        Product::where('id',$product->id)->update(['stock' => $remaining_stocks]);
-                    }
-                    $wist_quantity = $request->quantity - $packing_stocks;
-                    $request->quantity = $packing_stocks;
-                }
-
-                if($wist_quantity > 0){
-                    $wist_cart = $request->validated();
-                    $wist_cart['user_id'] = $request->user()->id;
-                    $wist_cart['product_id'] = $product->id;
-                    $wist_cart['p_price'] = $product->sp;
-                    $wist_cart['p_mrp'] = $product->mrp;
-                    $wist_cart['status'] = '0';
-                    $wist_cart['store_code'] = $vendor->store_code;
-                    $wist_cart['vendor_id'] =$vendor->id;
-                    $last_wist_cart = WishCart::where(['user_id' => $request->user()->id ,'product_id' => $request->product_id ,'status' => '0'])->first();
-
-                    if(empty($last_wist_cart)){
-                        $quantity = $wist_quantity;
-                        $wish_cart_total = $quantity * $product->sp;
-                        $wist_cart['quantity'] = $quantity;
-                        $wist_cart['total'] = $wish_cart_total;
-                        $wist_cart = WishCart::create($wist_cart);
-                        $cart_id = $wist_cart->id;
-                    }else{
-                        $quantity = $wist_quantity + $last_wist_cart->quantity;
-                        $wish_cart_total = $quantity * $product->sp;
-                        $wist_cart['quantity'] = $quantity;
-                        $wist_cart['total'] = $wish_cart_total;
-                        $wist_cart = WishCart::where('id',$last_wist_cart->id)->update($wist_cart);
-                        $cart_id = $last_wist_cart->id;
-                    }
-                }
-
-            }
-
-
-            if($request->quantity > 0){
-
-                if($product->is_limited == Product::$limited){
-                    $remaining_stocks = $product->stock - $request->quantity;
-                    Product::where('id',$product->id)->update(['stock' => $remaining_stocks]);
-                }
-
-                $cart = $request->validated();
-                $cart['user_id'] = $request->user()->id;
-                $cart['product_id'] = $product->id;
-                $cart['p_price'] = $product->sp;
-                $cart['p_mrp'] = $product->mrp;
-                $cart['status'] = '0';
-                $cart['store_code'] = $vendor->store_code;
-                $cart['vendor_id'] =$vendor->id;
-
-                $last_cart = Cart::where(['user_id' => $request->user()->id ,'product_id' => $request->product_id ,'status' => '0'])->first();
-                if(empty($last_cart)){
-                    $quantity = $request->quantity;
-                    $cart_total = $quantity * $product->sp;
-                    $cart['quantity'] = $quantity;
-                    $cart['total'] = $cart_total;
-                    $cart = Cart::create($cart);
-                    $cart_id = $cart->id;
-                }else{
-                    $quantity = $request->quantity + $last_cart->quantity;
-                    $cart_total = $quantity * $product->sp;
-                    $cart['quantity'] = $quantity;
-                    $cart['total'] = $cart_total;
-                    $cart = Cart::where('id',$last_cart->id)->update($cart);
-                    $cart_id = $last_cart->id;
-                }
-                $cart = Cart::where('id',$cart_id)->first();
+            $last_cart = Cart::where(['user_id' => $request->user()->id ,'product_id' => $request->product_id ,'status' => '0'])->first();
+            if(empty($last_cart)){
+                $quantity = $request->quantity;
+                $cart_total = $quantity * $product->sp;
+                $cart['quantity'] = $quantity;
+                $cart['total'] = $cart_total;
+                $cart = Cart::create($cart);
+                $cart_id = $cart->id;
+            }else{
+                $quantity = $request->quantity + $last_cart->quantity;
+                $cart_total = $quantity * $product->sp;
+                $cart['quantity'] = $quantity;
+                $cart['total'] = $cart_total;
+                $cart = Cart::where('id',$last_cart->id)->update($cart);
+                $cart_id = $last_cart->id;
             }
             return $this->sendSuccess('ADD PRODUCT IN CART SUCCESSFULLY');
         }catch(\Throwable $e){

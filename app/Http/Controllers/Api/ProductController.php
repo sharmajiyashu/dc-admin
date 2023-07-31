@@ -21,7 +21,7 @@ class ProductController extends Controller
 {
     use ApiResponse;
     public function CreateUpdateProduct(CreateUpdateProductApi $request){
-        try{
+        try{            
             if($request->user()->role_id == Role::$vendor){
                 $data = $request->validated();
                 $data['detail'] = $request->detail;
@@ -29,7 +29,11 @@ class ProductController extends Controller
                 $data['user_id'] = $request->user()->id;
                 $data['fetch_product_id'] = $request->fetch_product_id;
 
-                if(!empty($request->stock)){
+
+                if($request->stock == 0 && $request->stock != null){
+                    $data['is_limited'] = '1';
+                   
+                }elseif(!empty($request->stock)){
                     $data['is_limited'] = '1';
                 }else{
                     $data['is_limited'] = '0';
@@ -66,7 +70,8 @@ class ProductController extends Controller
                     }else{
                         $data['images'] = isset($fetch_prod->images) ? $fetch_prod->images :'';
                     }
-                    $data['category_id'] = isset($fetch_prod->category_id) ? $fetch_prod->category_id :'';
+                    $category_admin_user = Category::where('admin_id',$fetch_prod->category_id)->where('user_id',$request->user()->id)->first();
+                    $data['category_id'] = isset($category_admin_user->id) ? $category_admin_user->id :'';
                 }
                 $product = Product::updateOrCreate(['id' => $request->id],$data);
                 $images = json_decode($product->images);
@@ -308,11 +313,13 @@ class ProductController extends Controller
                     $product = Product::where('is_admin','!=','1')->find($val['id']); // Retrieve the existing record
                     if(!empty($product)){
                         $images = json_decode($product->images);
-                        if(!empty($imageName)){
+                        if(isset($imageName)){
                             $images[] = $imageName;
-                            $product->update([
-                                'images' => json_encode($images),
-                            ]);
+                            // $product->update([
+                            //     'images' => json_encode($images),
+                            // ]);
+                            
+                            $data['images'] = json_encode($images);
                         }
                         $product->update($data);
                         $total_update ++;
@@ -327,7 +334,8 @@ class ProductController extends Controller
                         }else{
                             $data['images'] = $product->images;
                         }
-                        $data['category_id'] = $product->category_id;
+                        $category_admin_user = Category::where('admin_id',$product->category_id)->where('user_id',$request->user()->id)->first();
+                        $data['category_id'] = isset($category_admin_user->id) ? $category_admin_user->id :'';
                         Product::create($data);
                         $total_create ++;
                     }
@@ -335,9 +343,6 @@ class ProductController extends Controller
                     Product::create($data);
                     $total_create ++;
                 }
-
-
-
 
             }
             return $this->sendSuccess('PRODUCT '.$total_create.' CREATE ,'.$total_update.' UPDATE SUCCESSFULLY','');

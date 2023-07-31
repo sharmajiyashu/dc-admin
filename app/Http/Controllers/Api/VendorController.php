@@ -123,9 +123,9 @@ class VendorController extends Controller
             if(!empty($request->link_id)){
                 $store_link = StoreLink::where('id',$request->link_id)->first();
                 if($store_link->status == StoreLink::$active){
-                    StoreLink::where('id',$request->link_id)->update(['status' => Slab::$inactive]);
+                    StoreLink::where('id',$request->link_id)->update(['status' => StoreLink::$inactive]);
                 }else{
-                    StoreLink::where('id',$request->link_id)->update(['status' => Slab::$active]);
+                    StoreLink::where('id',$request->link_id)->update(['status' => StoreLink::$active]);
                 }
             }
 
@@ -135,6 +135,17 @@ class VendorController extends Controller
                     Category::where('id',$request->category_id)->update(['status' => Category::$inactive]);
                 }else{
                     Category::where('id',$request->category_id)->update(['status' => Category::$active]);
+                }
+            }
+
+            if(!empty($request->user_id)){
+                $customers = StoreLink::where(['user_id' => $request->user_id ,'vendor_id' => $request->user()->id])->first();
+                if(!empty($customers)){
+                    if($customers->status == StoreLink::$active){
+                        StoreLink::where('id',$customers->id)->update(['status' => StoreLink::$inactive]);
+                    }else{
+                        StoreLink::where('id',$customers->id)->update(['status' => StoreLink::$active]);
+                    }
                 }
             }
 

@@ -98,7 +98,7 @@ class CategoryController extends Controller
 
         $data_2 = [
             'title' => $request->title,
-            // 'status' => $request->status,
+            'status' => $request->status,
         ];
         if($request->hasFile('image')) {
             // $image       = $request->file('image');
@@ -128,6 +128,7 @@ class CategoryController extends Controller
     public function destroy(Category $category)
     {
         $category->delete();
+        Category::where('admin_id',$category->id)->delete();
         return redirect()->route('categories.index')->with('success','Category Delete Success');
     }
 }

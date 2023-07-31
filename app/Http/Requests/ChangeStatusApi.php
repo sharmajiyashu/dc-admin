@@ -29,7 +29,8 @@ class ChangeStatusApi extends FormRequest
             'product_id' => 'nullable|exists:products,id',
             'slab_id' => 'nullable|exists:slabs,id',
             'link_id' => 'nullable|exists:store_links,id',
-            'category_id' => 'nullable|exists:categories,id'
+            'category_id' => 'nullable|exists:categories,id',
+            'user_id' => 'nullable|exists:users,id'
         ];
     }
 
