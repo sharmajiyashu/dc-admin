@@ -30,6 +30,8 @@ Route::get('/unauthrozed', function () {
             ]);        
     })->name('login');
 
+
+Route::get('payment',[Controller::class,'payment']);
     
 Route::group(['middleware' => 'AdminAuth'], function () {
 

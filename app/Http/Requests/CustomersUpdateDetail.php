@@ -31,7 +31,7 @@ class CustomersUpdateDetail extends FormRequest
             'dob' => 'required',
             'state' => 'required',
             'city' => 'required',
-            'address' => 'required',
+            'address' => 'nullable',
             'image' => 'nullable|mimes:png,jpg'
         ];
     }

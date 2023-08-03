@@ -29,7 +29,6 @@ class ProductController extends Controller
                 $data['user_id'] = $request->user()->id;
                 $data['fetch_product_id'] = $request->fetch_product_id;
 
-
                 if($request->stock == 0 && $request->stock != null){
                     $data['is_limited'] = '1';
                    
@@ -45,31 +44,70 @@ class ProductController extends Controller
                     $data['packing_quantity'] = '1';
                 }
 
-                if(!empty($request->image)){
-                    $image = [];
-                    foreach($request->image as $key=>$val){
-                        if(!empty($val)){
-                            $image_name = time().rand(1,100).'-'.$val->getClientOriginalName();
-                            $image_name = preg_replace('/\s+/', '', $image_name);
-                            $val->move(public_path('images/products'), $image_name);
-                            $image[] = $image_name;
+                    $old_product = Product::where('id',$request->id)->first();
+                    if(!empty($old_product->images)){
+                        $images = json_decode($old_product->images);
+                    }elseif($request->fetch_product_id){
+                        $fetch_product_data = Product::where('id',$request->fetch_product_id)->first();
+                        if(!empty($fetch_product_data->images)){
+                            $images = json_decode($fetch_product_data->images);
+                        }else{
+                            $images = [];    
+                        }
+                    }else{
+                        $images = [];
+                    }
+               
+                    if($request->hasFile('image_1')) {
+                        $image_name = time().rand(1,100).'-'.$request->image_1->getClientOriginalName();
+                        $image_name = preg_replace('/\s+/', '', $image_name);
+                        $request->image_1->move(public_path('images/products'), $image_name);
+                        if(isset($images[0])){
+                            $images[0] = $image_name;
+                        }else{
+                            $images[] = $image_name;
                         }
                     }
-                    $dd_image = json_encode($image);
-                    $data['images'] = isset($dd_image) ? $dd_image : '';
-                }
+
+                    if($request->hasFile('image_2')) {
+                        $image_name = time().rand(1,100).'-'.$request->image_2->getClientOriginalName();
+                        $image_name = preg_replace('/\s+/', '', $image_name);
+                        $request->image_2->move(public_path('images/products'), $image_name);
+                        if(isset($images[1])){
+                            $images[1] = $image_name;
+                        }else{
+                            $images[] = $image_name;
+                        }
+                    }
+
+                    if($request->hasFile('image_3')) {
+                        $image_name = time().rand(1,100).'-'.$request->image_3->getClientOriginalName();
+                        $image_name = preg_replace('/\s+/', '', $image_name);
+                        $request->image_3->move(public_path('images/products'), $image_name);
+                        if(isset($images[2])){
+                            $images[2] = $image_name;
+                        }else{
+                            $images[] = $image_name;
+                        }
+                    }
+
+                    if($request->hasFile('image_4')) {
+                        $image_name = time().rand(1,100).'-'.$request->image_4->getClientOriginalName();
+                        $image_name = preg_replace('/\s+/', '', $image_name);
+                        $request->image_4->move(public_path('images/products'), $image_name);
+                        if(isset($images[3])){
+                            $images[3] = $image_name;
+                        }else{
+                            $images[] = $image_name;
+                        }
+                    }
+
+                    if(!empty($images)){
+                        $data['images'] = json_encode($images);
+                    }
+                    
                 if(!empty($request->fetch_product_id)){
                     $fetch_prod = Product::where('id',$request->fetch_product_id)->first();
-                    if(!empty($image)){
-                        $fetch_prod_image = json_decode($fetch_prod->images);
-                        foreach($fetch_prod_image as $key=>$val){
-                            $image[] = $val;
-                        }
-                        $dd_image = json_encode($image);
-                        $data['images'] = isset($dd_image) ? $dd_image : '';
-                    }else{
-                        $data['images'] = isset($fetch_prod->images) ? $fetch_prod->images :'';
-                    }
                     $category_admin_user = Category::where('admin_id',$fetch_prod->category_id)->where('user_id',$request->user()->id)->first();
                     $data['category_id'] = isset($category_admin_user->id) ? $category_admin_user->id :'';
                 }
@@ -150,12 +188,12 @@ class ProductController extends Controller
             if($request->user()->role_id == Role::$customer){
                 $vendor = Vendor::where('store_code',$request->user()->active_store_code)->first();
                 if(!empty($vendor)){
-                    $categories = Category::where(['status' => Category::$active ,'is_delete' => '0' ,'user_id' => $vendor->id])->get();
+                    $categories = Category::where(['status' => Category::$active ,'is_delete' => '0' ,'user_id' => $vendor->id ,'is_admin' => '0'])->get();
                 }else{
-                    $categories = Category::where(['status' => Category::$active ,'is_delete' => '0' ,'user_id' => 00])->get();
+                    $categories = Category::where(['status' => Category::$active ,'is_delete' => '0' ,'user_id' => 00 ,'is_admin' => '0'])->get();
                 }
             }elseif($request->user()->role_id == Role::$vendor){
-                $categories = Category::where(['is_delete' => '0' ,'user_id' => $request->user()->id])->get();
+                $categories = Category::where(['is_delete' => '0' ,'user_id' => $request->user()->id ,'is_admin' => '0'])->get();
             }
 
             if(!empty($categories)){
@@ -176,7 +214,7 @@ class ProductController extends Controller
     public function GetProduct(CreateOrderApi $request){
         try{
             $vendor = Vendor::where('store_code',$request->user()->active_store_code)->first();
-            $products = Product::where(['user_id'=>$vendor->id,'status'=>'Active'])->where('is_delete','!=','1')->orderBy('id','DESC')->get();
+            $products = Product::where(['user_id'=>$vendor->id,'status'=>'Active'])->where('is_admin','=','0')->where('is_delete','!=','1')->orderBy('id','DESC')->get();
             foreach($products as $key=>$val){
                 $images = json_decode($val['images']);
                 if(!empty($images)){
@@ -198,7 +236,7 @@ class ProductController extends Controller
     public function NewArrivalProducts(CreateOrderApi $request){
         try{
             $vendor = Vendor::where('store_code',$request->user()->active_store_code)->first();
-            $products = Product::where(['user_id'=>$vendor->id,'status'=>'Active','is_delete' => '0'])->orderBy('id','DESC')->limit(10)->get();
+            $products = Product::where(['user_id'=>$vendor->id,'status'=>'Active','is_delete' => '0' ,'is_admin' => '0'])->orderBy('id','DESC')->limit(10)->get();
             foreach($products as $key=>$val){
                 $images = json_decode($val['images']);
                 if(!empty($images)){
