@@ -208,7 +208,7 @@
                                             <td>{{ date('d-M-y H:i:s',strtotime($val->created_at)) }}</td>
                                             <td>
                                                 <a  href="{{route('products.edit_2',$val->id)}}">
-                                                    <i data-feather="edit" class="me-50"></i>
+                                                    <button class="btn btn-primary">Edit</button>
                                                 </a>
                                             </td>
                                         </tr>

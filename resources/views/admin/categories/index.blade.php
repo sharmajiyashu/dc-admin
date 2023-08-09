@@ -73,10 +73,10 @@
                                                 <td>{{ date('d-M-y H:i:s',strtotime($val->created_at)) }}</td>
                                                 <td>
                                                     <a  href="{{route('categories.edit',$val->id)}}">
-                                                        <i data-feather="edit-2" class="me-50"></i>
+                                                        <button class="btn btn-primary">Edit</button>
                                                     </a>
 
-                                                    <a href="#" class="text-danger" data-bs-toggle="modal" data-bs-target="#danger_ke{{ $val->id }}"><i data-feather="trash" class="me-50"></i></a>
+                                                    <a href="#" class="text-danger" data-bs-toggle="modal" data-bs-target="#danger_ke{{ $val->id }}"><button class="btn btn-danger">Delete</button></a>
 
                                                     <!-- Modal -->
                                                     <div class="modal fade modal-danger text-start" id="danger_ke{{ $val->id }}" tabindex="-1" aria-labelledby="myModalLabel120" aria-hidden="true">
@@ -88,7 +88,7 @@
                                                                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                                                     </div>
                                                                     <div class="modal-body">
-                                                                        Are you Shure you want to delete !
+                                                                        Are you sure you want to delete !
                                                                     </div>
                                                                     <form action="{{route('categories.destroy',$val->id)}}" method="POST">
                                                                         @csrf

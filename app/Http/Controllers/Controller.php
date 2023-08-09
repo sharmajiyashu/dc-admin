@@ -19,10 +19,10 @@ class Controller extends BaseController
     use AuthorizesRequests, DispatchesJobs, ValidatesRequests;
 
     public function dashboard(){
-        $total_category = Category::where('status','Active')->count();
-        $total_product = Product::select('products.*')->join('users','users.id','=','products.user_id')->join('roles','roles.id','=','users.role_id')->where(['users.role_id'=> Role::$admin,'products.status' => 'Active'])->with('category')->orderBy('id','desc')->count();
-        $total_vendors = User::where('role_id',Role::$vendor)->count();
-        $total_customers = User::where('role_id',Role::$customer)->count();
+        $total_category = Category::where('status','Active')->where('is_admin','1')->count();
+        $total_product = Product::where('is_admin','1')->count();
+        $total_vendors = User::where('role_id',Role::$vendor)->where('is_register','1')->count();
+        $total_customers = User::where('role_id',Role::$customer)->where('is_register','1')->count();
         $total_orders = Order::count();
 
         return view('admin.dashboard',compact('total_category','total_product','total_vendors','total_customers','total_orders'))->with('success','ALLSSVHJBHJSBJVJ');

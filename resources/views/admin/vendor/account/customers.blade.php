@@ -135,7 +135,7 @@
                                             <td class="{{$val->status}} text-bold">{{ $val->status }}</td>
                                             <td>{{ date('d-M-y H:i:s',strtotime($val->created_at)) }}</td>
                                             <td>
-                                                <a href="#" class="text-primary" data-bs-toggle="modal" data-bs-target="#edit_ke{{ $val->id }}"><i data-feather="edit" class="me-50"></i></a>
+                                                <a href="#" class="text-primary" data-bs-toggle="modal" data-bs-target="#edit_ke{{ $val->id }}"><button class="btn btn-primary">Edit</button></a>
 
                                                     <!-- Modal -->
                                                 <div class="modal fade modal-primary text-start" id="edit_ke{{ $val->id }}" tabindex="-1" aria-labelledby="myModalLabel120" aria-hidden="true">
@@ -150,7 +150,7 @@
                                                                     <form action="{{route('vendors.account.customers.change_status')}}" method="POST">
                                                                         @csrf
 
-                                                                    Are you Shure you want to Change Status !
+                                                                        Are you sure you want to delete
 
                                                                     <div class="col-md-12 col-12">
                                                                         <div class="mb-1">
@@ -174,7 +174,7 @@
                                                     </div>
                                                 </div>
 
-                                                <a href="#" class="text-danger" data-bs-toggle="modal" data-bs-target="#danger_ke{{ $val->id }}"><i data-feather="trash" class="me-50"></i></a>
+                                                <a href="#" class="text-danger" data-bs-toggle="modal" data-bs-target="#danger_ke{{ $val->id }}"><button class="btn btn-danger">Delete</button></a>
 
                                                     <!-- Modal -->
                                                 <div class="modal fade modal-danger text-start" id="danger_ke{{ $val->id }}" tabindex="-1" aria-labelledby="myModalLabel120" aria-hidden="true">
