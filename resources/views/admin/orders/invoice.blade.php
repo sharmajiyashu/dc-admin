@@ -110,7 +110,8 @@
                             <tbody>
                                 <?php $i=1; ?>
 
-                               
+                            {{-- @for ($i = 0; $i < 300; $i++) --}}
+
                                 @foreach ($carts as $key => $item)
                                     <tr class="border-bottom">
                                         <td class="py-1">
@@ -140,7 +141,7 @@
                                     <?php $i++; ?>
                                 @endforeach
                                 
-                               
+                            {{-- @endfor --}}
 
                                 <tr style="background: #f3f2f7;">
                                     <td></td>

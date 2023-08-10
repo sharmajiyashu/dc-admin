@@ -34,6 +34,12 @@ class SlabController extends Controller
     public function GetSlab(Request $request){
         try{
             $slabs = Slab::where('user_id',$request->user()->id)->orWhere('is_default','1')->get();
+            foreach($slabs as $key=>$val){
+                $total_products = SlabLink::where(['slab_id' => $val->id ,'user_id' => $request->user()->id])->count();
+                $val['total_products'] = $total_products;
+                $total_customers = StoreLink::where(['vendor_id' => $request->user()->id , 'slab_id' => $val->id])->count();
+                $val['total_customers'] = $total_customers;
+            }
             return $this->sendSuccess('SLAB DATA FETCH SUCCESSFULLY',$slabs);
         }catch(\Throwable $e){
             return $this->sendFailed($e->getMessage(). ' On Line '. $e->getLine(),200);
