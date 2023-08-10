@@ -61,6 +61,7 @@
                                                 <th>State</th>
                                                 <th>City</th>
                                                 <th>Created Date</th>
+                                                <th>Action</th>
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -71,67 +72,14 @@
                                                 <td> <img src="{{ asset('public/images/users/'.$val->image) }}" id="account-upload-img" class="uploadedAvatar rounded me-50" alt="profile image" height="100" width="100" /></td>
                                                 <td>
                                                    
-                                                    {{-- <strong>{{ $val->name }}</strong> --}}
+                                                    
                                                     <a href="{{ route('vendors.show',$val->id) }}" 
-                                                    {{-- data-bs-toggle="modal"data-bs-target="#order_detail_{{ $val->id }}" --}}
+                                                    
                                                             >
                                                             <strong>{{ $val->name }}</strong>
                                                         </a>
 
-                                                    {{-- <div class="modal fade text-start"
-                                                            id="order_detail_{{ $val->id }}" tabindex="-1"
-                                                            aria-labelledby="myModalLabel17" aria-hidden="true">
-                                                            <div class="modal-dialog modal-dialog-centered">
-                                                                <div class="modal-content">
-                                                                    <div class="modal-header">
-                                                                        <h4 class="modal-title" id="myModalLabel17">
-                                                                          Vendor Detail</h4>
-
-                                                                        <button type="button" class="btn-close"
-                                                                            data-bs-dismiss="modal"
-                                                                            aria-label="Close"></button>
-                                                                    </div>
-                                                                    <div class="modal-body" style="    font-size: 14px;">
-                                                                
-                                                                        <div class="info-container">
-                                                                            <ul class="list-unstyled">
-                                                                                <li class="mb-75">
-                                                                                    <span class="fw-bolder me-25">Name:</span>
-                                                                                    <span>{{ $val->name }}</span>
-                                                                                </li>
-                                                                                <li class="mb-75">
-                                                                                    <span class="fw-bolder me-25">Mobile:</span>
-                                                                                    <span>{{ $val->mobile }}</span>
-                                                                                </li>
-                                                                                <li class="mb-75">
-                                                                                    <span class="fw-bolder me-25">Gender:</span>
-                                                                                    <span>{{ $val->gender }}</span>
-                                                                                </li>
-                                                                                <li class="mb-75">
-                                                                                    <span class="fw-bolder me-25">DOB:</span>
-                                                                                    <span>{{ $val->dob }}</span>
-                                                                                </li>
-                                                                                <li class="mb-75">
-                                                                                    <span class="fw-bolder me-25">State:</span>
-                                                                                    <span>{{ $val->state }}</span>
-                                                                                </li>
-                                                                                <li class="mb-75">
-                                                                                    <span class="fw-bolder me-25">City:</span>
-                                                                                    <span>{{ $val->city }}</span>
-                                                                                </li>
-                                                                                <li class="mb-75">
-                                                                                    <span class="fw-bolder me-25">Address:</span>
-                                                                                    <span>{{ $val->address }}</span>
-                                                                                </li>
-                                                                            </ul>
-                                                                        </div>
-
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                    </div> --}}
-                                                
-                                                
+                                                  
                                                 
                                                 </td>
                                                 <td>{{ $val->mobile }}</td>
@@ -139,6 +87,11 @@
                                                 <td>{{ $val->state }}</td>
                                                 <td>{{ $val->city }}</td>
                                                 <td>{{ date('d-M-y H:i:s',strtotime($val->created_at)) }}</td>
+                                                <td><a href="{{ route('vendors.show',$val->id) }}" 
+                                                    
+                                                    >
+                                                    <button class="btn btn-dark">View</button>
+                                                </a></td>
                                             </tr>
                                             @php $i++; @endphp
                                             @endforeach

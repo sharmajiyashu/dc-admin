@@ -142,5 +142,31 @@ class OrderController extends Controller
         }
         return view('admin.orders.order-history',compact('carts','vendor','customer','order'));
     }
+
+    public function changeOrderStatus($id,$status){
+        $order = Order::where('id',$id)->first();
+
+        if($status == 'accept' && $order->status == 'pending'){
+            $order->update(['status' => 'accepted']);
+            return redirect()->back()->with('success','Order Accepted Successfully');
+        }
+
+        if($status == 'reject' && $order->status == 'pending'){
+            $order->update(['status' => 'rejected']);
+            return redirect()->back()->with('success','Order Rejected Successfully');
+        }
+
+        if($status == 'dispach' && $order->status == 'accepted'){
+            $order->update(['status' => 'dispatched']);
+            return redirect()->back()->with('success','Order Dispatched Successfully');
+        }
+
+        if($status == 'deliver' && $order->status == 'dispatched'){
+            $order->update(['status' => 'delivered']);
+            return redirect()->back()->with('success','Order Delivered Successfully');
+        }
+
+        
+    }
         
 }

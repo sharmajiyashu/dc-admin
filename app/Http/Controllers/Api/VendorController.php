@@ -142,6 +142,10 @@ class VendorController extends Controller
                 $customers = StoreLink::where(['user_id' => $request->user_id ,'vendor_id' => $request->user()->id])->first();
                 if(!empty($customers)){
                     if($customers->status == StoreLink::$active){
+                        $user_data = Customer::where('id',$request->user_id)->first();
+                        if($request->user()->store_code == $user_data->active_store_code){
+                            $user_data->update(['active_store_code' => '']);
+                        }
                         StoreLink::where('id',$customers->id)->update(['status' => StoreLink::$inactive]);
                     }else{
                         StoreLink::where('id',$customers->id)->update(['status' => StoreLink::$active]);

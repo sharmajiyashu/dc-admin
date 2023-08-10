@@ -140,8 +140,19 @@ class StoreLinkController extends Controller
 
     public function UpdateActiveStore(CreateOrderApi $request){
         try{
-            Vendor::where('id',$request->user()->id)->update(['active_store_code'=> $request->store_code]);
-            return $this->sendSuccess('ACTIVE STORE CODE UPDATE SUCCESSFULLY','');
+            
+            $vendor = Vendor::where('store_code',$request->store_code)->first();
+            if(!empty($vendor)){
+                $store_link = StoreLink::where(['vendor_id'=>$vendor->id ,'user_id' => $request->user()->id])->first();
+                if($store_link->status == StoreLink::$active){
+                    Customer::where('id',$request->user()->id)->update(['active_store_code'=> $vendor->store_code]);
+                    return $this->sendSuccess('ACTIVE STORE CODE UPDATE SUCCESSFULLY','');
+                }else{
+                    return $this->sendFailed('YOU ARE INACTIVE PLEASE CONTACT TO STORE',200);
+                }
+            }else{
+                return $this->sendFailed('STORE CODE INVALID',200);
+            }
         }catch(\Throwable $e){
             return $this->sendFailed($e->getMessage(). ' On Line '. $e->getLine(),200);
         }

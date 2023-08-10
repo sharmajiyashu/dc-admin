@@ -89,7 +89,7 @@ class ProductController extends Controller
      */
     public function edit(Product $product)
     {   
-        $categories = Category::get();
+        $categories = Category::where('is_admin','1')->get();
         $product->images = json_decode($product->images);
         return view('admin.products.edit',compact('product','categories'));
     }

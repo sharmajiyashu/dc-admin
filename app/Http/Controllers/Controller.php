@@ -24,7 +24,6 @@ class Controller extends BaseController
         $total_vendors = User::where('role_id',Role::$vendor)->where('is_register','1')->count();
         $total_customers = User::where('role_id',Role::$customer)->where('is_register','1')->count();
         $total_orders = Order::count();
-
         return view('admin.dashboard',compact('total_category','total_product','total_vendors','total_customers','total_orders'))->with('success','ALLSSVHJBHJSBJVJ');
     }
 

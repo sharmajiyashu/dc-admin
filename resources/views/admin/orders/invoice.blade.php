@@ -97,8 +97,9 @@
                         <table class="table m-0" style="max-width: 100%;">
                             <thead>
                                 <tr>
-                                    <th class="py-1">Sr.no</th>
-                                    <th class="py-1">Item</th>
+                                    <th class="" style="width: 1%;">Sr.no</th>
+                                    <th class="py-1">Image</th>
+                                    <th class="py-1">Product</th>
                                     <th class="py-1">MRP</th>
                                     <th class="py-1">S.P.</th>
                                     <th class="py-1">Quantity</th>
@@ -108,13 +109,18 @@
                             </thead>
                             <tbody>
                                 <?php $i=1; ?>
+
+                               
                                 @foreach ($carts as $key => $item)
                                     <tr class="border-bottom">
-                                        <td class="py-1 ps-4">
+                                        <td class="py-1">
                                             {{ $i }}
                                         </td>
                                         <td class="py-1">
-                                            <img src="{{ asset('public/images/products/'.$item->image) }}" alt="product Image" style=" width: 8%;">
+                                            <img src="{{ asset('public/images/products/'.$item->image) }}" alt="product Image" width="90" >
+                                            
+                                        </td>
+                                        <td>
                                             {{ $item->product_name }}
                                         </td>
                                         <td class="py-1">
@@ -133,8 +139,11 @@
                                     </tr>
                                     <?php $i++; ?>
                                 @endforeach
+                                
+                               
 
                                 <tr style="background: #f3f2f7;">
+                                    <td></td>
                                     <td></td>
                                     <td style="text-align: center;"><strong>Total</strong></td>
                                     <td><strong>{{ $order->sum_mrp }}</strong></td>

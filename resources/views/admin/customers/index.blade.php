@@ -61,6 +61,7 @@
                                                 <th>State</th>
                                                 <th>City</th>
                                                 <th>Created Date</th>
+                                                <th>Action</th>
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -78,6 +79,7 @@
                                                 <td>{{ $val->state }}</td>
                                                 <td>{{ $val->city }}</td>
                                                 <td>{{ date('d-M-y H:i:s',strtotime($val->created_at)) }}</td>
+                                                <td><a href="{{ route('customers.show',$val->id) }}"><button class="btn btn-dark">View</button></a></td>
                                             </tr>
                                             @php $i++; @endphp
                                             @endforeach

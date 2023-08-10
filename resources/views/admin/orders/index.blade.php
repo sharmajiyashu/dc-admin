@@ -71,7 +71,7 @@
                                                 <td>{{ $val->total_item }}</td>
                                                 <td>{{ $val->amount }}</td>
                                                 <td>{{ date('d-M-y H:i:s',strtotime($val->created_at)) }}</td>
-                                                <td><a href="{{ route('orders.invoice',$val->order_id) }}"><i data-feather="eye" class="me-50"></i></a></td>
+                                                <td><a href="{{ route('orders.invoice',$val->order_id) }}"><button class="btn btn-dark">Invoice</button></a></td>
                                             </tr>
                                             @php $i++; @endphp
                                             @endforeach

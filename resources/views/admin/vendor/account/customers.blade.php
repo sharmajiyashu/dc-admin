@@ -150,7 +150,7 @@
                                                                     <form action="{{route('vendors.account.customers.change_status')}}" method="POST">
                                                                         @csrf
 
-                                                                        Are you sure you want to delete
+                                                                        {{-- Are you sure you want to delete ! --}}
 
                                                                     <div class="col-md-12 col-12">
                                                                         <div class="mb-1">
@@ -186,7 +186,7 @@
                                                                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                                                 </div>
                                                                 <div class="modal-body">
-                                                                    Are you Shure you want to delete !
+                                                                    Are you sure you want to delete !
                                                                 </div>
                                                                 <form action="{{route('vendors.account.customers.delete')}}" method="POST">
                                                                     @csrf

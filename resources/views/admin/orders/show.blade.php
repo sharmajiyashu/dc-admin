@@ -29,8 +29,24 @@
                     <div class="row">
                         <div class="col-12">
                             <div class="card">
-                                <div class="card-header">
-                                    <h3 class="">Order #{{ $order->order_id }}</h3>
+                                <div class="card-body row">
+                                    <div class="col-md-8"> 
+                                        <h3 class="">Order #{{ $order->order_id }}</h3>
+                                    </div>
+                                    <div class="col-md-4" style="text-align: end;">
+                                        @if ($order->status == 'pending')
+                                            <a href="{{ route('change-order-status',['id' => $order->id, 'status' => 'accept']) }}"><button class="btn btn-success">Accept</button></a>
+                                            <a href="{{ route('change-order-status',['id' => $order->id, 'status' => 'reject']) }}"><button class="btn btn-danger">Reject</button></a>
+                                        @elseif ($order->status == 'accepted')
+                                            <a href="{{ route('change-order-status',['id' => $order->id, 'status' => 'dispach']) }}"><button class="btn btn-success">Dispatch</button></a>
+
+                                        @elseif ($order->status == 'dispatched')
+                                            <a href="{{ route('change-order-status',['id' => $order->id, 'status' => 'deliver']) }}"><button class="btn btn-success">Deliver</button></a>
+                                        @else
+                                            
+                                        @endif
+                                        
+                                    </div>
                                     
                                 </div>
                                 <div class="card-body">
