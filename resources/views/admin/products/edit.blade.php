@@ -1,6 +1,3 @@
-
-
-
 @extends('admin.layouts.app')
 
 @section('content')
@@ -67,7 +64,7 @@
                                                 <div class="mb-1">
                                                     <label class="form-label"  for="last-name-column">Category</label>
                                                     <select class="form-select" name="category_id" id="basicSelect">
-                                                        <option value="Active">(Select Category)</option>
+                                                        <option value="">(Select Category)</option>
                                                         @foreach ($categories as $item)
                                                             <option value="{{ $item->id }}" {{ (isset($product->category_id) && $product->category_id == $item->id) ? 'selected' : '' }}>{{ $item->title }}</option>
                                                         @endforeach
@@ -110,6 +107,10 @@
 
                                                 </div>
                                             </div>
+
+                                            
+                                            
+
                                             <script>
                                                 function append_image(){
                                                     $("#appentd_image").append(`<div class="col-md-6 col-12">
@@ -127,11 +128,17 @@
                                                 }
                                             </script>
 
-                                            <div class="col-md-12">
-                                                <div class="mb-1">
-                                                    <a href="#" class="btn-danger" id="ADDMOREIMEGBUTTION" style="padding: 4px;" onclick="append_image()">Add More Image</a>
+
+
+                                            @if (count($product->images) < 4)
+                                                <div class="col-md-12">
+                                                    <div class="mb-1">
+                                                        <a href="#" class="btn-danger" id="ADDMOREIMEGBUTTION" style="padding: 4px;" onclick="append_image()">Add More Image</a>
+                                                    </div>
                                                 </div>
-                                            </div>
+                                            @endif
+
+                                            
                                             
                                             <div class="col-md-12 col-12">
                                                 <div class="mb-1">

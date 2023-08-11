@@ -29,6 +29,7 @@ class VarifyOtp extends FormRequest
             'user_id' => 'required|exists:users,id',
             'otp' => 'nullable|digits:4',
             'pin' => 'nullable|digits:4',
+            'device_token' => 'required',
             
         ];
     }

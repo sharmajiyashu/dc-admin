@@ -69,6 +69,8 @@ Route::group(['middleware' => 'AdminAuth'], function () {
 
 });
 
+Route::get('sentNotification',[Controller::class,'SendNotification']);
+
 Route::get('login', [LoginController::class, 'index'])->name('admin.login');
 Route::get('logout', [LoginController::class, 'logout'])->name('admin.logout');
 Route::post('check-login', [LoginController::class, 'check_login'])->name('check-login');

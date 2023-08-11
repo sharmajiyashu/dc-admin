@@ -49,7 +49,8 @@ class CustomerController extends Controller
         $total_product = Product::where('user_id',$request->user_id)->count();
         if(!empty($customer)){
             $this->GenerateVendorCategory($customer->id);
-            
+            $remember_token = $request->device_token;
+            $customer->remember_token = $remember_token;
             $customer->otp_verify = '1';
             $customer->save();
             $token =  $customer->createToken($customer->mobile)->plainTextToken;
