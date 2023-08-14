@@ -4,10 +4,14 @@
 @extends('admin.layouts.app')
 
 @section('content')
+
 <style>
     .error{
         color:red;
     }
+    /* input {
+        text-transform: uppercase;
+    } */
 </style>
 
  <!-- BEGIN: Content-->
@@ -63,7 +67,7 @@
                                             <div class="col-md-12 col-12">
                                                 <div class="mb-1">
                                                     <label class="form-label" for="first-name-column">Title <span class="error">*</span></label>
-                                                    <input type="text" id="first-name-column" name="title" class="form-control" placeholder="Title" value="{{ old('title') }}" />
+                                                    <input type="text" id="first-name-column" name="title" class="form-control" placeholder="Title" oninput="this.value = this.value.toUpperCase()"  value="{{ old('title') }}" />
                                                 </div>
                                             </div>
 
@@ -78,11 +82,12 @@
                                                 <div class="mb-1">
                                                     <label class="form-label"  for="last-name-column">Status</label>
                                                     <select class="form-select" name="status" id="basicSelect">
-                                                        <option value="Active">Active</option>
-                                                        <option value="Inactive">Inactive</option>
+                                                        <option value="Active" {{ (old("status") == 'Active' ? "selected":"") }}>Active</option>
+                                                        <option value="Inactive" {{ (old("status") == 'Inactive' ? "selected":"") }}>Inactive</option>
                                                     </select>
                                                 </div>
                                             </div>
+                                            
                                             {{-- <div class="col-md-6 col-12">
                                                 <div class="mb-1">
                                                     <label class="form-label" for="first-name-column">Packing Quantity</label>

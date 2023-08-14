@@ -38,7 +38,7 @@ class ProductController extends Controller
      */
     public function create()
     {
-        $categories = Category::get();
+        $categories = Category::where('is_admin','1')->get();
         return view('admin.products.create',compact('categories'));
     }
 
@@ -102,7 +102,17 @@ class ProductController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function update(UpdateProductRequest $request, Product $product)
-    {
+    {   
+
+        // echo $product->id;
+
+        $check = Product::where('id','!=',$product->id)->where('name',$request->name)->where('is_admin','1')->count();
+        if($check > 0){
+            return back()->withErrors([
+                'email' => 'The name has already been taken.',
+            ])->onlyInput('email');
+        }
+        
         $data = $request->validated();
         $data['detail'] = $request->detail;
         $data['unit'] = $request->unit;

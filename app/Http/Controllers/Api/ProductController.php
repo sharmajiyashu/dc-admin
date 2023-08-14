@@ -16,6 +16,7 @@ use App\Traits\ApiResponse;
 use Illuminate\Support\Facades\Redis;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\File;
+use Illuminate\Support\Str;
 
 class ProductController extends Controller
 {
@@ -24,6 +25,7 @@ class ProductController extends Controller
         try{            
             if($request->user()->role_id == Role::$vendor){
                 $data = $request->validated();
+                $data['name'] = Str::upper($request->name);
                 $data['detail'] = $request->detail;
                 $data['unit'] = $request->unit;
                 $data['user_id'] = $request->user()->id;
@@ -36,6 +38,16 @@ class ProductController extends Controller
                     $data['is_limited'] = '1';
                 }else{
                     $data['is_limited'] = '0';
+                }
+
+                if(!empty($request->id)){
+                    $check = Product::where('user_id',$request->user()->id)->where('id','!=',$request->id)->where('name',$data['name'])->count();
+                }else{
+                    $check = Product::where('user_id',$request->user()->id)->where('name',$data['name'])->count();
+                }
+
+                if($check > 0){
+                    return $this->sendFailed('The name has already been taken.',200);
                 }
 
                 if(!empty($request->packing_quantity)){

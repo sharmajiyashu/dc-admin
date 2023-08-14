@@ -129,14 +129,24 @@
                                             </script>
 
 
-
-                                            @if (count($product->images) < 4)
-                                                <div class="col-md-12">
-                                                    <div class="mb-1">
-                                                        <a href="#" class="btn-danger" id="ADDMOREIMEGBUTTION" style="padding: 4px;" onclick="append_image()">Add More Image</a>
+                                                @if (!empty($product->images))
+                                                        @if (count($product->images) < 4)
+                                                        <div class="col-md-12">
+                                                            <div class="mb-1">
+                                                                <a href="#" class="btn-danger" id="ADDMOREIMEGBUTTION" style="padding: 4px;" onclick="append_image()">Add More Image</a>
+                                                            </div>
+                                                        </div>
+                                                    @endif   
+                                                @else
+                                                    <div class="col-md-12">
+                                                        <div class="mb-1">
+                                                            <a href="#" class="btn-danger" id="ADDMOREIMEGBUTTION" style="padding: 4px;" onclick="append_image()">Add More Image</a>
+                                                        </div>
                                                     </div>
-                                                </div>
-                                            @endif
+                                                @endif
+                                                
+                                            
+                                            
 
                                             
                                             

@@ -94,6 +94,14 @@ class CategoryController extends Controller
      */
     public function update(UpdateCategoryRequest $request, Category $category)
     {
+
+        $check = Category::where('id','!=',$category->id)->where('title',$request->title)->where('is_admin','1')->count();
+        if($check > 0){
+            return back()->withErrors([
+                'email' => 'The name has already been taken.',
+            ])->onlyInput('email');
+        }
+
         $data = $request->validated();
 
         $data_2 = [
