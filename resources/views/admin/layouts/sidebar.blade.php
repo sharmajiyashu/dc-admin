@@ -36,7 +36,8 @@
             <li class="nav-item {{ \Request::is('orders') ? 'active' : ''  }} "><a class="d-flex align-items-center" href="{{ route('orders.index') }}"><i data-feather="shopping-cart"></i><span class="menu-title text-truncate" data-i18n="File Manager">Orders</span></a>
             </li>
             
-           
+            <li class="nav-item {{ \Request::is('notifications') ? 'active' : ''  }} "><a class="d-flex align-items-center" href="{{ route('notifications.index') }}"><i data-feather="shopping-cart"></i><span class="menu-title text-truncate" data-i18n="File Manager">Notification</span></a>
+            </li>
             
             
             

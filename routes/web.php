@@ -7,6 +7,7 @@ use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\VendorController;
 use App\Http\Controllers\CustomerController;
+use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\OrderController;
 
 
@@ -58,6 +59,15 @@ Route::group(['middleware' => 'AdminAuth'], function () {
         Route::get('customers-orders/{id}',[CustomerController::class,'orders'])->name('orders');
         Route::get('customers-wishlist/{id}',[CustomerController::class,'wishlist'])->name('wishlist');
         Route::get('customers-carts/{id}',[CustomerController::class,'carts'])->name('carts');
+    });
+
+    Route::group(['as' => 'notifications.'], function () {
+        Route::get('notifications',[NotificationController::class,'index'])->name('index');
+        Route::get('notifications-create',[NotificationController::class,'create'])->name('create');
+        Route::post('notifications-store',[NotificationController::class,'store'])->name('store');
+        Route::post('notifications-edit',[NotificationController::class,'edit'])->name('edit');
+        Route::get('sent-admin-message/{id}',[NotificationController::class,'sentAdminNotification'])->name('sent-admin-notofication');
+
     });
 
     Route::resource('customers',CustomerController::class);
