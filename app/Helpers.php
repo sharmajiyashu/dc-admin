@@ -112,9 +112,15 @@ class Helper {
 			foreach($store_customers as $key=>$val){
 				$user = Helper::getUserDetail($val->user_id);
 				$device_id = isset($user->remember_token) ? $user->remember_token :'';
-				$title = 'A new product has been added to '.$vendor->store_name;
-				$body = '';
-				$image = "";
+				$title = 'A new product has been added to '.$vendor->store_name.'!';
+				$body = 'Store name : '.$vendor->store_name.', Product Name : '.$product->name;
+				if(!empty($product->images)){
+					$images = json_decode($product->image);
+					$image = isset($images[0]) ? $images[0] : '';
+				}else{
+					$image = '';
+				}
+				$image = asset('public/images/products/'.$image);
 				Helper::SendNotification($device_id,$title,$body,$image);
 			}
 		}
@@ -128,7 +134,7 @@ class Helper {
 		$order_detail = Order::where('id',$order_id)->first();
 		$user = Helper::getUserDetail($order_detail->user_id);
 		$device_id = isset($user->remember_token) ? $user->remember_token :'';
-		$title = 'Knock knock! Your Order has been '.$status.' !';
+		$title = 'Knock knock! Your Order has been '.$status.'!';
 		$body = 'Order Id : '.$order_detail->order_id;
 		$order_image = Helper::getOrderProductImage($order_id);
 		Helper::SendNotification($device_id,$title,$body,$order_image);
@@ -174,7 +180,7 @@ class Helper {
 	public static function sentMessageCreateOrder($order_id){
 		$order = Order::where('id',$order_id)->first();
 		$user = Helper::getUserDetail($order->user_id);
-		$user_title = 'Your order has been placed !';
+		$user_title = 'Your order has been placed!';
 		$user_body = 'Order Id : '.$order->order_id;
 		$user_device_id = isset($user->remember_token) ? $user->remember_token :'';
 		$order_user_image = Helper::getOrderProductImage($order_id);
@@ -185,6 +191,33 @@ class Helper {
 		$body = "Mobile : ".$user->mobile.', City : '.$user->city;
 		$vendor_device_id = isset($vendor->remember_token) ? $vendor->remember_token :'';
 		Helper::SendNotification($vendor_device_id,$vendor_title,$body,$order_user_image);
+	}
+
+	public static function sentNotificationAddCustomerbyMobile($user_id,$vendor_id){
+		$user = Helper::getUserDetail($user_id);
+		$vendor = Helper::getUserDetail($vendor_id); 
+		$device_id = isset($user->remember_token) ? $user->remember_token :'';
+		// $title = $vendor->name." added you Kindly enjoy the shooping ";
+		// $body = "Store Code : ".$vendor->store_code .', City : '.$vendor->city;
+		$title = "You have been added to ".$vendor->store_name.'!';
+		$body = "“".$vendor->name."” added you kindly enjoy the shooping";
+		$image = asset('public/images/users/'.$vendor->store_image);
+		Helper::SendNotification($device_id,$title,$body,$image);
+	}
+
+	public static function sentNotificationForActiveInactiveUser($user_id,$vendor_id,$type){
+		$user = Helper::getUserDetail($user_id);
+		$vendor = Helper::getUserDetail($vendor_id); 
+		$image = asset('public/images/users/'.$vendor->store_image);
+		$device_id = isset($user->remember_token) ? $user->remember_token :'';
+		if($type == StoreLink::$active){
+			$title = 'Store '.$vendor->store_name.' have been activated!';
+			$body = "“".$vendor->name."” activate your account kindly enjoy the shooping";
+		}else{
+			$title = 'Store '.$vendor->store_name.' have been deactivated!';
+			$body = "“".$vendor->name."” your account has been deactivated, kindly contact the store";
+		}
+		Helper::SendNotification($device_id,$title,$body,$image);
 	}
 
 }

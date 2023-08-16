@@ -130,6 +130,7 @@ class StoreLinkController extends Controller
                     }else{
                         $store = StoreLink::create(['vendor_id' => $request->user()->id ,'user_id' => $customer->id,'store_code' => $request->user()->store_code,'status' => '1','in_add' => '1' ,'slab_id' => $slab_id]);
                         Vendor::where('id',$customer->id)->update(['active_store_code' => $request->user()->store_code]);
+                        Helper::sentNotificationAddCustomerbyMobile($customer->id,$request->user()->id);
                         return $this->sendSuccess('SENT REQUEST SUCCESS SUCCESSFULLY', $store);
                     }
                 }else{

@@ -1,6 +1,8 @@
 <?php
 
 namespace App\Http\Controllers\Api;
+
+use App\Helpers\Helper;
 use App\Http\Requests\VendorsUpdateDetail;
 use App\Http\Requests\VendorRegisterLoginMobileRequest;
 use Intervention\Image\ImageManagerStatic as Image;
@@ -149,8 +151,10 @@ class VendorController extends Controller
                             $user_data->update(['active_store_code' => '']);
                         }
                         StoreLink::where('id',$customers->id)->update(['status' => StoreLink::$inactive]);
+                        Helper::sentNotificationForActiveInactiveUser($request->user_id,$request->user()->id,StoreLink::$inactive);
                     }else{
                         StoreLink::where('id',$customers->id)->update(['status' => StoreLink::$active]);
+                        Helper::sentNotificationForActiveInactiveUser($request->user_id,$request->user()->id,StoreLink::$active);
                     }
                 }
             }
