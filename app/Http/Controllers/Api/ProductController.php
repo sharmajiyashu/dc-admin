@@ -1,6 +1,8 @@
 <?php
 
 namespace App\Http\Controllers\Api;
+
+use App\Helpers\Helper;
 use App\Models\Product;
 use App\Models\Category;
 use App\Models\Role;
@@ -132,6 +134,16 @@ class ProductController extends Controller
                 }
                 $product['images'] = isset($img) ? $img :'';
 
+                
+
+                $check = SlabLink::where(['user_id' => $request->user()->id ,'product_id'=>$product->id])->count();
+                if($check == 0){
+                    $get_default_slab = Helper::getDefaultSlab();
+                    SlabLink::create(['user_id' => $request->user()->id ,'product_id'=>$product->id ,'slab_id' => $get_default_slab]);
+                }
+                $message = 'A new product has been added to '.$request->user()->store_name;
+                $type = 1;
+                Helper::sentMessageToCreateUpdateProduct($product->id,$type);
                 return $this->sendSuccess('PRODUCT CREATE SUCCESSFULLY', $product);
             }else{
                 return $this->sendFailed('This For Only Vendors',200);
@@ -139,6 +151,11 @@ class ProductController extends Controller
         }catch(\Throwable $e){
             return $this->sendFailed($e->getMessage(). ' On Line '. $e->getLine(),200);
         }
+    }
+
+    function sentNotificationToCustomers($product_id,$message){
+        $product_data = Product::where('id',$product_id)->first();
+        
     }
 
     public function DeleteProduct(Request $request){

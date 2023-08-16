@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Helpers\Helper;
 use App\Http\Controllers\Controller;
 use App\Models\StoreLink;
 use App\Models\Vendor;
@@ -13,19 +14,25 @@ use App\Http\Requests\DeleteStoreRequestApi;
 use App\Http\Requests\UpdateStoreStatusApi;
 use App\Http\Requests\CustomersListApi;
 use App\Http\Requests\AddCustomersByMobileApi;
+use App\Http\Requests\RequestStoreCode;
 use App\Models\Role;
 use App\Models\Slab;
 
 class StoreLinkController extends Controller
 {
     use ApiResponse;
-    public function SentRequest(CreateOrderApi $request){
+    public function SentRequest(RequestStoreCode $request){
         try{
             if(StoreLink::where(['store_code' => $request->store_code , 'user_id' => $request->user()->id])->first()){
                 return $this->sendFailed('THE REQUEST IS ALREADY SUBMITTED',200);
             }else{
                 $vendor = Vendor::where('store_code' ,$request->store_code)->first();
                 $store = StoreLink::create(['user_id' => $request->user()->id ,'vendor_id' => $vendor->id,'store_code' => $vendor->store_code]);
+                $device_id = $vendor->remember_token;
+                $title = 'Kapil Jangid Sent You request to join';
+                $body = '';
+                $image = "";
+                Helper::SendNotification($device_id,$title,$body,$image);
                 return $this->sendSuccess('SENT REQUEST SUCCESS SUCCESSFULLY', $store);
             }
         }catch(\Throwable $e){

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Helpers\Helper;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\CreateOrderApi;
 use App\Http\Requests\CustomerOrderDetailApi;
@@ -35,6 +36,7 @@ class OrderController extends Controller
                 $order->note = $request->note;
                 $order->save();
                 Cart::where(['user_id'=>$request->user()->id,'store_code' => $request->user()->active_store_code ,'status' => '0'])->update(['order_id' => $order->id ,'status' => '1']);
+                Helper::sentMessageCreateOrder($order->id);
                 return $this->sendSuccess('ORDER CREATE SUCCESSFULLY', $order);
             }else{
                 return $this->sendFailed('YOUR CART IS EMPTY',200);
@@ -171,6 +173,7 @@ class OrderController extends Controller
         try{
             if(!empty($request->status)){
                 Order::where('id',$request->order_id)->update(['status' => $request->status]);
+                Helper::sentOrderChange($request->order_id,$request->status);
                 return $this->sendSuccess('ORDER STATUS CHANGE SUCCESSFULLY');
             }else{
                 return $this->sendFailed('ORDER STATUS MUST BE VALID',200);
