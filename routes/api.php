@@ -87,6 +87,7 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
     Route::get('remove_cart_items',[CartController::class,'RemoveAllItem']);
     Route::post('add_product_in_slab',[SlabController::class,'AddProductInSlab']);
     Route::post('get_slab_product',[ProductController::class,'GetSlabProduct']);
+    Route::get('get_notification',[VendorController::class,'getNotificatons']);
 
 });
 Route::post('customer_register_login_mobile',[CustomerController::class,'customerRegisterLoginMobile']);

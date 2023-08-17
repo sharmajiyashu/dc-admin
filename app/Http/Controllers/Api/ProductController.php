@@ -43,9 +43,11 @@ class ProductController extends Controller
                 }
 
                 if(!empty($request->id)){
+                    $type = 1;
                     $check = Product::where('user_id',$request->user()->id)->where('id','!=',$request->id)->where('name',$data['name'])->count();
                 }else{
                     $check = Product::where('user_id',$request->user()->id)->where('name',$data['name'])->count();
+                    $type = 0;
                 }
 
                 if($check > 0){
@@ -124,6 +126,7 @@ class ProductController extends Controller
                     $fetch_prod = Product::where('id',$request->fetch_product_id)->first();
                     $category_admin_user = Category::where('admin_id',$fetch_prod->category_id)->where('user_id',$request->user()->id)->first();
                     $data['category_id'] = isset($category_admin_user->id) ? $category_admin_user->id :'';
+                    $type = 0;
                 }
                 $product = Product::updateOrCreate(['id' => $request->id],$data);
                 $images = json_decode($product->images);
@@ -141,10 +144,13 @@ class ProductController extends Controller
                     $get_default_slab = Helper::getDefaultSlab();
                     SlabLink::create(['user_id' => $request->user()->id ,'product_id'=>$product->id ,'slab_id' => $get_default_slab]);
                 }
-                $message = 'A new product has been added to '.$request->user()->store_name;
-                $type = 1;
                 Helper::sentMessageToCreateUpdateProduct($product->id,$type);
-                return $this->sendSuccess('PRODUCT CREATE SUCCESSFULLY', $product);
+                if($type == 1){
+                    return $this->sendSuccess('Product is updated successfully', $product);
+                }else{
+                    return $this->sendSuccess('Product is created successfully', $product);
+                }
+                
             }else{
                 return $this->sendFailed('This For Only Vendors',200);
             }

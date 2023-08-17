@@ -125,7 +125,6 @@ class OrderController extends Controller
     }
 
     public function OrderHistory($id){
-
         $order = Order::where('order_id',$id)->first();
         $order->sum_mrp = Cart::where('order_id',$order->id)->sum('p_mrp');
         $order->sum_quantity = Cart::where('order_id',$order->id)->sum('quantity');
@@ -167,6 +166,24 @@ class OrderController extends Controller
         }
 
         
+    }
+
+    public function OrderInvoice($id){
+        $order = Order::where('order_id',$id)->first();
+        $order->sum_mrp = Cart::where('order_id',$id)->sum('p_mrp');
+        $order->sum_quantity = Cart::where('order_id',$id)->sum('quantity');
+        $order->sum_price = Cart::where('order_id',$id)->sum('p_price');
+        $order->in_word = $this->numberToWord($order->amount);
+        $customer = User::where('id',$order->user_id)->first();
+        $vendor = User::where('id',$order->vendor_id)->first();
+        $carts = Cart::where('order_id',$order->id)->get();
+        foreach($carts as $key=>$val){
+            $product = Product::where('id',$val->product_id)->first();
+            $val->product_name = isset($product->name) ? $product->name :'';
+            $image = json_decode($product->images);
+            $val->image = isset($image[0]) ? $image[0] :'download.png';
+        }
+        return view('admin.orders.invoice-show',compact('carts','vendor','customer','order'));
     }
         
 }

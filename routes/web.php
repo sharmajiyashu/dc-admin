@@ -65,7 +65,9 @@ Route::group(['middleware' => 'AdminAuth'], function () {
         Route::get('notifications',[NotificationController::class,'index'])->name('index');
         Route::get('notifications-create',[NotificationController::class,'create'])->name('create');
         Route::post('notifications-store',[NotificationController::class,'store'])->name('store');
-        Route::post('notifications-edit',[NotificationController::class,'edit'])->name('edit');
+        Route::post('notifications-update/{id}',[NotificationController::class,'update'])->name('update');
+        Route::get('notifications-edit/{id}',[NotificationController::class,'edit'])->name('edit');
+        Route::get('notifications-delete/{id}',[NotificationController::class,'delete'])->name('delete');
         Route::get('sent-admin-message/{id}',[NotificationController::class,'sentAdminNotification'])->name('sent-admin-notofication');
 
     });
@@ -87,3 +89,4 @@ Route::post('check-login', [LoginController::class, 'check_login'])->name('check
 
 
 Route::get('order-history/{id}',[OrderController::class,'OrderHistory'])->name('order-history');
+Route::get('order-invoice/{id}',[OrderController::class,'OrderInvoice'])->name('order-invoice');

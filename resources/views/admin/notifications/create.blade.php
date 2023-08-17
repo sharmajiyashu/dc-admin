@@ -19,14 +19,14 @@
                 <div class="content-header-left col-md-9 col-12 mb-2">
                     <div class="row breadcrumbs-top">
                         <div class="col-12">
-                            <h2 class="content-header-title float-start mb-0">Notifications</h2>
+                            <h2 class="content-header-title float-start mb-0">Notification</h2>
                             <div class="breadcrumb-wrapper">
                                 <ol class="breadcrumb">
                                     <li class="breadcrumb-item"><a href="{{ url('admin')}}">Home</a>
                                     </li>
                                     <li class="breadcrumb-item"><a href="{{ route('notifications.index') }}">Notifications</a>
                                     </li>
-                                    <li class="breadcrumb-item active">Sent
+                                    <li class="breadcrumb-item active">Sent Notification
                                     </li>
                                 </ol>
                             </div>
@@ -40,7 +40,7 @@
                 @foreach ($errors->all() as $error)
                 <div class="alert alert-danger alert-dismissible fade show" role="alert">
                     <div class="alert-body">
-                                            {{$error}}
+                        {{$error}}
                     </div>
                     <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                 </div>
@@ -53,7 +53,7 @@
                         <div class="col-12">
                             <div class="card">
                                 <div class="card-header">
-                                    <h4 class="card-title">Sent</h4>
+                                    <h4 class="card-title">Sent Notification</h4>
                                 </div>
                                 <div class="card-body">
                                     <form class="form" action="{{ route('notifications.store') }}" method="POST" enctype="multipart/form-data">

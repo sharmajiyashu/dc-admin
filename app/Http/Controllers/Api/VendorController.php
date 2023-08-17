@@ -19,6 +19,7 @@ use Illuminate\Support\Str;
 use App\Http\Requests\ChangeStatusApi;
 use App\Http\Requests\UpdateCategoryPackingApi;
 use App\Http\Requests\UploadApi;
+use App\Models\Notification;
 use App\Models\Slab;
 use App\Models\StoreLink;
 
@@ -193,5 +194,19 @@ class VendorController extends Controller
         }
     }
 
+    public function getNotificatons(Request $request){
+        try{
+            $notifications = Notification::where('user_id',$request->user()->id)->orderBy('id','desc')->get();
+            $count = Notification::where('user_id',$request->user()->id)->orderBy('id','desc')->count();
+            Helper::removeBefore7daysData();
+            if(!empty($notifications)){
+                return $this->sendSuccess('There are '.$count.' messages',$notifications);
+            }else{
+                return $this->sendFailed('There is no content or message available',200);
+            }
+        }catch(\Throwable $e){
+            return $this->sendFailed($e->getMessage(). ' On Line '. $e->getLine(),200);
+        }
+    }
 
 }

@@ -5,6 +5,7 @@ namespace App\Helpers;
 use App\Models\Cart;
 use App\Models\Category;
 use App\Models\Customer;
+use App\Models\Notification;
 use App\Models\Order;
 use App\Models\Product;
 use App\Models\Role;
@@ -14,6 +15,7 @@ use App\Models\SlabLink;
 use App\Models\StoreLink;
 use App\Models\User;
 use App\Models\Vendor;
+use Carbon\Carbon;
 
 class Helper {
     
@@ -67,6 +69,8 @@ class Helper {
 		$result = curl_exec($ch);
 		curl_close($ch);
 
+		Helper::removeBefore7daysData();
+
 		return $result;
 		
     }
@@ -74,22 +78,28 @@ class Helper {
 	public static function sentAdminNotification($id){
 		$sent = SentNotification::where('id',$id)->first();
 		if(!empty($sent)){
+			$count = $sent->count + 1;
 			if($sent->to_customers == '1'){
 				$customers = Customer::where('role_id',Role::$customer)->where('is_register','1')->get();
 				foreach($customers as $key => $val){
-					$title = 'hyy '.$val->name.' customer '.$sent->title;
-					$image = "";
-					Helper::SendNotification('',$title,$sent->body,$image);
+					$title = 'Hello, '.$val->name.' '.$sent->title;
+					$image = asset('public/images/notifications/'.$sent->image);
+					$body = $sent->body;
+					Helper::SendNotification('',$title,$body,$image);
+					Notification::create(['user_id' => $val->id ,'title' => $title ,'body' => $body ,'image' => $image]);
 				}
 			}
 			if($sent->to_vendors == '1'){
 				$customers = Customer::where('role_id',Role::$vendor)->where('is_register','1')->get();
 				foreach($customers as $key => $val){
-					$title = 'hyy '.$val->name.' Vendor '.$sent->title;
-					$image = "";
-					Helper::SendNotification('',$title,$sent->body,$image);
+					$title = 'Hello, '.$val->name.' '.$sent->title;
+					$body = $sent->body;
+					$image = asset('public/images/notifications/'.$sent->image);
+					Helper::SendNotification('',$title,$body,$image);
+					Notification::create(['user_id' => $val->id ,'title' => $title ,'body' => $body ,'image' => $image]);
 				}
 			}
+			SentNotification::where('id',$id)->update(['count' => $count]);
 		}
 	}
 
@@ -112,7 +122,11 @@ class Helper {
 			foreach($store_customers as $key=>$val){
 				$user = Helper::getUserDetail($val->user_id);
 				$device_id = isset($user->remember_token) ? $user->remember_token :'';
-				$title = 'A new product has been added to '.$vendor->store_name.'!';
+				if($type == 1){
+					$title = 'A product has been updated to '.$vendor->store_name.'!';
+				}else{
+					$title = 'A new product has been added to '.$vendor->store_name.'!';
+				}
 				$body = 'Store name : '.$vendor->store_name.', Product Name : '.$product->name;
 				if(!empty($product->images)){
 					$images = json_decode($product->image);
@@ -122,6 +136,7 @@ class Helper {
 				}
 				$image = asset('public/images/products/'.$image);
 				Helper::SendNotification($device_id,$title,$body,$image);
+				Notification::create(['user_id' => $user->id ,'title' => $title ,'body' => $body ,'image' => $image]);
 			}
 		}
 	}
@@ -138,6 +153,7 @@ class Helper {
 		$body = 'Order Id : '.$order_detail->order_id;
 		$order_image = Helper::getOrderProductImage($order_id);
 		Helper::SendNotification($device_id,$title,$body,$order_image);
+		Notification::create(['user_id' => $user->id ,'title' => $title ,'body' => $body ,'image' => $order_image]);
 	}
 
 	public static function getOrderProductImage($order_id){
@@ -185,12 +201,15 @@ class Helper {
 		$user_device_id = isset($user->remember_token) ? $user->remember_token :'';
 		$order_user_image = Helper::getOrderProductImage($order_id);
 		Helper::SendNotification($user_device_id,$user_title,$user_body,$order_user_image);
+		Notification::create(['user_id' => $user->id ,'title' => $user_title ,'body' => $user_body ,'image' => $order_user_image]);
 
 		$vendor = Helper::getUserDetail($order->vendor_id);
 		$vendor_title = "A new order has been placed by ".$user->name;
 		$body = "Mobile : ".$user->mobile.', City : '.$user->city;
 		$vendor_device_id = isset($vendor->remember_token) ? $vendor->remember_token :'';
 		Helper::SendNotification($vendor_device_id,$vendor_title,$body,$order_user_image);
+		Notification::create(['user_id' => $vendor->id ,'title' => $vendor_title ,'body' => $body ,'image' => $order_user_image]);
+
 	}
 
 	public static function sentNotificationAddCustomerbyMobile($user_id,$vendor_id){
@@ -203,6 +222,7 @@ class Helper {
 		$body = "“".$vendor->name."” added you kindly enjoy the shooping";
 		$image = asset('public/images/users/'.$vendor->store_image);
 		Helper::SendNotification($device_id,$title,$body,$image);
+		Notification::create(['user_id' => $user->id ,'title' => $title ,'body' => $body ,'image' => $image]);
 	}
 
 	public static function sentNotificationForActiveInactiveUser($user_id,$vendor_id,$type){
@@ -218,6 +238,13 @@ class Helper {
 			$body = "“".$vendor->name."” your account has been deactivated, kindly contact the store";
 		}
 		Helper::SendNotification($device_id,$title,$body,$image);
+		Notification::create(['user_id' => $user->id ,'title' => $title ,'body' => $body ,'image' => $image]);
+	}
+
+	public static function removeBefore7daysData(){
+		$sevenDaysAgo = Carbon::now()->subDays(7)->toDateString();
+			Notification::whereDate('created_at', '<', $sevenDaysAgo)
+				->delete();
 	}
 
 }

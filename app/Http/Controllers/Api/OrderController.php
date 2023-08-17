@@ -121,8 +121,13 @@ class OrderController extends Controller
                 $val['customer_name'] = isset($user->name) ? $user->name :'';
                 $val['product_image'] = $this->GetOneImage($val->id);
                 $val['order_history'] = route('order-history',$val['order_id']);
+                $val['order_invoice'] = route('order-invoice',$val['order_id']);
                 $vendor = Vendor::where('id',$val->vendor_id)->first();
-                $val['store_image'] = asset('public/images/users/'.$vendor->store_image);
+                if(!empty($vendor->store_image)){
+                    $val['store_image'] = asset('public/images/users/'.$vendor->store_image);
+                }else{
+                    $val['store_image'] = '';
+                }
             }
             return $this->sendSuccess('ORDER HISTORY FETCH SUCCESSFULLY', $orders);
         }catch(\Throwable $e){

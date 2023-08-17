@@ -14,12 +14,12 @@
                 <div class="content-header-left col-md-9 col-12 mb-2">
                     <div class="row breadcrumbs-top">
                         <div class="col-12">
-                            <h2 class="content-header-title float-start mb-0">Category</h2>
+                            <h2 class="content-header-title float-start mb-0">Notification</h2>
                             <div class="breadcrumb-wrapper">
                                 <ol class="breadcrumb">
                                     <li class="breadcrumb-item"><a href="{{ url('/')}}">Home</a>
                                     </li>
-                                    <li class="breadcrumb-item"><a href="{{ route('categories.index') }}">Categories </a>
+                                    <li class="breadcrumb-item"><a href="{{ route('notifications.index') }}">Notifications </a>
                                     </li>
                                     <li class="breadcrumb-item active">Edit
                                     </li>
@@ -53,41 +53,49 @@
                                 <div class="card-body">
                                     
 
-                                    <form class="form" action="{{ route('categories.update',$category->id) }}" method="POST" enctype="multipart/form-data">
+                                    <form class="form" action="{{ route('notifications.update',$notification->id) }}" method="POST" enctype="multipart/form-data">
                                         {{ csrf_field() }}
-                                        @method('PATCH')
                                     
                                         <div class="row">
                                             <div class="col-md-6 col-12">
                                                 <div class="mb-1">
                                                     <label class="form-label" for="first-name-column">Title</label>
-                                                    <input type="text" id="first-name-column" name="title" class="form-control" placeholder="Title" value="{{ $category->title }}" />
+                                                    <input type="text" id="first-name-column" name="title" class="form-control" placeholder="Title" value="{{ $notification->title }}" />
                                                 </div>
-                                            </div>
-                                            <div class="col-md-6 col-12">
+
                                                 <div class="mb-1">
-                                                    <label class="form-label"  for="last-name-column">Status</label>
-                                                    <select class="form-select" name="status" id="basicSelect">
-                                                        <option value="Active"  {{ (isset($category->status) && $category->status == 'Active') ? 'selected' : '' }}>Active</option>
-                                                        <option value="Inactive" {{ (isset($category->status) && $category->status == 'Inactive') ? 'selected' : '' }}>Inactive</option>
-                                                    </select>
+                                                    <div class="form-group">
+                                                        <label class="form-label" for="first-name-column">Sent To <span class="error">*</span></label>
+                                                        <div class="row">
+                                                            <div class="col-md-4">
+                                                                <input type="checkbox" id="" name="to_vendors" value="vendor" {{ ($notification->to_vendors == '1' ? "checked":"") }}> <span>Vendors</span>
+                                                            </div>
+                                                            <div class="col-md-4">
+                                                                <input type="checkbox" id="" name="to_customers" value="customer"{{ ($notification->to_customers == '1' ? "checked":"") }} > <span>Customers</span> 
+                                                            </div>
+                                                        </div> 
+                                                    </div> 
                                                 </div>
-                                            </div>
-                                            <div class="col-md-6 col-12">
-                                                <div class="mb-1">
-                                                    <label class="form-label" for="first-name-column">Icon</label>
-                                                    <div>
-                                                        <img src="{{ asset('public/images/categories/'.$category->image) }}" alt="" width="100">
-                                                    </div>
-                                                </div>
+
                                             </div>
 
                                             <div class="col-md-6 col-12">
                                                 <div class="mb-1">
-                                                    <label class="form-label" for="first-name-column">Update Icon</label>
+                                                    <label class="form-label" for="first-name-column">Image</label>
+                                                    <div>
+                                                        <img src="{{ asset('public/images/notifications/'.$notification->image) }}" alt="" width="100">
+                                                    </div>
+                                                    <label class="form-label" for="first-name-column">Update Image</label>
                                                     <div>
                                                         <input type="file" name="image" class="form-control">
                                                     </div>
+                                                </div>
+                                            </div>
+
+                                            <div class="col-md-12 col-12">
+                                                <div class="mb-1">
+                                                    <label class="form-label" for="exampleFormControlTextarea1">Body</label>
+                                                    <textarea class="form-control" name="body" id="exampleFormControlTextarea1" rows="3" placeholder="Body">{{ $notification->body }}</textarea>
                                                 </div>
                                             </div>
                                             

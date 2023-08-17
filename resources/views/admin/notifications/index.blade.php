@@ -24,7 +24,7 @@
                 <div class="content-header-left col-md-9 col-12 mb-2">
                     <div class="row breadcrumbs-top">
                         <div class="col-12">
-                            <h2 class="content-header-title float-start mb-0">Notoficaton</h2>
+                            <h2 class="content-header-title float-start mb-0">Sent Notification</h2>
                             <div class="breadcrumb-wrapper">
                                 <ol class="breadcrumb">
                                     <li class="breadcrumb-item"><a href="{{url('/')}}">Home</a>
@@ -47,7 +47,7 @@
                             <div class="card">
                                 <div class="card-header border-bottom">
                                     <h4 class="card-title">List</h4>
-                                    <a href="{{route('notifications.create')}}" class=" btn btn-info btn-gradient round  ">Add Category</a>
+                                    <a href="{{route('notifications.create')}}" class=" btn btn-primary btn-gradient round  ">Sent Notification</a>
                                 </div>
                                 <div class="card-datatable">
                                     <table class="datatables-ajax table table-responsive datatable_data">
@@ -78,7 +78,7 @@
                                                     </a>
 
                                                     <a  href="{{route('notifications.edit',$val->id)}}">
-                                                        <button class="btn btn-primary">Edit</button>
+                                                        <button class="btn btn-info">Edit</button>
                                                     </a>
 
                                                     <a href="#" class="text-danger" data-bs-toggle="modal" data-bs-target="#danger_ke{{ $val->id }}"><button class="btn btn-danger">Delete</button></a>
@@ -95,13 +95,11 @@
                                                                     <div class="modal-body">
                                                                         Are you sure you want to delete !
                                                                     </div>
-                                                                    <form action="" method="POST">
-                                                                        @csrf
-                                                                        @method('delete')
+                                                                    
                                                                         <div class="modal-footer">
-                                                                            <button type="submit" class="btn btn-danger" data-bs-dismiss="modal">Delete</button>
+                                                                            <a href="{{ route('notifications.delete',$val->id) }}"><button class="btn btn-danger">Delete</button></a>
                                                                         </div>
-                                                                    </form>
+                                                                    
                                                                 </div>
                                                         </div>
                                                     </div>

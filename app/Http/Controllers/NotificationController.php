@@ -25,8 +25,9 @@ class NotificationController extends Controller
         return view('admin.notifications.index',compact('categories'));
     }
 
-    public function edit(){
-
+    public function edit($id){
+        $notification = SentNotification::where('id',$id)->first();
+        return view('admin.notifications.edit',compact('notification'));
     }
 
     public function create (){
@@ -34,7 +35,46 @@ class NotificationController extends Controller
     }
 
     public function store(Request $request){
+        $validatedData = $request->validate([
+            'title' => 'required|string',
+            'to_vendors' => 'required_without:to_customers',
+            'to_customers' => 'required_without:to_vendors',
+        ]);
 
+        $data = [
+            'title' => $request->title,
+            'body' => $request->body,
+        ];
+
+        if($request->hasFile('image')) {
+            $image_name = time().rand(1,100).'-'.$request->image->getClientOriginalName();
+            $image_name = preg_replace('/\s+/', '', $image_name);
+            $request->image->move(public_path('images/notifications'), $image_name);
+            $data['image'] = $image_name;
+        }
+        
+        if(!empty($request->to_customers)){
+            $data['to_customers'] = '1';
+        }
+        if(!empty($request->to_vendors)){
+            $data['to_vendors'] = '1';
+        }
+        $sent = SentNotification::create($data);
+        $this->sentAdminNotification($sent->id);
+       return redirect()->route('notifications.index')->with('success','Notification Sent SuccessFully');
+    }
+
+    function sentAdminNotification($id){
+        Helper::sentAdminNotification($id);
+        return redirect()->back()->with('success','Message Sent Successfully');
+    }
+
+    function delete($id){
+        SentNotification::where('id',$id)->delete();
+        return redirect()->route('notifications.index')->with('success','Notification delete successfully');
+    }
+
+    function update($id , Request $request){
         $validatedData = $request->validate([
             'title' => 'required|string',
             'to_vendors' => 'required_without:to_customers',
@@ -44,18 +84,35 @@ class NotificationController extends Controller
             'title' => $request->title,
             'body' => $request->body,
         ];
-        if(!empty($request->to_customers)){
-            $data['to_customers'] = '1';
-        }
-        if(!empty($request->to_vendors)){
-            $data['to_vendors'] = '1';
-        }
-        SentNotification::create($data);
-       return redirect()->route('notifications.index')->with('success','Notification Sent SuccessFully');
-    }
 
-    function sentAdminNotification($id){
-        Helper::sentAdminNotification($id);
-        return redirect()->back()->with('success','Message Sent Successfully');
+        if($request->hasFile('image')) {
+            $image_name = time().rand(1,100).'-'.$request->image->getClientOriginalName();
+            $image_name = preg_replace('/\s+/', '', $image_name);
+            $request->image->move(public_path('images/notifications'), $image_name);
+            $data['image'] = $image_name;
+        }    
+
+        if(!empty($request->to_customers)){
+            if($request->to_customers == 'customer'){
+                $data['to_customers'] = '1';
+            }else{
+                $data['to_customers'] = '0';
+            }
+        }else{
+            $data['to_customers'] = '0';
+        }
+
+        if(!empty($request->to_vendors)){
+            if($request->to_vendors == 'vendor'){
+                $data['to_vendors'] = '1';
+            }else{
+                $data['to_vendors'] = '0';
+            }
+        }else{
+            $data['to_vendors'] = '0';
+        }
+
+        SentNotification::where('id',$id)->update($data);
+        return redirect()->route('notifications.index')->with('success','Notification update successfully');
     }
 }
