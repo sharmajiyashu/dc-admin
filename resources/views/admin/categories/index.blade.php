@@ -84,17 +84,22 @@
                                                             
                                                                 <div class="modal-content">
                                                                     <div class="modal-header">
-                                                                        <h5 class="modal-title" id="myModalLabel120">Delete Product</h5>
+                                                                        <h5 class="modal-title" id="myModalLabel120">Delete Category</h5>
                                                                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                                                     </div>
                                                                     <div class="modal-body">
-                                                                        Are you sure you want to delete !
+                                                                        @if ($val->total_products < 1)
+                                                                            Are you sure you want to delete !
+                                                                        @else
+                                                                            This Category still have some products. Please delete products first
+                                                                        @endif
+                                                                        
                                                                     </div>
                                                                     <form action="{{route('categories.destroy',$val->id)}}" method="POST">
                                                                         @csrf
                                                                         @method('delete')
                                                                         <div class="modal-footer">
-                                                                            <button type="submit" class="btn btn-danger" data-bs-dismiss="modal">Delete</button>
+                                                                            <button type="submit" class="btn btn-danger" @if ($val->total_products > 0) @disabled(true) @endif>Delete</button>
                                                                         </div>
                                                                     </form>
                                                                 </div>

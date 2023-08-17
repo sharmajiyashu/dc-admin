@@ -6,6 +6,7 @@ use App\Helpers\Helper;
 use App\Models\Category;
 use App\Http\Requests\StoreCategoryRequest;
 use App\Http\Requests\UpdateCategoryRequest;
+use App\Models\Product;
 use App\Models\Role;
 use App\Models\Vendor;
 use Illuminate\Support\Facades\Auth;
@@ -20,7 +21,10 @@ class CategoryController extends Controller
      */
     public function index()
     {
-        $categories = Category::orderBy('title','asc')->where('is_admin','1')->get();
+        $categories = Category::orderBy('title','asc')->where('is_admin','1')->where('is_delete','!=','1')->get();
+        foreach($categories as $key=>$val){
+            $val['total_products'] = Product::where('category_id',$val->id)->count();
+        }
         return view('admin.categories.index',compact('categories'));
     }
 
@@ -99,7 +103,7 @@ class CategoryController extends Controller
     public function update(UpdateCategoryRequest $request, Category $category)
     {
 
-        $check = Category::where('id','!=',$category->id)->where('title',$request->title)->where('is_admin','1')->count();
+        $check = Category::where('id','!=',$category->id)->where('title',$request->title)->where('is_admin','1')->where('is_delete','!=','1')->count();
         if($check > 0){
             return back()->withErrors([
                 'email' => 'The name has already been taken.',
@@ -136,8 +140,8 @@ class CategoryController extends Controller
      */
     public function destroy(Category $category)
     {
-        $category->delete();
-        Category::where('admin_id',$category->id)->delete();
+        $category->update(['is_delete' => '1' ,'status' => Category::$inactive]);
+        Category::where('admin_id',$category->id)->update(['is_delete' => '1' ,'status' => Category::$inactive]);
         return redirect()->route('categories.index')->with('success','Category Delete Success');
     }
 }

@@ -312,8 +312,7 @@ class ProductController extends Controller
 
     public function GetProductByName(Request $request){
         try{
-
-            $products = Product::where(['is_admin' => '1' ,'status' => 'Active'])->where('products.name',$request->name)->orderBy('products.id','DESC')->first();
+            $products = Product::where(['is_admin' => '1' ,'status' => 'Active' ,'is_delete' => '0'])->where('products.name',$request->name)->orderBy('products.id','DESC')->first();
             if(!empty($products)){
                 $images = json_decode($products->images);
                 if(!empty($images)){

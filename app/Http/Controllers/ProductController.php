@@ -39,7 +39,7 @@ class ProductController extends Controller
      */
     public function create()
     {
-        $categories = Category::where('is_admin','1')->get();
+        $categories = Category::where('is_admin','1')->where('is_delete','!=','1')->get();
         return view('admin.products.create',compact('categories'));
     }
 
@@ -90,7 +90,7 @@ class ProductController extends Controller
      */
     public function edit(Product $product)
     {   
-        $categories = Category::where('is_admin','1')->get();
+        $categories = Category::where('is_admin','1')->where('is_delete','!=','1')->get();
         $images = json_decode($product->images);
         $product['images'] = $images;
         $product['image_1'] = isset($images[0]) ? $images[0] :'no_image.png';
