@@ -15,6 +15,34 @@
     
 </style>
 
+<style>
+    .rejected{
+        color: #f21e20;
+        font-weight: 900;
+        text-transform: uppercase;
+    }
+    .delivered{
+        color: #8f968f;
+        font-weight: 900;
+        text-transform: uppercase;
+    }
+    .accepted{
+        color:#6daf6d;
+        font-weight: 900;
+        text-transform: uppercase;
+    }
+    .dispatched{
+        color: #b0c348;
+        font-weight: 900;
+        text-transform: uppercase;
+    }
+    .pending{
+        color: orange;
+        font-weight: 900;
+        text-transform: uppercase;
+    }
+</style>
+
  <!-- BEGIN: Content-->
 <!-- BEGIN: Content-->
 <div class="app-content content ">
@@ -56,6 +84,7 @@
                                                 <th>Seller</th>
                                                 <th>Item</th>
                                                 <th>Amount</th>
+                                                <th>status</th>
                                                 <th>Created Date</th>
                                                 <th>Invoice</th>
                                             </tr>
@@ -70,6 +99,7 @@
                                                 <td>{{ $val->vendor_name }}</td>
                                                 <td>{{ $val->total_item }}</td>
                                                 <td>{{ $val->amount }}</td>
+                                                <td class="{{$val->status}} text-bold">{{ $val->status }}</td>
                                                 <td>{{ date('d-M-y H:i:s',strtotime($val->created_at)) }}</td>
                                                 <td><a href="{{ route('orders.invoice',$val->order_id) }}"><button class="btn btn-dark">Invoice</button></a></td>
                                             </tr>

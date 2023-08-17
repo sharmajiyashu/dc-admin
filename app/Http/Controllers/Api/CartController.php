@@ -92,6 +92,20 @@ class CartController extends Controller
         }
     }
 
+    public function wishListItems(Request $request){
+        $with_cart = WishCart::where(['user_id'=>$request->user()->id,'store_code' => $request->user()->active_store_code,'status' => '0'] )->get();
+            foreach($with_cart as $key=>$val){
+                $product = $this->getProductData($val->product_id);
+                $val->product_name = isset($product->name) ? $product->name :'';
+                $val->product_image = isset($product->images) ? $product->images :'';
+                $val->product_detail = isset($product->detail) ? $product->detail :'';
+                $val->packing_quantity = isset($product->packing_quantity) ? $product->packing_quantity :'';
+                $val->category_name = isset($product->category_name) ? $product->category_name :'';
+                $val->category_image = isset($product->category_image) ? $product->category_image :'';
+            }
+            return $this->sendSuccess('WISHLIST ITEM FETCH SUCCESSFULLY',$with_cart);
+    }
+
     function getProductData($id){
         $product = Product::where('id',$id)->first();
         $category = Category::where('id',$product->category_id)->first();
@@ -103,9 +117,13 @@ class CartController extends Controller
             }
         }
         $product->images = isset($new_img)  ? $new_img :'';
-        $product->category_name = isset($category->title)  ? $category->title :'';
-        // if(!empty())
-        $product->category_image = asset('public/images/categories/'.$category->image);
+        if(!empty($category)){
+            $product->category_name = isset($category->title)  ? $category->title :'';
+            $product->category_image = asset('public/images/categories/'.$category->image);
+        }else{
+            $product->category_name = '';
+            $product->category_image = "";
+        }
         return $product;
     }
 

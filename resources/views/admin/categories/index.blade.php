@@ -47,7 +47,7 @@
                             <div class="card">
                                 <div class="card-header border-bottom">
                                     <h4 class="card-title">List</h4>
-                                    <a href="{{route('categories.create')}}" class=" btn btn-info btn-gradient round  ">Add Category</a>
+                                    <a href="{{route('categories.create')}}" class=" btn btn-primary btn-gradient round  ">Add Category</a>
                                 </div>
                                 <div class="card-datatable">
                                     <table class="datatables-ajax table table-responsive datatable_data">
@@ -73,7 +73,7 @@
                                                 <td>{{ date('d-M-y H:i:s',strtotime($val->created_at)) }}</td>
                                                 <td>
                                                     <a  href="{{route('categories.edit',$val->id)}}">
-                                                        <button class="btn btn-primary">Edit</button>
+                                                        <button class="btn btn-info">Edit</button>
                                                     </a>
 
                                                     <a href="#" class="text-danger" data-bs-toggle="modal" data-bs-target="#danger_ke{{ $val->id }}"><button class="btn btn-danger">Delete</button></a>

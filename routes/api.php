@@ -37,6 +37,7 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
     Route::post('get_all_categories',[ProductController::class,'GetAllCategories']);
     Route::post('add_product_in_cart',[CartController::class,'AddProductInCart']);
     Route::post('cart_items',[CartController::class,'CartItem']);
+    Route::get('wishlist_items',[CartController::class,'wishListItems']);
     Route::post('remove_cart_item',[CartController::class,'RemoveCartItem']);
     Route::post('decrement_cart_quantity',[CartController::class,'DecrementCartQuantity']);
     Route::post('create_order',[OrderController::class,'CreateOrder']);

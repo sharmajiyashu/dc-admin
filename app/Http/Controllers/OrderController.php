@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Helpers\Helper;
 use Illuminate\Http\Request;
 use App\Models\Order;
 use App\Models\User;
@@ -35,7 +36,7 @@ class OrderController extends Controller
             $product = Product::where('id',$val->product_id)->first();
             $val->product_name = isset($product->name) ? $product->name :'';
             $image = json_decode($product->images);
-            $val->image = isset($image[0]) ? $image[0] :'download.png';
+            $val->image = isset($image[0]) ? $image[0] :'no_image_found.png';
         }
         return view('admin.orders.invoice',compact('carts','vendor','customer','order'));
     }
@@ -52,8 +53,10 @@ class OrderController extends Controller
         foreach($carts as $key=>$val){
             $product = Product::where('id',$val->product_id)->first();
             $val->product_name = isset($product->name) ? $product->name :'';
-            $image = json_decode($product->images);
-            $val->image = isset($image[0]) ? $image[0] :'download.png';
+            if(!empty($product->images)){
+                $image = json_decode($product->images);
+            }
+            $val->image = isset($image[0]) ? $image[0] :'no_image_found.png';
         }
 
         // $word = $this->numberToWord(120);
@@ -137,7 +140,7 @@ class OrderController extends Controller
             $product = Product::where('id',$val->product_id)->first();
             $val->product_name = isset($product->name) ? $product->name :'';
             $image = json_decode($product->images);
-            $val->image = isset($image[0]) ? $image[0] :'download.png';
+            $val->image = isset($image[0]) ? $image[0] :'no_image_found.png';
         }
         return view('admin.orders.order-history',compact('carts','vendor','customer','order'));
     }
@@ -147,21 +150,25 @@ class OrderController extends Controller
 
         if($status == 'accept' && $order->status == 'pending'){
             $order->update(['status' => 'accepted']);
+            Helper::sentOrderChange($order->id,'accepted');
             return redirect()->back()->with('success','Order Accepted Successfully');
         }
 
         if($status == 'reject' && $order->status == 'pending'){
             $order->update(['status' => 'rejected']);
+            Helper::sentOrderChange($order->id,'rejected');
             return redirect()->back()->with('success','Order Rejected Successfully');
         }
 
         if($status == 'dispach' && $order->status == 'accepted'){
             $order->update(['status' => 'dispatched']);
+            Helper::sentOrderChange($order->id,'dispatched');
             return redirect()->back()->with('success','Order Dispatched Successfully');
         }
 
         if($status == 'deliver' && $order->status == 'dispatched'){
             $order->update(['status' => 'delivered']);
+            Helper::sentOrderChange($order->id,'delivered');
             return redirect()->back()->with('success','Order Delivered Successfully');
         }
 
@@ -181,7 +188,7 @@ class OrderController extends Controller
             $product = Product::where('id',$val->product_id)->first();
             $val->product_name = isset($product->name) ? $product->name :'';
             $image = json_decode($product->images);
-            $val->image = isset($image[0]) ? $image[0] :'download.png';
+            $val->image = isset($image[0]) ? $image[0] :'no_image_found.png';
         }
         return view('admin.orders.invoice-show',compact('carts','vendor','customer','order'));
     }

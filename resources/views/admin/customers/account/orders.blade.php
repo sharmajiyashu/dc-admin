@@ -10,18 +10,23 @@
     }
 </style>
 <style>
-    .accept{
-        color: green;
+    .rejected{
+        color: #f21e20;
         font-weight: 900;
         text-transform: uppercase;
     }
-    .accept{
-        color: green;
+    .delivered{
+        color: #8f968f;
         font-weight: 900;
         text-transform: uppercase;
     }
-    .reject{
-        color: red;
+    .accepted{
+        color:#6daf6d;
+        font-weight: 900;
+        text-transform: uppercase;
+    }
+    .dispatched{
+        color: #b0c348;
         font-weight: 900;
         text-transform: uppercase;
     }
