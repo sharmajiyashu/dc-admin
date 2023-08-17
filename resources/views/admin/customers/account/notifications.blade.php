@@ -75,28 +75,23 @@
                                     <thead>
                                         <tr>
                                             <th>Sr.no</th>
-                                            <th>Product</th>
-                                            <th>Store Code</th>
-                                            <th>MRP</th>
-                                            <th>S.P.</th>
-                                            <th>Quantity</th>
-                                            <th>Amount</th>
+                                            <th>Image</th>
+                                            <th>Title</th>
+                                            <th>Body</th>
                                             <th>Created Date</th>
+                                            <th>Action</th>
                                         </tr>
                                     </thead>
                                     <tbody>
                                         @php  $i=1; @endphp
-                                        @foreach($wish_items as $key => $val)
+                                        @foreach($notifications as $key => $val)
                                         <tr>
                                             <th scope="row">{{ $i }}</th>
-                                            <td><img src="{{ asset('public/images/products/'.$val->product_image) }}" id="account-upload-img" class="uploadedAvatar rounded me-50" alt="profile image" height="100" width="100" /><strong>{{ $val->product_name }}</strong></td>
-                                            <td>{{ $val->store_code }}</td>
-                                            <td>{{ $val->p_mrp }}</td>
-                                            <td>{{ $val->p_price }}</td>
-                                            <td>{{ $val->quantity }}</td>
-                                            <td><strong>{{ $val->total }}</strong></td>
+                                            <td><img src="{{ $val->image }}" id="account-upload-img" class="uploadedAvatar rounded me-50" alt="profile image" height="100" width="100" /><strong>{{ $val->product_name }}</strong></td>
+                                            <td><strong>{{ $val->title }}</strong></td>
+                                            <td>{{ $val->body }}</td>
                                             <td>{{ date('d-M-y H:i:s',strtotime($val->created_at)) }}</td>
-                                            {{-- <td><a href="{{ route('orders.invoice',$val->order_id) }}"><i data-feather="eye" class="me-50"></i></a></td> --}}
+                                            <td><a href="#"><Button class="btn btn-danger" onclick="deleteFunction({{ $val->id }})" >Delete</Button></a></td>
                                         </tr>
                                         @php $i++; @endphp
                                         @endforeach
@@ -107,6 +102,17 @@
                             
                         </div>
                     </div>
+
+                    <script>
+                        function deleteFunction(id){
+                            var confirmed = confirm("Are you sure you want to delete notification?");
+                            if (confirmed) {
+                                var deleteUrl = "{{ route('delete_notifications', ':id') }}";
+                                deleteUrl = deleteUrl.replace(':id', id);
+                                window.location.href = deleteUrl;
+                            }
+                        }
+                    </script>
 
                 </div>
             </div>

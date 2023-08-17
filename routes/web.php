@@ -48,6 +48,7 @@ Route::group(['middleware' => 'AdminAuth'], function () {
         Route::get('vendor-customers/{id}',[VendorController::class,'vendors_customers'])->name('customers');
         Route::get('vendor-orders/{id}',[VendorController::class,'vendors_orders'])->name('orders');
         Route::get('vendor-wishlist/{id}',[VendorController::class,'wishlist'])->name('wishlist');
+        Route::get('vendor-notifications/{id}',[VendorController::class,'notifications'])->name('notifications');
         Route::post('vendor-customers-delete',[VendorController::class,'vendors_customers_detele'])->name('customers.delete');
         Route::post('vendor-customers-add-customers',[VendorController::class,'add_customers'])->name('customers.add_customers');
         Route::post('vendor-customers-change-status-customers',[VendorController::class,'customers_change_status'])->name('customers.change_status');
@@ -59,6 +60,7 @@ Route::group(['middleware' => 'AdminAuth'], function () {
         Route::get('customers-orders/{id}',[CustomerController::class,'orders'])->name('orders');
         Route::get('customers-wishlist/{id}',[CustomerController::class,'wishlist'])->name('wishlist');
         Route::get('customers-carts/{id}',[CustomerController::class,'carts'])->name('carts');
+        Route::get('customers-notifications/{id}',[CustomerController::class,'notifications'])->name('notifications');
     });
 
     Route::group(['as' => 'notifications.'], function () {
@@ -78,6 +80,8 @@ Route::group(['middleware' => 'AdminAuth'], function () {
     Route::post('delete-image',[ProductController::class, 'delete_product_image'])->name('delete-product-image');
 
     Route::get('change-order-status/{id}/{status}',[OrderController::class,'changeOrderStatus'])->name('change-order-status');
+
+    Route::get('delete_notifications/{id}',[NotificationController::class,'delete_notifications'])->name('delete_notifications');
 
 });
 

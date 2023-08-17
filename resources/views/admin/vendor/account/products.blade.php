@@ -37,7 +37,7 @@
                                 </li>
                                 <li class="breadcrumb-item"><a href="{{ route('vendors.index') }}">Vendors </a>
                                 </li>
-                                <li class="breadcrumb-item"><a href="#">Account Settings </a>
+                                <li class="breadcrumb-item"><a href="#">{{ $vendor->name }}</a>
                                 </li>
                                 <li class="breadcrumb-item active"> Products
                                 </li>
@@ -83,8 +83,7 @@
                                         @foreach($products as $key => $val)
                                         <tr>
                                             <th scope="row">{{ $i }}</th>
-                                            <?php  $image = isset($val->images[0]) ? $val->images[0] :'download.png'; ?>
-                                            <td><img src="{{ asset('public/images/products/'.$image) }}" alt="" width="100"></td>
+                                            <td><img src="{{ asset('public/images/products/'.$val->image) }}" alt="" width="100"></td>
                                             <td>
                                                 <a href="#" class="text-primary" data-bs-toggle="modal" data-bs-target="#danger_k{{ $val->id }}"><strong>{{ $val->name }}</strong></a>
                                                 <div class="modal fade modal-dark text-start" id="danger_k{{ $val->id }}" tabindex="-1" aria-labelledby="myModalLabel120" aria-hidden="true">
@@ -208,7 +207,7 @@
                                             <td>{{ date('d-M-y H:i:s',strtotime($val->created_at)) }}</td>
                                             <td>
                                                 <a  href="{{route('products.edit_2',$val->id)}}">
-                                                    <button class="btn btn-primary">Edit</button>
+                                                    <button class="btn btn-info">Edit</button>
                                                 </a>
                                             </td>
                                         </tr>

@@ -12,7 +12,10 @@ use App\Http\Requests\CreateUpdateProductApi;
 use App\Http\Requests\CreateOrderApi;
 use App\Http\Requests\GetVendorProductsApi;
 use App\Http\Requests\GetSlabCustomerApi;
+use App\Models\Customer;
+use App\Models\Slab;
 use App\Models\SlabLink;
+use App\Models\StoreLink;
 use App\Models\Vendor;
 use App\Traits\ApiResponse;
 use Illuminate\Support\Facades\Redis;
@@ -249,20 +252,37 @@ class ProductController extends Controller
     public function GetProduct(CreateOrderApi $request){
         try{
             $vendor = Vendor::where('store_code',$request->user()->active_store_code)->first();
-            $products = Product::where(['user_id'=>$vendor->id,'status'=>'Active'])->where('is_admin','=','0')->where('is_delete','!=','1')->orderBy('id','DESC')->get();
-            foreach($products as $key=>$val){
-                $images = json_decode($val['images']);
-                if(!empty($images)){
-                    $img = [];
-                    foreach($images as $k){
-                        $img[] = asset('public/images/products/'.$k);
+            $StoreLink = StoreLink::where('user_id',$request->user()->id)->where('vendor_id',$vendor->id)->first();
+            if(!empty($StoreLink)){
+                if($StoreLink->status == StoreLink::$active){
+                    $products = [];
+                    $slab_link = SlabLink::where(['user_id' => $vendor->id, 'slab_id' => $StoreLink->slab_id])->get();
+                    foreach($slab_link as $key => $val){
+                        $check_slab = Slab::where('id',$val->slab_id)->first();
+                        if($check_slab->status == Slab::$active){
+                            $products[] = Product::where('id',$val->product_id)->where(['user_id'=>$vendor->id,'status'=>'Active'])->where('is_admin','=','0')->where('is_delete','!=','1')->orderBy('id','DESC')->first();
+                        }
                     }
-                    $val['images'] = $img;
+                    foreach($products as $key=>$val){
+                        $images = json_decode($val['images']);
+                        if(!empty($images)){
+                            $img = [];
+                            foreach($images as $k){
+                                $img[] = asset('public/images/products/'.$k);
+                            }
+                            $val['images'] = $img;
+                        }else{
+                            $val['images'] = '';
+                        }
+                    }
+                    return $this->sendSuccess('PRODUCT FETCH SUCCESSFULLY', $products);
                 }else{
-                    $val['images'] = '';
+                    Customer::where('id',$request->user()->id)->update(['active_store_code' => '']);
+                    return $this->sendSuccess('PRODUCT FETCH SUCCESSFULLY', []);
                 }
+            }else{
+                return $this->sendSuccess('PRODUCT FETCH SUCCESSFULLY', []);
             }
-            return $this->sendSuccess('PRODUCT FETCH SUCCESSFULLY', $products);
         }catch(\Throwable $e){
             return $this->sendFailed($e->getMessage(). ' On Line '. $e->getLine(),200);
         }

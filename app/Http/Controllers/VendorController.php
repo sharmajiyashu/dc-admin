@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Helpers\Helper;
 use App\Models\Vendor;
 use App\Models\Role;
 use App\Models\Product;
@@ -15,6 +16,7 @@ use App\Models\WishCart;
 use Illuminate\Http\Request;
 use App\Http\Requests\StoreVendorRequest;
 use App\Http\Requests\UpdateVendorRequest;
+use App\Models\Notification;
 use Illuminate\Support\Facades\Redis;
 
 class VendorController extends Controller
@@ -27,6 +29,11 @@ class VendorController extends Controller
     public function index()
     {
         $vendors = Vendor::where('role_id',Role::$vendor)->where('is_register','1')->get();
+        foreach($vendors as $key => $val){
+            if(empty($val->image)){
+                $val['image'] = 'no_image.png';
+            }
+        }
         return view('admin.vendor.index',compact('vendors'));
     }
 
@@ -101,10 +108,14 @@ class VendorController extends Controller
         $vendor = Vendor::where('id',$id)->first();
         $products = Product::where('user_id',$id)->orderBy('id','desc')->get();
         foreach($products as $key=>$val){
-            $val['images'] = json_decode($val->images);
+            $image = json_decode($val->images);
+            $val['images'] = $image;
+            $val['image'] = isset($image[0]) ? $image[0] :'no_image.png';
             $category = Category::where('id',$val->category_id)->first();
             $val['category_name'] = isset($category->title) ? $category->title :'';
         }
+
+        
         return view('admin.vendor.account.products',compact('products','vendor'));
     }
 
@@ -170,12 +181,14 @@ class VendorController extends Controller
             if($StoreLink > 0){
                 return redirect()->back()->with('error','Customer Is Already Exist');
             }else{
-                StoreLink::create(['vendor_id' => $request->vendor_id,'user_id' => $customer->id,'store_code' => $vendor->store_code ,'status' => '1']);
+                StoreLink::create(['vendor_id' => $request->vendor_id,'user_id' => $customer->id,'store_code' => $vendor->store_code ,'status' => '1','slab_id' => Helper::getDefaultSlab()]);
+                Helper::sentNotificationAddCustomerbyMobile($customer->id,$request->vendor_id);
                 return redirect()->back()->with('success','Customer Add Successfully');
             }
         }else{
             $customer = Customer::create(['mobile'=>$request->mobile ,'role_id' => Role::$customer ,'active_store_code' => $vendor->store_code]);
-            StoreLink::create(['vendor_id' => $request->vendor_id,'user_id' => $customer->id,'store_code' => $vendor->store_code ,'status' => '1']);
+            StoreLink::create(['vendor_id' => $request->vendor_id,'user_id' => $customer->id,'store_code' => $vendor->store_code ,'status' => '1','slab_id' => Helper::getDefaultSlab()]);
+            Helper::sentNotificationAddCustomerbyMobile($customer->id,$request->vendor_id);
             return redirect()->back()->with('success','New Customer Add Successfully');
         }
         
@@ -186,31 +199,29 @@ class VendorController extends Controller
             'status' => 'required|in:0,1,2',
             'id' => 'required',
         ]);
-
         StoreLink::where('id',$request->id)->update(['status' => $request->status]);
+        $StoreLink = StoreLink::where('id',$request->id)->first();
+        Helper::sentNotificationForActiveInactiveUser($StoreLink->user_id,$StoreLink->vendor_id,$request->status);
         return  redirect()->back()->with('success','Status Change Successfully');
     }
 
     public function customers_add_stores(Request $request){
         $validated = $request->validate([
-            'mobile' => 'nullable|numeric|digits:10|exists:users,mobile',
+            'mobile' => 'nullable|numeric|digits:10|exists:users,mobile,role_id,2',
             'customer_id' => 'required|exists:users,id',
             'store_code' => 'nullable|exists:users,store_code'
         ]);
-
         if(empty($request->store_code) && empty($request->mobile)){
             return redirect()->back()->with('error','Enter Any Store code Or Vendor Mobile');
         }
-
         $vendor = Vendor::where('mobile',$request->mobile)->orWhere('store_code',$request->store_code)->where('role_id',Role::$vendor)->first();
-        
-
         $StoreLink = StoreLink::where(['user_id'=> $request->customer_id ,'vendor_id' => $vendor->id])->count();
         if($StoreLink > 0){
             return redirect()->back()->with('error','Store Is Already Linked');
         }else{
-            StoreLink::create(['vendor_id' => $vendor->id,'user_id' => $request->customer_id,'store_code' => $vendor->store_code ,'status' => '1']);
+            StoreLink::create(['vendor_id' => $vendor->id,'user_id' => $request->customer_id,'store_code' => $vendor->store_code ,'status' => '1','slab_id' => Helper::getDefaultSlab()]);
             return redirect()->back()->with('success','Customer Add Successfully');
+            Helper::sentNotificationAddCustomerbyMobile($request->customer_id,$vendor->id);
         }
     }
 
@@ -221,13 +232,19 @@ class VendorController extends Controller
             $val['customer_name'] = isset($this->getUserDetail($val->user_id)->name) ? $this->getUserDetail($val->user_id)->name :'';
             $val['product_name'] = isset($this->getProductDetail($val->product_id)->name) ? $this->getProductDetail($val->product_id)->name :'';
             $image = json_decode($this->getProductDetail($val->product_id)->images);
-            $val['product_image'] = isset($image[0]) ? $image[0] :'download.png';
+            $val['product_image'] = isset($image[0]) ? $image[0] :'no_image.png';
         }
         return view('admin.vendor.account.wishlist',compact('vendor','wish_items'));
     }
 
     function getProductDetail($id){
         return Product::where('id',$id)->first();
+    }
+
+    public function notifications($id){
+        $vendor = $this->getUserDetail($id);
+        $notifications = Notification::where('user_id',$vendor->id)->orderBy('id','desc')->get();
+        return view('admin.vendor.account.notifications',compact('vendor','notifications'));
     }
 
 

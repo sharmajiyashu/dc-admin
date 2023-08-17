@@ -1,6 +1,8 @@
 <?php
 
 namespace App\Http\Controllers;
+
+use App\Helpers\Helper;
 use App\Models\Category;
 use App\Http\Requests\StoreCategoryRequest;
 use App\Http\Requests\UpdateCategoryRequest;
@@ -48,6 +50,7 @@ class CategoryController extends Controller
         }
         $data = $request->validated();
         $data['image'] = isset($image_name) ? $image_name : '';
+        $data['title'] = Helper::createUpperString($request->title);
         $data['user_id'] = Auth::user()->id;
         $data['is_admin'] = '1';
         $category = Category::create($data);
@@ -55,6 +58,7 @@ class CategoryController extends Controller
         $vendor = Vendor::where('role_id',Role::$vendor)->where('is_register','1')->get();
         foreach($vendor as $key=>$val){
             $data_2 = $request->validated();
+            $data_2['title'] = Helper::createUpperString($request->title);
             $data_2['image'] = isset($image_name) ? $image_name : '';
             $data_2['user_id'] = $val->id;
             $data_2['admin_id'] = $category->id;
@@ -103,16 +107,13 @@ class CategoryController extends Controller
         }
 
         $data = $request->validated();
+        $data['title'] = Helper::createUpperString($request->title);
 
         $data_2 = [
-            'title' => $request->title,
+            'title' => Helper::createUpperString($request->title),
             'status' => $request->status,
         ];
         if($request->hasFile('image')) {
-            // $image       = $request->file('image');
-            // $image_name = time().rand(1,100).'-'.$image->getClientOriginalName();
-            // $image_name = preg_replace('/\s+/', '', $image_name);
-            // $image->move(public_path('images/categories/'.$image_name));
 
             $image_name = time().rand(1,100).'-'.$request->image->getClientOriginalName();
             $image_name = preg_replace('/\s+/', '', $image_name);

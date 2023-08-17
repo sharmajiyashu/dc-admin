@@ -36,7 +36,7 @@ class OrderController extends Controller
             $product = Product::where('id',$val->product_id)->first();
             $val->product_name = isset($product->name) ? $product->name :'';
             $image = json_decode($product->images);
-            $val->image = isset($image[0]) ? $image[0] :'no_image_found.png';
+            $val->image = isset($image[0]) ? $image[0] :'no_image.png';
         }
         return view('admin.orders.invoice',compact('carts','vendor','customer','order'));
     }
@@ -56,7 +56,7 @@ class OrderController extends Controller
             if(!empty($product->images)){
                 $image = json_decode($product->images);
             }
-            $val->image = isset($image[0]) ? $image[0] :'no_image_found.png';
+            $val->image = isset($image[0]) ? $image[0] :'no_image.png';
         }
 
         // $word = $this->numberToWord(120);
@@ -140,7 +140,7 @@ class OrderController extends Controller
             $product = Product::where('id',$val->product_id)->first();
             $val->product_name = isset($product->name) ? $product->name :'';
             $image = json_decode($product->images);
-            $val->image = isset($image[0]) ? $image[0] :'no_image_found.png';
+            $val->image = isset($image[0]) ? $image[0] :'no_image.png';
         }
         return view('admin.orders.order-history',compact('carts','vendor','customer','order'));
     }
@@ -188,7 +188,7 @@ class OrderController extends Controller
             $product = Product::where('id',$val->product_id)->first();
             $val->product_name = isset($product->name) ? $product->name :'';
             $image = json_decode($product->images);
-            $val->image = isset($image[0]) ? $image[0] :'no_image_found.png';
+            $val->image = isset($image[0]) ? $image[0] :'no_image.png';
         }
         return view('admin.orders.invoice-show',compact('carts','vendor','customer','order'));
     }

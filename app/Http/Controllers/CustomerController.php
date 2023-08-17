@@ -11,6 +11,7 @@ use App\Models\WishCart;
 use App\Models\Product;
 use App\Http\Requests\StoreCustomerRequest;
 use App\Http\Requests\UpdateCustomerRequest;
+use App\Models\Notification;
 use Illuminate\Http\Request;
 
 
@@ -24,6 +25,11 @@ class CustomerController extends Controller
     public function index()
     {
         $customers = Customer::where('role_id',Role::$customer)->where('is_register','1')->get();
+        foreach($customers as $key => $val){
+            if(empty($val->image)){
+                $val['image'] = 'no_image.png';
+            }
+        }
         return view('admin.customers.index',compact('customers'));
     }
 
@@ -56,7 +62,8 @@ class CustomerController extends Controller
      */
     public function show(Customer $customer)
     {
-        return view('admin.customers.account.account',compact('customer'));
+        $store = StoreLink::where('user_id',$customer->id)->where('status',StoreLink::$active)->get();
+        return view('admin.customers.account.account',compact('customer','store'));
     }
 
     /**
@@ -87,6 +94,8 @@ class CustomerController extends Controller
         $data['city'] = $request->city;
         $data['address'] = $request->address;
         $data['pin'] = $request->pin;
+
+        $data['active_store_code'] = isset($request->active_store_code) ? $request->active_store_code :'';
         
         if($request->hasFile('image')) {
             $image       = $request->file('image');
@@ -168,7 +177,7 @@ class CustomerController extends Controller
             $val['vendor_name'] = isset($this->getUserDetail($val->vendor_id)->name) ? $this->getUserDetail($val->vendor_id)->name :'';
             $val['product_name'] = isset($this->getProductDetail($val->product_id)->name) ? $this->getProductDetail($val->product_id)->name :'';
             $image = json_decode($this->getProductDetail($val->product_id)->images);
-            $val['product_image'] = isset($image[0]) ? $image[0] :'download.png';
+            $val['product_image'] = isset($image[0]) ? $image[0] :'no_image.png';
         }
         return view('admin.customers.account.wishlist',compact('customer','wish_items'));
     }
@@ -184,9 +193,15 @@ class CustomerController extends Controller
             $val['vendor_name'] = isset($this->getUserDetail($val->vendor_id)->name) ? $this->getUserDetail($val->vendor_id)->name :'';
             $val['product_name'] = isset($this->getProductDetail($val->product_id)->name) ? $this->getProductDetail($val->product_id)->name :'';
             $image = json_decode($this->getProductDetail($val->product_id)->images);
-            $val['product_image'] = isset($image[0]) ? $image[0] :'download.png';
+            $val['product_image'] = isset($image[0]) ? $image[0] :'no_image.png';
         }
         return view('admin.customers.account.cart',compact('customer','cart_items'));
+    }
+
+    public function notifications($id){
+        $customer = $this->getUserDetail($id);
+        $notifications = Notification::where('user_id',$customer->id)->orderBy('id','desc')->get();
+        return view('admin.customers.account.notifications',compact('customer','notifications'));
     }
 
 }

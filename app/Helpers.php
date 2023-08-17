@@ -16,6 +16,7 @@ use App\Models\StoreLink;
 use App\Models\User;
 use App\Models\Vendor;
 use Carbon\Carbon;
+use Illuminate\Support\Str;
 
 class Helper {
     
@@ -82,7 +83,7 @@ class Helper {
 			if($sent->to_customers == '1'){
 				$customers = Customer::where('role_id',Role::$customer)->where('is_register','1')->get();
 				foreach($customers as $key => $val){
-					$title = 'Hello, '.$val->name.' '.$sent->title;
+					$title = 'Hello '.$val->name.', '.$sent->title;
 					$image = asset('public/images/notifications/'.$sent->image);
 					$body = $sent->body;
 					Helper::SendNotification('',$title,$body,$image);
@@ -92,7 +93,7 @@ class Helper {
 			if($sent->to_vendors == '1'){
 				$customers = Customer::where('role_id',Role::$vendor)->where('is_register','1')->get();
 				foreach($customers as $key => $val){
-					$title = 'Hello, '.$val->name.' '.$sent->title;
+					$title = 'Hello '.$val->name.', '.$sent->title;
 					$body = $sent->body;
 					$image = asset('public/images/notifications/'.$sent->image);
 					Helper::SendNotification('',$title,$body,$image);
@@ -245,6 +246,10 @@ class Helper {
 		$sevenDaysAgo = Carbon::now()->subDays(7)->toDateString();
 			Notification::whereDate('created_at', '<', $sevenDaysAgo)
 				->delete();
+	}
+
+	public static function createUpperString($name){
+		return Str::upper($name);
 	}
 
 }

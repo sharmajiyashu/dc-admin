@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Helpers\Helper;
+use App\Models\Notification;
 use App\Models\SentNotification;
 use Illuminate\Http\Request;
 
@@ -114,5 +115,10 @@ class NotificationController extends Controller
 
         SentNotification::where('id',$id)->update($data);
         return redirect()->route('notifications.index')->with('success','Notification update successfully');
+    }
+
+    function delete_notifications($id){
+        Notification::where('id',$id)->delete();
+        return redirect()->back()->with('success','Notification delete successfully');
     }
 }

@@ -53,7 +53,7 @@
                                 </li>
                                 <li class="breadcrumb-item"><a href="{{ route('customers.index') }}">Customers </a>
                                 </li>
-                                <li class="breadcrumb-item"><a href="#">Account Settings </a>
+                                <li class="breadcrumb-item"><a href="#">{{ $customer->name }} </a>
                                 </li>
                                 <li class="breadcrumb-item active"> Orders
                                 </li>

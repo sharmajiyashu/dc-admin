@@ -26,7 +26,7 @@
                                 </li>
                                 <li class="breadcrumb-item"><a href="{{ route('customers.index') }}">Customers </a>
                                 </li>
-                                <li class="breadcrumb-item"><a href="#">Account Settings </a>
+                                <li class="breadcrumb-item"><a href="#">{{ $customer->name }} </a>
                                 </li>
                                 <li class="breadcrumb-item active"> Account
                                 </li>
@@ -74,10 +74,22 @@
                                 {{ csrf_field() }}
                                 @method('PATCH')
                                 <div class="row">
-                                    <div class="col-md-6 col-12">
+                                    <div class="col-md-3 col-12">
                                         <div class="mb-1">
                                             <label class="form-label"  for="last-name-column">Update Profile<span class="error">*</span></label>
                                             <input type="file" name="image" class="form-control">
+                                        </div>
+                                    </div>
+
+                                    <div class="col-md-3 col-12">
+                                        <div class="mb-1">
+                                            <label class="form-label"  for="last-name-column">Active Store Code<span class="error">*</span></label>
+                                            <select name="active_store_code" id="" class="form-select">
+                                                <option value="">Select Store Code</option>
+                                                @foreach ($store as $item)
+                                                    <option value="{{ $item->store_code }}" {{ (isset($customer) && $customer->active_store_code == $item->store_code) ? 'selected' : '' }} >{{ $item->store_code }}</option>
+                                                @endforeach
+                                            </select>
                                         </div>
                                     </div>
 

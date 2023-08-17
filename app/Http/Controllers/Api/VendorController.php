@@ -84,9 +84,20 @@ class VendorController extends Controller
                 $val['customer_name'] = isset($customer->name) ? $customer->name :'';
                 $val['customer_mobile'] = isset($customer->mobile) ? $customer->mobile :'';
                 $product = Product::where('id',$val->product_id)->first();
+                if(!empty($product->images)){
+                    $images = json_decode($product->images);
+                    if(!empty($images[0])){
+                        $image = asset('public/images/products/'.$images[0]);
+                    }else{
+                        $image = '';
+                    }
+                }else{
+                    $image = '';
+                }
                 $val['product_name'] = isset($this->GetProductData($val->product_id)->name) ? $this->GetProductData($val->product_id)->name :'';
                 $val['category_name'] = isset($this->CategoryData($this->GetProductData($val->product_id)->category_id)->title) ? $this->CategoryData($this->GetProductData($val->product_id)->category_id)->title :'';
-                
+                $val['category_id'] = isset($this->CategoryData($this->GetProductData($val->product_id)->category_id)->id) ? $this->CategoryData($this->GetProductData($val->product_id)->category_id)->id :'';
+                $val['product_image'] = $image;
             }
             return $this->sendSuccess('WISHLIST ITEMS GET SUCCESSFULLY',$carts);
         } catch (\Throwable $e) {

@@ -41,7 +41,7 @@
                                 </li>
                                 <li class="breadcrumb-item"><a href="{{ route('vendors.index') }}">Vendors </a>
                                 </li>
-                                <li class="breadcrumb-item"><a href="#">Account Settings </a>
+                                <li class="breadcrumb-item"><a href="#">{{ $vendor->name }} </a>
                                 </li>
                                 <li class="breadcrumb-item active"> Customers
                                 </li>
@@ -73,7 +73,7 @@
                         <div class="card-header border-bottom">
                             <h4 class="card-title">Customer Details</h4>
 
-                            <a href="#" class="text-danger" data-bs-toggle="modal" data-bs-target="#AddStporeCode"><button class="btn btn-primary me-1 waves-effect waves-float waves-light">Add Customer</button></a>
+                            <a href="#" class="text-danger" data-bs-toggle="modal" data-bs-target="#AddStporeCode"><button class=" btn btn-primary btn-gradient round   waves-effect waves-float waves-light">Add Customer</button></a>
 
 
                             <!-- Modal -->
@@ -135,7 +135,7 @@
                                             <td class="{{$val->status}} text-bold">{{ $val->status }}</td>
                                             <td>{{ date('d-M-y H:i:s',strtotime($val->created_at)) }}</td>
                                             <td>
-                                                <a href="#" class="text-primary" data-bs-toggle="modal" data-bs-target="#edit_ke{{ $val->id }}"><button class="btn btn-primary">Edit</button></a>
+                                                <a href="#" class="text-primary" data-bs-toggle="modal" data-bs-target="#edit_ke{{ $val->id }}"><button class="btn btn-info">Edit</button></a>
 
                                                     <!-- Modal -->
                                                 <div class="modal fade modal-primary text-start" id="edit_ke{{ $val->id }}" tabindex="-1" aria-labelledby="myModalLabel120" aria-hidden="true">

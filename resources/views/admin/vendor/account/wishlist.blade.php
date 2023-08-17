@@ -48,7 +48,7 @@
                                 </li>
                                 <li class="breadcrumb-item"><a href="{{ route('vendors.index') }}">Vendors </a>
                                 </li>
-                                <li class="breadcrumb-item"><a href="#">Account Settings </a>
+                                <li class="breadcrumb-item"><a href="#">{{ $vendor->name }}</a>
                                 </li>
                                 <li class="breadcrumb-item active"> Wishlist
                                 </li>
