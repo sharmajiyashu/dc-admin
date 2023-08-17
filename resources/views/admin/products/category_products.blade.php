@@ -24,12 +24,16 @@
                 <div class="content-header-left col-md-9 col-12 mb-2">
                     <div class="row breadcrumbs-top">
                         <div class="col-12">
-                            <h2 class="content-header-title float-start mb-0">Product</h2>
+                            <h2 class="content-header-title float-start mb-0">Category</h2>
                             <div class="breadcrumb-wrapper">
                                 <ol class="breadcrumb">
                                     <li class="breadcrumb-item"><a href="{{url('/')}}">Home</a>
                                     </li>
-                                    <li class="breadcrumb-item"><a href="{{ route('products.index') }}">Products</a>
+                                    <li class="breadcrumb-item"><a href="{{ route('categories.index') }}">Categories</a>
+                                    </li>
+                                    <li class="breadcrumb-item active">{{ $category->title }}
+                                    </li>
+                                    <li class="breadcrumb-item"><a href="{{ route('categories.index') }}">products</a>
                                     </li>
                                     <li class="breadcrumb-item active">List
                                     </li>
@@ -50,40 +54,7 @@
                                     <div class="col-md-7">
                                         <h4 class="card-title">List</h4>
                                     </div>
-                                    <div class="col-md-3" style="    text-align: end;">
-                                        <a href="#" class=" btn btn-success btn-gradient round  "  data-bs-toggle="modal" data-bs-target="#add_bulk_product">Add Bulk Product</a>
-
-                                        <div class="modal fade modal-success text-start" id="add_bulk_product" tabindex="-1" aria-labelledby="myModalLabel120" aria-hidden="true">
-                                            <div class="modal-dialog modal-dialog-centered">
-                                                
-                                                    <div class="modal-content">
-                                                        <div class="modal-header">
-                                                            <h5 class="modal-title" id="myModalLabel120">Add Bulk Product  </h5>
-                                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                                                        </div>
-                                                        <form action="{{ route('add_bulk_csv') }}" method="post" enctype="multipart/form-data">
-                                                            @csrf
-                                                            <div class="modal-body">
-                                                                <div class="md-1">
-                                                                    <label for="" class="form-label">Upload CSV</label>
-                                                                    <input type="file" name="csv_file" class="form-control">
-                                                                </div>
-                                                                <div class="modal-footer">
-                                                                    <a href="{{ asset('public/uploads/template.csv') }}" class="btn btn-info">Download Template</a>
-                                                                    <div class="md-1">
-                                                                        <button type="submit" class="btn btn-success">Submit</button>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                        </form>
-                                                    </div>
-                                            </div>
-                                        </div>
-
-                                    </div>
-                                    <div class="col-md-2">
-                                        <a href="{{route('products.create')}}" class=" btn btn-primary btn-gradient round  ">Add Product</a>
-                                    </div>
+                                    
                                     
                                     
                                 </div>

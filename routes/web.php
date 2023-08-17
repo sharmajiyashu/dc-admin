@@ -82,6 +82,7 @@ Route::group(['middleware' => 'AdminAuth'], function () {
     Route::get('change-order-status/{id}/{status}',[OrderController::class,'changeOrderStatus'])->name('change-order-status');
 
     Route::get('delete_notifications/{id}',[NotificationController::class,'delete_notifications'])->name('delete_notifications');
+    Route::post('add_bulk_product',[ProductController::class,'addBulkProduct'])->name('add_bulk_csv');
 
 });
 

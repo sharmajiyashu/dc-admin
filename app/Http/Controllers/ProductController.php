@@ -297,4 +297,57 @@ class ProductController extends Controller
 
 
     }
+
+
+    public function addBulkProduct(Request $request){
+        $validated = $request->validate([
+            'csv_file' => 'required|mimes:csv',
+        ]);
+
+        if ($request->hasFile('csv_file')) {
+            $file = $request->file('csv_file');
+            $filename = 'subscriptions'.time() . '.' . $file->getClientOriginalExtension();
+            $file->move(public_path('uploads'), $filename);
+
+            $total = $this->insertBulkData($filename);
+
+            return redirect()->back()->with('success',$total.' Product Import SuccessFully');
+        }
+
+        return redirect()->back()->with('error',' Subscriber Import Failour');
+    }
+
+    private function insertBulkData($filename)
+    {
+        $file = public_path('uploads/' . $filename);
+        $csvData = array_map('str_getcsv', file($file));
+        $csvHeader = $csvData[0]; // Assuming the first row contains header names
+
+        $total_subscriber_insert = 0;
+
+        foreach ($csvData as $key => $row) {
+            if ($key === 0) continue; // Skip the header row
+            $length = count($row);
+            if($length == 2){
+                $product_name = Helper::createUpperString($row[0]);
+                $category_name = Helper::createUpperString($row[1]);
+                $check_product = Product::where('is_admin','1')->where('is_delete','!=','1')->where('name',$product_name)->count();
+                if($check_product < 1){
+                    $check_category = Category::where(['is_delete' => 0 ,'is_admin' => '1' ,'title' => $category_name])->first();
+                    if(!empty($check_category)){
+                        $category_id = $check_category->id;
+                    }else{
+                        $category = Category::create(['title' => $category_name ,'is_admin' => '1' ,'user_id' => Auth::user()->id ]);
+                        $category_id = $category->id;
+                    }
+                    Product::create(['name' => $product_name ,'category_id' => $category_id ,'user_id' => Auth::user()->id ,'sp' => 0 ,'is_admin' => '1']);
+                    $total_subscriber_insert ++;
+                }
+
+                
+            }
+        }
+
+        return $total_subscriber_insert;
+    }
 }

@@ -68,7 +68,7 @@
                                             <tr>
                                                 <th scope="row">{{ $i }}</th>
                                                 <td><img src="{{ asset('public/images/categories/'.$val->image) }}" alt="" width="100"></td>
-                                                <td><strong>{{ $val->title }}</strong></td>
+                                                <td><strong><a href="{{ route('categories.show',$val->id) }}">{{ $val->title }}</a></strong></td>
                                                 <td class="{{$val->status}} text-bold">{{ $val->status }}</td>
                                                 <td>{{ date('d-M-y H:i:s',strtotime($val->created_at)) }}</td>
                                                 <td>

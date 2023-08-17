@@ -19,11 +19,15 @@ class CategoryController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
+
     public function index()
     {
         $categories = Category::orderBy('title','asc')->where('is_admin','1')->where('is_delete','!=','1')->get();
         foreach($categories as $key=>$val){
             $val['total_products'] = Product::where('category_id',$val->id)->count();
+            if(empty($val->image)){
+                $val['image'] = 'no_image.png';
+            }
         }
         return view('admin.categories.index',compact('categories'));
     }
@@ -79,7 +83,14 @@ class CategoryController extends Controller
      */
     public function show(Category $category)
     {
-        
+        $products = Product::where('is_admin','1')->with('category')->orderBy('id','desc')->where('category_id',$category->id)->get();
+        foreach($products as $key=>$val){
+            $images = json_decode($val->images);
+            $val['image'] = isset($images[0]) ? $images[0] :'no_image.png';
+            $category = Category::where('id',$val->category_id)->first();
+            $val['category_name'] = isset($category->title) ? $category->title :'';
+        }
+        return view('admin.products.category_products',compact('products','category'));   
     }
 
     /**
