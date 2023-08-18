@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Helpers\Helper;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\CreateUpdateSlabApi;
 use App\Http\Requests\AddCustomerInSlabApi;
@@ -23,9 +24,20 @@ class SlabController extends Controller
     public function CreateUpdate(CreateUpdateSlabApi $request){
         try{
             $data = $request->validated();
+            $data['name'] = Helper::createUpperString($request->name);
             $data['user_id'] = $request->user()->id;
+            $msg = 'Create';
+            if(!empty($request->id)){
+                $msg = 'Update';
+                $check = Slab::where(['name' => $data['name'] ,'user_id' => $request->user()->id])->where('id','!=',$request->id)->count();
+            }else{
+                $check = Slab::where(['name' => $data['name'] ,'user_id' => $request->user()->id])->count();
+            }
+            if($check > 0){
+                return $this->sendFailed('The name has already been taken.',200);
+            }
             $product = Slab::updateOrCreate(['id' => $request->id],$data);
-            return $this->sendSuccess('CREATE UPDATE SLAB SUCCESSFULLY');
+            return $this->sendSuccess($msg.' SLAB SUCCESSFULLY');
         }catch(\Throwable $e){
             return $this->sendFailed($e->getMessage(). ' On Line '. $e->getLine(),200);
         }

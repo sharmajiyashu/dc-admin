@@ -87,7 +87,7 @@ class Helper {
 					$image = asset('public/images/notifications/'.$sent->image);
 					$body = $sent->body;
 					$device_id =  $val->remember_token; 
-					Helper::SendNotification('',$title,$body,$image);
+					Helper::SendNotification($device_id,$title,$body,$image);
 					Notification::create(['user_id' => $val->id ,'title' => $title ,'body' => $body ,'image' => $image]);
 				}
 			}
@@ -111,7 +111,7 @@ class Helper {
 		if(!empty($default_slab)){
 			return $default_slab->id;
 		}else{
-			$default_slab = Slab::create(['is_default'=>'1' ,'status' => '1','name' => 'Default' ,'days' => 0]);
+			$default_slab = Slab::create(['is_default'=>'1' ,'status' => '1','name' => Helper::createUpperString('Default') ,'days' => 0]);
 			return $default_slab->id;
 		}
 	}
