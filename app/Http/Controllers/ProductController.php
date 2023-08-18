@@ -12,6 +12,7 @@ use App\Models\Vendor;
 use GuzzleHttp\Handler\Proxy;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Redis;
 
 class ProductController extends Controller
 {
@@ -350,4 +351,67 @@ class ProductController extends Controller
 
         return $total_subscriber_insert;
     }
+
+
+    public function edit_multiple_product_image (Request $request){
+        $product_2 = $request->products;
+        $product = json_decode($request->products);
+        $products = Product::select('id','name','category_id','images')->whereIn('id',$product)->get();
+
+        foreach($products as $key=>$val){
+            if(!empty($val->images)){
+                $images = json_decode($val->images);
+            }else{
+                $images = [];
+            }
+            $val['images'] = $images;
+            $val['image_1'] = isset($images[0]) ? $images[0] :'no_image.png';
+            $val['image_2'] = isset($images[1]) ? $images[1] :'no_image.png';
+            $val['image_3'] = isset($images[2]) ? $images[2] :'no_image.png';
+            $val['image_4'] = isset($images[3]) ? $images[3] :'no_image.png';
+
+            $val['category_name'] = isset(Category::where('id',$val->category_id)->first()->title) ? Category::where('id',$val->category_id)->first()->title : '';
+        }
+
+        return view('admin.products.edit_multiple_product_image',compact('products','product_2'));
+
+    }
+
+    public function update_multiple_products_image (Request $request){
+        $products = json_decode($request->products);
+        $total_images_update = 0;
+        foreach($products as $val){
+            $product = Product::where('id',$val)->first();
+            if(!empty($product->images)){
+                $images = json_decode($product->images);
+            }else{
+                $images = [];    
+            }
+            for($i = 1; $i<5; $i++){
+                $name = 'image_'.$i.'_'.$val;
+                if($request->hasFile($name)) {
+                    $image_name = time().rand(1,100).'-'.$request->$name->getClientOriginalName();
+                    $image_name = preg_replace('/\s+/', '', $image_name);
+                    $request->$name->move(public_path('images/products'), $image_name);
+                    $kk = $i-1;
+                    if(isset($images[$kk])){
+                        $images[$kk] = $image_name;
+                    }else{
+                        $images[] = $image_name;
+                    }
+                    $total_images_update ++;
+                }
+            }
+            $product->update(['images' => json_encode($images)]);
+        }
+        return redirect()->route('products.index')->with('success',$total_images_update.' Images Uplode');
+    }
+
+    public function delete_multiple_images(Request $request){
+        $product = json_decode($request->products);
+        $products = Product::whereIn('id',$product)->delete();
+        return redirect()->back()->with('success','Delete products successfully');
+    }
+
+
 }

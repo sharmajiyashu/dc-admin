@@ -69,6 +69,8 @@ class OrderController extends Controller
                 $val['vendor_mobile'] = isset($user->mobile) ? $user->mobile :'';
                 $val['vendor_city'] = isset($user->city) ? $user->city :'';
                 $val['store_name'] = isset($user->store_name) ? $user->store_name :'';
+                $val['order_history'] = route('order-history',$val['order_id']);
+                $val['order_invoice'] = route('order-invoice',$val['order_id']);
             }
             return $this->sendSuccess('ORDER HISTORY FETCH SUCCESSFULLY', $orders);
         }catch(\Throwable $e){
@@ -134,6 +136,30 @@ class OrderController extends Controller
             return $this->sendFailed($e->getMessage(). ' On Line '. $e->getLine(),200);
         }        
     }
+
+    public function VendorOrderHistory2(Request $request)
+     { 
+        try{
+             $orders = Order::where(['vendor_id' => $request->user()->id]) 
+             ->where('is_delete', '0') 
+             ->orderBy('id', 'DESC') 
+             ->with(['vendor:id,store_image']) 
+             ->withCount('cart')
+             ->get() 
+             ->map(function($order) {
+                 $order->customer_name = $order->vendor->name ?? '';
+                 $order->product_image = $this->GetOneImage($order->id); 
+                 $order->order_history = route('order-history', $order->order_id); 
+                 $order->order_invoice = route('order-invoice', $order->order_id); 
+                 return $order;
+                 }
+                );
+
+        return $this->sendSuccess('ORDER HISTORY FETCH SUCCESSFULLY', $orders);
+    } catch (\Throwable $e) {
+        return $this->sendFailed($e->getMessage() . ' On Line ' . $e->getLine(), 200);
+    } 
+}
 
     function GetOneImage($id){
        $carts =  Cart::where('order_id',$id)->get();

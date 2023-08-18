@@ -13,6 +13,6 @@ class Slab extends Model
 
 
     static $active = '1';
-    static $inactive = '2';
+    static $inactive = '0';
 
 }

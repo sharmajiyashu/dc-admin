@@ -84,6 +84,10 @@ Route::group(['middleware' => 'AdminAuth'], function () {
     Route::get('delete_notifications/{id}',[NotificationController::class,'delete_notifications'])->name('delete_notifications');
     Route::post('add_bulk_product',[ProductController::class,'addBulkProduct'])->name('add_bulk_csv');
 
+    Route::post('update_multiple_image',[ProductController::class,'edit_multiple_product_image'])->name('product.edit_multiple_product_image');
+    Route::post('delete_multiple_images',[ProductController::class,'delete_multiple_images'])->name('product.delete_multiple_images');
+    Route::post('update_multiple_products_image',[ProductController::class,'update_multiple_products_image'])->name('update_multiple_products_image');
+
 });
 
 Route::get('sentNotification',[Controller::class,'SendNotification']);

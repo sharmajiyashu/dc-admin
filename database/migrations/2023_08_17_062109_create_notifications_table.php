@@ -19,6 +19,7 @@ return new class extends Migration
             $table->string('title')->nullable();
             $table->longText('body')->nullable();
             $table->longText('image')->nullable();
+            // $table->softDeletes();
             $table->timestamps();
         });
     }

@@ -102,6 +102,7 @@ class CartController extends Controller
                 $val->packing_quantity = isset($product->packing_quantity) ? $product->packing_quantity :'';
                 $val->category_name = isset($product->category_name) ? $product->category_name :'';
                 $val->category_image = isset($product->category_image) ? $product->category_image :'';
+                $val->category_id = isset($product->category_id) ? $product->category_id :'';
             }
             return $this->sendSuccess('WISHLIST ITEM FETCH SUCCESSFULLY',$with_cart);
     }

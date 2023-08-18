@@ -32,7 +32,7 @@ class Helper {
 
 		// $image = "https://staging.premad.in/dc-dukaan/public/images/products/169167394770-pp.jPG";
 
-		$device_id = "eoSS0IvqSliQUHI0U2zSwE:APA91bGldRvKPo874pXsxzIoSw2nFQMdkBWMw77JQKC5__kt9TXGsKbQy_oaBggQzF1wkBATsMFjVhKptD51PNofspdou8CA1I8Ej4ohWFRbLdAJCPP83i1X5N_VU0COZ-Ym44btj-lQ";
+// 		$device_id = "eoSS0IvqSliQUHI0U2zSwE:APA91bGldRvKPo874pXsxzIoSw2nFQMdkBWMw77JQKC5__kt9TXGsKbQy_oaBggQzF1wkBATsMFjVhKptD51PNofspdou8CA1I8Ej4ohWFRbLdAJCPP83i1X5N_VU0COZ-Ym44btj-lQ";
 
 		$data = array(
 			"to" => $device_id,
@@ -86,6 +86,7 @@ class Helper {
 					$title = 'Hello '.$val->name.', '.$sent->title;
 					$image = asset('public/images/notifications/'.$sent->image);
 					$body = $sent->body;
+					$device_id =  $val->remember_token; 
 					Helper::SendNotification('',$title,$body,$image);
 					Notification::create(['user_id' => $val->id ,'title' => $title ,'body' => $body ,'image' => $image]);
 				}
@@ -96,7 +97,8 @@ class Helper {
 					$title = 'Hello '.$val->name.', '.$sent->title;
 					$body = $sent->body;
 					$image = asset('public/images/notifications/'.$sent->image);
-					Helper::SendNotification('',$title,$body,$image);
+					$device_id =  $val->remember_token;
+					Helper::SendNotification($device_id,$title,$body,$image);
 					Notification::create(['user_id' => $val->id ,'title' => $title ,'body' => $body ,'image' => $image]);
 				}
 			}

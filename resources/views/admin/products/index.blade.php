@@ -99,18 +99,20 @@
                                                 <th>Created Date</th>
                                                 <th>Action</th>
                                             </tr>
+
+
+                                            
+
                                         </thead>
                                         <tbody>
                                             @php  $i=1; @endphp
                                             @foreach($products as $key => $val)
                                             <tr>
-                                                <th scope="row">{{ $i }}</th>
+                                                <th scope="row">{{ $i }} </th>
                                                 <td><img src="{{ asset('public/images/products/'.$val->image) }}" alt="" width="100"></td>
-                                                <td>
-                                                    
+                                                <td><input type="checkbox" onclick="checkAllProducts()" name="checked_products" value="{{ $val->id }}">
 
                                                     <a href="#" class="text-primary" data-bs-toggle="modal" data-bs-target="#danger_k{{ $val->id }}"><strong>{{ $val->name }}</strong></a>
-
                                                     <!-- Modal -->
                                                     <div class="modal fade modal-dark text-start" id="danger_k{{ $val->id }}" tabindex="-1" aria-labelledby="myModalLabel120" aria-hidden="true">
                                                         <div class="modal-dialog modal-dialog-centered modal-lg">
@@ -211,6 +213,84 @@
                 </section>
 
                 <!--/ Ajax Sourced Server-side -->
+
+                <script>
+                    function checkAllProducts(){
+                        const checkboxes = document.querySelectorAll('input[type="checkbox"][name="checked_products"]');
+
+                        // Create an empty array to store the values of checked checkboxes
+                        const checkedValues = [];
+
+                        // Loop through each checkbox and check if it is checked
+                        checkboxes.forEach((checkbox) => {
+                            if (checkbox.checked) {
+                                checkedValues.push(checkbox.value);
+                            }
+                        });
+
+                        // toastr.success(checkedValues.length+' Product Selected');
+                        
+                        console.log(checkedValues.length);
+
+                        const delete_select_product = document.getElementById('delete_select_product');
+                        const update_select_product = document.getElementById('update_select_product');
+
+                        if (checkedValues.length > 0) {
+                            delete_select_product.disabled = false;
+                            update_select_product.disabled = false;
+                        } else {
+                            delete_select_product.disabled = true;
+                            update_select_product.disabled = true;
+                        }
+                        
+                        const spanElement = document.getElementById('selected_product_count');
+                        spanElement.textContent = checkedValues.length;
+
+                        const encodedArray = JSON.stringify(checkedValues);
+
+                        const hiddenInput = document.getElementById('update_selected_images');
+                                hiddenInput.value = encodedArray;
+
+                        const hiddenInput_2 = document.getElementById('delete_selected_images');
+                        hiddenInput_2.value = encodedArray;
+                        
+                    }
+
+
+                </script>
+
+
+                <div class="card">
+                    <div class="card-header">
+                        
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-4">
+
+                            </div>
+                            <div class="col-md-3">
+                                <h3 > <span class="badge rounded-pill badge-light-success"  id="selected_product_count">0</span> Product Selected</h3>
+                            </div>
+
+                            <div class="col-md-3">
+                                <form action="{{ route('product.edit_multiple_product_image') }}" method="POST" >
+                                    @csrf
+                                    <input type="hidden" name="products" value="" id="update_selected_images">
+                                    <button class="btn btn-success" disabled id="update_select_product">Update Image Selected product</button>
+                                </form>
+                            </div>
+
+                            <div class="col-md-2">
+                                <form action="{{ route('product.delete_multiple_images') }}" method="POST">
+                                    @csrf
+                                    <input type="hidden" name="products" value="" id="delete_selected_images">
+                                    <button class="btn btn-danger" disabled id="delete_select_product"> Delete Selected Product</button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
 
                 
 
