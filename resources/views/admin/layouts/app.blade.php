@@ -50,6 +50,13 @@
         table.dataTable tbody tr.even {
             background-color: #f3f2f7;
         }
+
+        .table > :not(caption) > * > * {
+            padding: 0.72rem 1rem;
+            background-color: var(--bs-table-bg);
+            border-bottom-width: 1px;
+            box-shadow: inset 0 0 0 9999px var(--bs-table-accent-bg);
+        }
     </style>
 </head>
 <!-- END: Head-->

@@ -76,6 +76,8 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
     Route::post('add_product_in_slab',[SlabController::class,'AddProductInSlab']);
     Route::post('get_slab_product',[ProductController::class,'GetSlabProduct']);
     Route::get('get_notification',[VendorController::class,'getNotificatons']);
+    Route::post('remove_product_from_slab',[SlabController::class,'removeProductFromSlab']);
+    Route::post('delete_slab',[SlabController::class,'deleteSlab']);
 
 });
 Route::post('customer_register_login_mobile',[CustomerController::class,'customerRegisterLoginMobile']);

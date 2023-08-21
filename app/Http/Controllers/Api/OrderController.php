@@ -36,6 +36,7 @@ class OrderController extends Controller
                 $order->note = $request->note;
                 $order->save();
                 Cart::where(['user_id'=>$request->user()->id,'store_code' => $request->user()->active_store_code ,'status' => '0'])->update(['order_id' => $order->id ,'status' => '1']);
+                WishCart::where(['user_id'=>$request->user()->id,'store_code' => $request->user()->active_store_code ,'status' => '0'])->update(['order_id' => $order->id ,'status' => '1']);
                 Helper::sentMessageCreateOrder($order->id);
                 return $this->sendSuccess('ORDER CREATE SUCCESSFULLY', $order);
             }else{
@@ -88,6 +89,11 @@ class OrderController extends Controller
                 $val->product_image = isset($product->images) ? $product->images :'';
                 $val->category_name = isset($product->category_name) ? $product->category_name :'';
                 $val->category_image = isset($product->category_image) ? $product->category_image :'';
+                $wish_stock = WishCart::where(['order_id' => $order->id ,'product_id' => $val->product_id])->first();
+                $val['out_of_stock'] = 0;
+                if(!empty($wish_stock)){
+                    $val['out_of_stock'] = $wish_stock->quantity;
+                }
             }
             $vendor = Vendor::where('id',$order->vendor_id)->first();
             $vendor->image = asset('public/images/users/'.$vendor->image);
@@ -189,6 +195,12 @@ class OrderController extends Controller
                 $val->product_image = isset($product->images) ? $product->images :'';
                 $val->category_name = isset($product->category_name) ? $product->category_name :'';
                 $val->category_image = isset($product->category_image) ? $product->category_image :'';
+
+                $wish_stock = WishCart::where(['order_id' => $order->id ,'product_id' => $val->product_id])->first();
+                $val['out_of_stock'] = 0;
+                if(!empty($wish_stock)){
+                    $val['out_of_stock'] = $wish_stock->quantity;
+                }
             }
 
             $vendor = Vendor::where('id',$order->vendor_id)->first();

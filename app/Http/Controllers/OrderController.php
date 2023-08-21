@@ -8,7 +8,7 @@ use App\Models\Order;
 use App\Models\User;
 use App\Models\Cart;
 use App\Models\Product;
-
+use App\Models\WishCart;
 
 class OrderController extends Controller
 {
@@ -25,9 +25,9 @@ class OrderController extends Controller
 
     public function order_invoice ($id){
         $order = Order::where('order_id',$id)->first();
-        $order->sum_mrp = Cart::where('order_id',$id)->sum('p_mrp');
-        $order->sum_quantity = Cart::where('order_id',$id)->sum('quantity');
-        $order->sum_price = Cart::where('order_id',$id)->sum('p_price');
+        $order->sum_mrp = Cart::where('order_id',$order->id)->sum('p_mrp');
+        $order->sum_quantity = Cart::where('order_id',$order->id)->sum('quantity');
+        $order->sum_price = Cart::where('order_id',$order->id)->sum('p_price');
         $order->in_word = $this->numberToWord($order->amount);
         $customer = User::where('id',$order->user_id)->first();
         $vendor = User::where('id',$order->vendor_id)->first();
@@ -37,6 +37,13 @@ class OrderController extends Controller
             $val->product_name = isset($product->name) ? $product->name :'';
             $image = json_decode($product->images);
             $val->image = isset($image[0]) ? $image[0] :'no_image.png';
+            $wish_stock = WishCart::where(['order_id' => $order->id ,'product_id' => $val->product_id])->first();
+            $val['out_of_stock'] = 0;
+            if(!empty($wish_stock)){
+                
+                
+                $val['out_of_stock'] = $wish_stock->quantity;
+            }
         }
         return view('admin.orders.invoice',compact('carts','vendor','customer','order'));
     }
@@ -57,6 +64,13 @@ class OrderController extends Controller
                 $image = json_decode($product->images);
             }
             $val->image = isset($image[0]) ? $image[0] :'no_image.png';
+            $wish_stock = WishCart::where(['order_id' => $order->id ,'product_id' => $val->product_id])->first();
+            $val['out_of_stock'] = 0;
+            if(!empty($wish_stock)){
+                
+                
+                $val['out_of_stock'] = $wish_stock->quantity;
+            }
         }
 
         // $word = $this->numberToWord(120);
@@ -141,6 +155,13 @@ class OrderController extends Controller
             $val->product_name = isset($product->name) ? $product->name :'';
             $image = json_decode($product->images);
             $val->image = isset($image[0]) ? $image[0] :'no_image.png';
+            $wish_stock = WishCart::where(['order_id' => $order->id ,'product_id' => $val->product_id])->first();
+            $val['out_of_stock'] = 0;
+            if(!empty($wish_stock)){
+                
+                
+                $val['out_of_stock'] = $wish_stock->quantity;
+            }
         }
         return view('admin.orders.order-history',compact('carts','vendor','customer','order'));
     }
@@ -177,9 +198,9 @@ class OrderController extends Controller
 
     public function OrderInvoice($id){
         $order = Order::where('order_id',$id)->first();
-        $order->sum_mrp = Cart::where('order_id',$id)->sum('p_mrp');
-        $order->sum_quantity = Cart::where('order_id',$id)->sum('quantity');
-        $order->sum_price = Cart::where('order_id',$id)->sum('p_price');
+        $order->sum_mrp = Cart::where('order_id',$order->id)->sum('p_mrp');
+        $order->sum_quantity = Cart::where('order_id',$order->id)->sum('quantity');
+        $order->sum_price = Cart::where('order_id',$order->id)->sum('p_price');
         $order->in_word = $this->numberToWord($order->amount);
         $customer = User::where('id',$order->user_id)->first();
         $vendor = User::where('id',$order->vendor_id)->first();
@@ -189,6 +210,11 @@ class OrderController extends Controller
             $val->product_name = isset($product->name) ? $product->name :'';
             $image = json_decode($product->images);
             $val->image = isset($image[0]) ? $image[0] :'no_image.png';
+            $wish_stock = WishCart::where(['order_id' => $order->id ,'product_id' => $val->product_id])->first();
+            $val['out_of_stock'] = 0;
+            if(!empty($wish_stock)){
+                $val['out_of_stock'] = $wish_stock->quantity;
+            }
         }
         return view('admin.orders.invoice-show',compact('carts','vendor','customer','order'));
     }

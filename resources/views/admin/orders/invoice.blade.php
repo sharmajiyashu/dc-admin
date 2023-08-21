@@ -97,14 +97,13 @@
                         <table class="table m-0" style="max-width: 100%;">
                             <thead>
                                 <tr>
-                                    <th class="" style="width: 1%;">Sr.no</th>
+                                    <th class="py-1" style="width: 1%;">Sr.no</th>
                                     <th class="py-1">Image</th>
                                     <th class="py-1">Product</th>
                                     <th class="py-1">MRP</th>
                                     <th class="py-1">S.P.</th>
                                     <th class="py-1">Quantity</th>
                                     <th class="py-1">Amount</th>
-                                    <th></th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -121,7 +120,7 @@
                                             <img src="{{ asset('public/images/products/'.$item->image) }}" alt="product Image" width="90" >
                                             
                                         </td>
-                                        <td>
+                                        <td class="py-1">
                                             {{ $item->product_name }}
                                         </td>
                                         <td class="py-1">
@@ -131,12 +130,15 @@
                                             {{ $item->p_price }}
                                         </td>
                                         <td class="py-1">
-                                            {{ $item->quantity }}
+                                            {{ $item->quantity }} 
+                                            @if ($item->out_of_stock > 0)
+                                                <br><span style="color: red !important;">( -{{$item->out_of_stock}} out of stock)</span>
+                                            @endif
                                         </td>
                                         <td class="py-1">
                                             {{ $item->total }}
                                         </td>
-                                        <td></td>
+                                        
                                     </tr>
                                     <?php $i++; ?>
                                 @endforeach
@@ -144,14 +146,14 @@
                             {{-- @endfor --}}
 
                                 <tr style="background: #f3f2f7;">
-                                    <td></td>
-                                    <td></td>
-                                    <td style="text-align: center;"><strong>Total</strong></td>
-                                    <td><strong>{{ $order->sum_mrp }}</strong></td>
-                                    <td><strong>{{ $order->sum_price }}</strong></td>
-                                    <td><strong>{{ $order->sum_quantity }}</strong></td>
-                                    <td><strong>{{ $order->amount }}</strong></td>
-                                    <td></td>
+                                    <td class="py-1"></td>
+                                    <td class="py-1"></td>
+                                    <td class="py-1" style="text-align: center;"><strong>Total</strong></td>
+                                    <td class="py-1"> <strong>{{ $order->sum_mrp }}</strong></td>
+                                    <td class="py-1"><strong>{{ $order->sum_price }}</strong></td>
+                                    <td class="py-1"><strong>{{ $order->sum_quantity }}</strong></td>
+                                    <td class="py-1"><strong>{{ $order->amount }}</strong></td>
+                                    <td style="    background-color: white;"></td>
                                 </tr>
 
                             </tbody>
@@ -163,13 +165,16 @@
                         <table class="datatables-ajax table table-responsive ">
                             <thead>
                                 <tr>
-                                    <th>Total Of Amount</th>
-                                    <td><strong>{{ $order->amount }}/-</strong></td>
+                                    <th class="py-1">Total Of Amount</th>
+                                    <td class="py-1"><strong>{{ $order->amount }}/-</strong></td>
+                                    <td></td>
                                 </tr>
                                 <tr>
-                                    <th>In Words</th>
-                                    <td>{{ $order->in_word }}</td>
+                                    <th class="py-1">In Words</th>
+                                    <td class="py-1">{{ $order->in_word }}</td>
+                                    <td></td>
                                 </tr>
+                                
                             </thead>
                             
                         </table>

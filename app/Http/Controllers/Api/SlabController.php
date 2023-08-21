@@ -119,10 +119,6 @@ class SlabController extends Controller
                         }
                     }
                 }
-                // print_r($data['product_id']);die;
-
-
-                // print_r($request->all());die;
                 return $this->sendSuccess($total_added.' PRODUCT ADDED INTO SLAB SUCCESSFULLY','');
             }else{
                 return $this->sendFailed('Data Is Empty',200);
@@ -132,6 +128,44 @@ class SlabController extends Controller
         }
     }
 
+    public function removeProductFromSlab(Request $request){
+        try{
+            $slab_link = SlabLink::where(['slab_id' => $request->slab_id ,'product_id' => $request->product_id ,'user_id' => $request->user()->id])->first();     
+            if(!empty($slab_link)){
+                if($slab_link->slab_id == Helper::getDefaultSlab()){
+                    return $this->sendFailed('You Cant Delete product from default slab',200);
+                }else{
+                    $slab_link->delete();
+                    return $this->sendSuccess(' Product remove from slab','');
+                }
+            }else{
+                return $this->sendFailed('No Slabs link found',200);
+            }
+        }catch(\Throwable $e){
+            return $this->sendFailed($e->getMessage(). ' On Line '. $e->getLine(),200);
+        }
+    }
+
+    public function deleteSlab(GetSlabCustomerApi $request){
+        try{
+            $slab = Slab::where(['id' => $request->slab_id ,'user_id' => $request->user()->id])->first();
+            if(!empty($slab)){
+                $store = StoreLink::where('slab_id',$slab->id)->where('vendor_id',$request->user()->id);
+                $store_count = $store->count();
+                $store_link = $store->first();
+                if($store_count > 0){
+                    return $this->sendFailed('Cannot delete slab, '.$store_count.' customers linked. Apologies for inconvenience.',200);
+                }else{
+                    $slab->delete();
+                    return $this->sendSuccess('Slab Delete successfully','');
+                }
+            }else{
+                return $this->sendFailed('No Slabs found for this user',200);
+            }
+        }catch(\Throwable $e){
+            return $this->sendFailed($e->getMessage(). ' On Line '. $e->getLine(),200);
+        }
+    }
 
 
 

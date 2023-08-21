@@ -131,7 +131,11 @@
                                                         {{ $item->product_name }}</td>
                                                     <td>{{ $item->p_mrp }}</td>
                                                     <td>{{ $item->p_price }}</td>
-                                                    <td>{{ $item->quantity }}</td>
+                                                    <td>{{ $item->quantity }}
+                                                        @if ($item->out_of_stock > 0)
+                                                            <br><span style="color: red !important;">( -{{$item->out_of_stock}} out of stock)</span>
+                                                        @endif
+                                                    </td>
                                                     <td>{{ $item->total }}</td>
                                                 </tr>
                                                 <?php $i++; ?>
