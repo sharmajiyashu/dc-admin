@@ -76,12 +76,14 @@
                             <table class="datatables-ajax table table-responsive ">
                                 <thead>
                                     <tr>
-                                        <th>Invoice#</th>
-                                        <td><strong>{{ $order->order_id }}</strong></td>
+                                        <th class="py-1">Invoice#</th>
+                                        <td class="py-1"><strong>{{ $order->order_id }}</strong></td>
+                                        <td></td>
                                     </tr>
                                     <tr>
-                                        <th>Date</th>
-                                        <td>{{ date('d-m-Y H:i:s',strtotime($order->created_at)) }}</td>
+                                        <th class="py-1">Date</th>
+                                        <td class="py-1">{{ date('d-m-Y H:i:s',strtotime($order->created_at)) }}</td>
+                                        <td></td>
                                     </tr>
                                 </thead>
                                 
