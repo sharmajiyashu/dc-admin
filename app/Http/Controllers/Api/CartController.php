@@ -21,42 +21,47 @@ class CartController extends Controller
     use ApiResponse;
     public function AddProductInCart(AddProductInCartApi $request){
         try{
-            $product = Product::where('id',$request->product_id)->first();
-            $vendor = Vendor::where('id',$product->user_id)->first();
 
-            if($request->quantity % $product->packing_quantity) {
-                return $this->sendFailed('PLEASE ENTER QUANTITY BY PACKING',200);
-            }
-            if($request->quantity < $product->packing_quantity){
-                return $this->sendFailed('PLEASE ENTER MINIMUM QUANTITY '.$product->packing_quantity,200);
-            }
+            if(!empty($request->user()->active_store_code)){
+                $product = Product::where('id',$request->product_id)->first();
+                $vendor = Vendor::where('id',$product->user_id)->first();
 
-            $cart = $request->validated();
-            $cart['user_id'] = $request->user()->id;
-            $cart['product_id'] = $product->id;
-            $cart['p_price'] = $product->sp;
-            $cart['p_mrp'] = $product->mrp;
-            $cart['status'] = '0';
-            $cart['store_code'] = $vendor->store_code;
-            $cart['vendor_id'] =$vendor->id;
+                if($request->quantity % $product->packing_quantity) {
+                    return $this->sendFailed('PLEASE ENTER QUANTITY BY PACKING',200);
+                }
+                if($request->quantity < $product->packing_quantity){
+                    return $this->sendFailed('PLEASE ENTER MINIMUM QUANTITY '.$product->packing_quantity,200);
+                }
 
-            $last_cart = Cart::where(['user_id' => $request->user()->id ,'product_id' => $request->product_id ,'status' => '0'])->first();
-            if(empty($last_cart)){
-                $quantity = $request->quantity;
-                $cart_total = $quantity * $product->sp;
-                $cart['quantity'] = $quantity;
-                $cart['total'] = $cart_total;
-                $cart = Cart::create($cart);
-                $cart_id = $cart->id;
+                $cart = $request->validated();
+                $cart['user_id'] = $request->user()->id;
+                $cart['product_id'] = $product->id;
+                $cart['p_price'] = $product->sp;
+                $cart['p_mrp'] = $product->mrp;
+                $cart['status'] = '0';
+                $cart['store_code'] = $vendor->store_code;
+                $cart['vendor_id'] =$vendor->id;
+
+                $last_cart = Cart::where(['user_id' => $request->user()->id ,'product_id' => $request->product_id ,'status' => '0'])->first();
+                if(empty($last_cart)){
+                    $quantity = $request->quantity;
+                    $cart_total = $quantity * $product->sp;
+                    $cart['quantity'] = $quantity;
+                    $cart['total'] = $cart_total;
+                    $cart = Cart::create($cart);
+                    $cart_id = $cart->id;
+                }else{
+                    $quantity = $request->quantity + $last_cart->quantity;
+                    $cart_total = $quantity * $product->sp;
+                    $cart['quantity'] = $quantity;
+                    $cart['total'] = $cart_total;
+                    $cart = Cart::where('id',$last_cart->id)->update($cart);
+                    $cart_id = $last_cart->id;
+                }
+                return $this->sendSuccess('ADD PRODUCT IN CART SUCCESSFULLY');
             }else{
-                $quantity = $request->quantity + $last_cart->quantity;
-                $cart_total = $quantity * $product->sp;
-                $cart['quantity'] = $quantity;
-                $cart['total'] = $cart_total;
-                $cart = Cart::where('id',$last_cart->id)->update($cart);
-                $cart_id = $last_cart->id;
+                return $this->sendFailed('you do not have any active store plese select an active store',200);
             }
-            return $this->sendSuccess('ADD PRODUCT IN CART SUCCESSFULLY');
         }catch(\Throwable $e){
             return $this->sendFailed($e->getMessage(). ' On Line '. $e->getLine(),200);
         }
