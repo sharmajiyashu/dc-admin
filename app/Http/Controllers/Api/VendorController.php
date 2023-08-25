@@ -22,6 +22,7 @@ use App\Http\Requests\UploadApi;
 use App\Models\Notification;
 use App\Models\Slab;
 use App\Models\StoreLink;
+use App\Models\User;
 
 class VendorController extends Controller
 {
@@ -211,10 +212,29 @@ class VendorController extends Controller
             $count = Notification::where('user_id',$request->user()->id)->orderBy('id','desc')->count();
             Helper::removeBefore7daysData();
             if(!empty($notifications)){
-                return $this->sendSuccess('There are '.$count.' messages',$notifications);
+                return $this->sendSuccess('There are '.$count.' messages',['is_notify' => $request->user()->is_notify, 'notifications' => $notifications]);
             }else{
-                return $this->sendFailed('There is no content or message available',200);
+                return $this->sendSuccess('There are '.$count.' messages',['is_notify' => $request->user()->is_notify, 'notifications' => $notifications]);
             }
+        }catch(\Throwable $e){
+            return $this->sendFailed($e->getMessage(). ' On Line '. $e->getLine(),200);
+        }
+    }
+
+    public function changeNotifyStatus(Request $request){
+        try{
+            if($request->user()->is_notify == '1'){
+                User::where('id',$request->user()->id)->update(['is_notify' => '0']);
+            }else{
+                User::where('id',$request->user()->id)->update(['is_notify' => '1']);
+            }
+            $user = User::select('is_notify')->where('id',$request->user()->id)->first();
+            if($user->is_notify == '1'){
+                $msg = "Notification unmute successfully";
+            }else{
+                $msg = "Notification mute successfully";
+            }
+            return $this->sendSuccess($msg,$user);
         }catch(\Throwable $e){
             return $this->sendFailed($e->getMessage(). ' On Line '. $e->getLine(),200);
         }

@@ -426,9 +426,7 @@ class ProductController extends Controller
                         $images[] = $imageName;
                         $data['images'] = json_encode($images);
                     }
-
                 }
-
 
                 if(!empty($val['id'])) {
                     $product = Product::where('is_admin','!=','1')->find($val['id']); // Retrieve the existing record
@@ -443,6 +441,11 @@ class ProductController extends Controller
                             $data['images'] = json_encode($images);
                         }
                         $product->update($data);
+                        $check = SlabLink::where(['user_id' => $request->user()->id ,'product_id'=>$product->id])->count();
+                        if($check == 0){
+                            $get_default_slab = Helper::getDefaultSlab();
+                            SlabLink::create(['user_id' => $request->user()->id ,'product_id'=>$product->id ,'slab_id' => $get_default_slab]);
+                        }
                         $total_update ++;
                     }
                 }elseif(!empty($val['fetch_product_id'])){
@@ -457,11 +460,21 @@ class ProductController extends Controller
                         }
                         $category_admin_user = Category::where('admin_id',$product->category_id)->where('user_id',$request->user()->id)->first();
                         $data['category_id'] = isset($category_admin_user->id) ? $category_admin_user->id :'';
-                        Product::create($data);
+                                    $product = Product::create($data);
+                                    $check = SlabLink::where(['user_id' => $request->user()->id ,'product_id'=>$product->id])->count();
+                                    if($check == 0){
+                                        $get_default_slab = Helper::getDefaultSlab();
+                                        SlabLink::create(['user_id' => $request->user()->id ,'product_id'=>$product->id ,'slab_id' => $get_default_slab]);
+                                    }
                         $total_create ++;
                     }
                 }else{
-                    Product::create($data);
+                    $product = Product::create($data);
+                    $check = SlabLink::where(['user_id' => $request->user()->id ,'product_id'=>$product->id])->count();
+                    if($check == 0){
+                        $get_default_slab = Helper::getDefaultSlab();
+                        SlabLink::create(['user_id' => $request->user()->id ,'product_id'=>$product->id ,'slab_id' => $get_default_slab]);
+                    }
                     $total_create ++;
                 }
 

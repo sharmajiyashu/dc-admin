@@ -87,7 +87,9 @@ class Helper {
 					$image = asset('public/images/notifications/'.$sent->image);
 					$body = $sent->body;
 					$device_id =  $val->remember_token; 
-					Helper::SendNotification($device_id,$title,$body,$image);
+					if($customers->is_notify == 1){
+						Helper::SendNotification($device_id,$title,$body,$image);
+					}
 					Notification::create(['user_id' => $val->id ,'title' => $title ,'body' => $body ,'image' => $image]);
 				}
 			}
@@ -98,7 +100,9 @@ class Helper {
 					$body = $sent->body;
 					$image = asset('public/images/notifications/'.$sent->image);
 					$device_id =  $val->remember_token;
-					Helper::SendNotification($device_id,$title,$body,$image);
+					if($customers->is_notify == 1){
+						Helper::SendNotification($device_id,$title,$body,$image);
+					}
 					Notification::create(['user_id' => $val->id ,'title' => $title ,'body' => $body ,'image' => $image]);
 				}
 			}
@@ -138,7 +142,9 @@ class Helper {
 					$image = '';
 				}
 				$image = asset('public/images/products/'.$image);
-				Helper::SendNotification($device_id,$title,$body,$image);
+				if($user->is_notify == 1){
+					Helper::SendNotification($device_id,$title,$body,$image);
+				}
 				Notification::create(['user_id' => $user->id ,'title' => $title ,'body' => $body ,'image' => $image]);
 			}
 		}
@@ -155,7 +161,9 @@ class Helper {
 		$title = 'Knock knock! Your Order has been '.$status.'!';
 		$body = 'Order Id : '.$order_detail->order_id;
 		$order_image = Helper::getOrderProductImage($order_id);
-		Helper::SendNotification($device_id,$title,$body,$order_image);
+		if($user->is_notify == 1){
+			Helper::SendNotification($device_id,$title,$body,$order_image);
+		}
 		Notification::create(['user_id' => $user->id ,'title' => $title ,'body' => $body ,'image' => $order_image]);
 	}
 
@@ -203,14 +211,18 @@ class Helper {
 		$user_body = 'Order Id : '.$order->order_id;
 		$user_device_id = isset($user->remember_token) ? $user->remember_token :'';
 		$order_user_image = Helper::getOrderProductImage($order_id);
-		Helper::SendNotification($user_device_id,$user_title,$user_body,$order_user_image);
+		if($user->is_notify == 1){
+			Helper::SendNotification($user_device_id,$user_title,$user_body,$order_user_image);
+		}
 		Notification::create(['user_id' => $user->id ,'title' => $user_title ,'body' => $user_body ,'image' => $order_user_image]);
 
 		$vendor = Helper::getUserDetail($order->vendor_id);
 		$vendor_title = "A new order has been placed by ".$user->name;
 		$body = "Mobile : ".$user->mobile.', City : '.$user->city;
 		$vendor_device_id = isset($vendor->remember_token) ? $vendor->remember_token :'';
-		Helper::SendNotification($vendor_device_id,$vendor_title,$body,$order_user_image);
+		if($vendor->is_notify == 1){
+			Helper::SendNotification($vendor_device_id,$vendor_title,$body,$order_user_image);
+		}
 		Notification::create(['user_id' => $vendor->id ,'title' => $vendor_title ,'body' => $body ,'image' => $order_user_image]);
 
 	}
@@ -224,7 +236,9 @@ class Helper {
 		$title = "You have been added to ".$vendor->store_name.'!';
 		$body = "“".$vendor->name."” added you kindly enjoy the shooping";
 		$image = asset('public/images/users/'.$vendor->store_image);
-		Helper::SendNotification($device_id,$title,$body,$image);
+		if($user->is_notify == 1){
+			Helper::SendNotification($device_id,$title,$body,$image);
+		}
 		Notification::create(['user_id' => $user->id ,'title' => $title ,'body' => $body ,'image' => $image]);
 	}
 
@@ -240,7 +254,9 @@ class Helper {
 			$title = 'Store '.$vendor->store_name.' have been deactivated!';
 			$body = "“".$vendor->name."” your account has been deactivated, kindly contact the store";
 		}
-		Helper::SendNotification($device_id,$title,$body,$image);
+		if($user->is_notify == 1){
+			Helper::SendNotification($device_id,$title,$body,$image);
+		}
 		Notification::create(['user_id' => $user->id ,'title' => $title ,'body' => $body ,'image' => $image]);
 	}
 
