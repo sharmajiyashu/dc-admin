@@ -17,6 +17,8 @@ use Illuminate\Http\Request;
 use App\Http\Requests\StoreVendorRequest;
 use App\Http\Requests\UpdateVendorRequest;
 use App\Models\Notification;
+use App\Models\Slab;
+use App\Models\SlabLink;
 use Illuminate\Support\Facades\Redis;
 
 class VendorController extends Controller
@@ -247,5 +249,14 @@ class VendorController extends Controller
         return view('admin.vendor.account.notifications',compact('vendor','notifications'));
     }
 
+    public function slabs($id){
+        $vendor = $this->getUserDetail($id);
+        $slabs = Slab::with('slabLink')->where('user_id',$vendor->id)->orWhere('is_default','1')->orderBy('id','desc')->get()->map(function($slabs) use($vendor){
+            $slabs->total_customers = SlabLink::where('slab_id',$slabs->id)->where('user_id',$vendor->id)->count();
+            $slabs->total_products = SlabLink::where('slab_id',$slabs->id)->where('user_id',$vendor->id)->count();
+            return $slabs;
+        }); 
+        return view('admin.vendor.account.slabs',compact('vendor','slabs'));
+    }
 
 }

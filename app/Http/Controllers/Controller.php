@@ -11,8 +11,10 @@ use App\Models\Category;
 use App\Models\Role;
 use App\Models\User;
 use App\Models\Order;
-use GuzzleHttp\Client;
-
+use App\Models\Slab;
+use App\Models\SlabLink;
+use App\Models\StoreLink;
+use Illuminate\Http\Request;
 use Illuminate\Routing\Controller as BaseController;
 
 class Controller extends BaseController
@@ -29,12 +31,50 @@ class Controller extends BaseController
     }
 
 
-    public function SendNotification()
-	{
-		$device_id = "";
-		$title = "Test Title";
-		$body = "Test Body";
-		Helper::SendNotification($device_id,$title,$body);
-	}
+    public function changes_slab_status(Request $request){
+        $payment_status = Slab::where('id',$request->id)->first();
+        if($payment_status->status == Slab::$active){
+            $payment_status->update(['status' => Slab::$inactive]);
+            return json_encode(['0' ,'Status Inactive Successfully']);
+        }else{
+            $payment_status->update(['status' => Slab::$active]);
+            return json_encode(['1' ,'Status Active Successfully']);
+        }
+    }
+
+    public function changes_category_status(Request $request){
+        $payment_status = Category::where('id',$request->id)->first();
+        if($payment_status->status == Category::$active){
+            $payment_status->update(['status' => Category::$inactive]);
+            return json_encode(['0' ,'Status Inactive Successfully']);
+        }else{
+            $payment_status->update(['status' => Category::$active]);
+            return json_encode(['1' ,'Status Active Successfully']);
+        }
+    }
+
+    public function changes_product_status(Request $request){
+        $payment_status = Product::where('id',$request->id)->first();
+        if($payment_status->status == Product::$active){
+            $payment_status->update(['status' => Product::$inactive]);
+            return json_encode(['0' ,'Status Inactive Successfully']);
+        }else{
+            $payment_status->update(['status' => Product::$active]);
+            return json_encode(['1' ,'Status Active Successfully']);
+        }
+    }
+
+    public function changes_store_link_status(Request $request){
+        $payment_status = StoreLink::where('id',$request->id)->first();
+        if($payment_status->status == StoreLink::$active){
+            $payment_status->update(['status' => StoreLink::$inactive]);
+            Helper::sentNotificationForActiveInactiveUser($payment_status->user_id,$payment_status->vendor_id,StoreLink::$inactive);
+            return json_encode(['0' ,'Status Inactive Successfully']);
+        }else{
+            $payment_status->update(['status' => StoreLink::$active]);
+            Helper::sentNotificationForActiveInactiveUser($payment_status->user_id,$payment_status->vendor_id,StoreLink::$active);
+            return json_encode(['1' ,'Status Active Successfully']);
+        }
+    }
 
 }

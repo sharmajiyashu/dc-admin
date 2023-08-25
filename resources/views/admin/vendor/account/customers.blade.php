@@ -132,7 +132,13 @@
                                             <td>{{ $val->customer_mobile }}</td>
                                             <td>{{ $val->customer_state }}</td>
                                             <td>{{ $val->customer_city }}</td>
-                                            <td class="{{$val->status}} text-bold">{{ $val->status }}</td>
+                                            <td>
+                                                <div class="form-check form-check-primary form-switch">
+                                                    <input class="form-check-input checked_chackbox" id="systemNotification" type="checkbox" name="is_default" onclick="ChangeSlabStatus({{ $val->id }})" @if ($val->status == 'Active')
+                                                        @checked(true) 
+                                                    @endif   value="1" >
+                                                </div>
+                                            </td>
                                             <td>{{ date('d-M-y H:i:s',strtotime($val->created_at)) }}</td>
                                             <td>
                                                 <a href="#" class="text-primary" data-bs-toggle="modal" data-bs-target="#edit_ke{{ $val->id }}"><button class="btn btn-info">Edit</button></a>
@@ -219,4 +225,26 @@
     </div>
 </div>
     <!-- END: Content-->
+
+    <script>
+        function ChangeSlabStatus (id){
+            $.ajax({
+                url: "{{ route('changes_store_link_status') }}",
+                type: 'POST',
+                dataType: 'json',
+                data: {
+                    _token: "{{ csrf_token() }}",id:id
+                },
+                success: function(response){
+                    console.log(response[0]);
+                    if(response[0] == 1){
+                        toastr.success(response[1]);
+                    }else{
+                        toastr.error(response[1]);
+                    }
+                }
+            });
+        }
+    </script>
+
 @endsection

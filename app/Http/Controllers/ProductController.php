@@ -208,7 +208,7 @@ class ProductController extends Controller
 
     public function edit_2($id){
         $product = Product::where('id',$id)->first();
-        $categories = Category::where('user_id',$product->user_id)->get();
+        $categories = Category::where('user_id',$product->user_id)->where('is_delete','!=','1')->get();
         $images = json_decode($product->images);
         $product['images'] = $images;
         $product['image_1'] = isset($images[0]) ? $images[0] :'no_image.png';

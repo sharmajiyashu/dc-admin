@@ -35,10 +35,19 @@
         </a>
     </li>
 
+    
+
     <li class="nav-item">
         <a class="nav-link {{ Request::routeIs('vendors.account.notifications',$vendor->id) ? 'active' : ''  }}" href="{{ route('vendors.account.notifications',$vendor->id) }}">
             <i data-feather="bell" class="font-medium-3 me-50"></i>
             <span class="fw-bold">Notifications</span>
+        </a>
+    </li>
+
+    <li class="nav-item">
+        <a class="nav-link {{ Request::routeIs('vendors.account.slabs',$vendor->id) ? 'active' : ''  }}" href="{{ route('vendors.account.slabs',$vendor->id) }}">
+            <i data-feather="shopping-cart" class="font-medium-3 me-50"></i>
+            <span class="fw-bold">Slabs</span>
         </a>
     </li>
 

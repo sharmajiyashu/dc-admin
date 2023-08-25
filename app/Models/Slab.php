@@ -15,4 +15,8 @@ class Slab extends Model
     static $active = '1';
     static $inactive = '0';
 
+    function slabLink(){
+        return $this->hasOne(SlabLink::class);
+    }
+
 }

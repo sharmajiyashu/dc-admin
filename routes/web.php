@@ -48,6 +48,7 @@ Route::group(['middleware' => 'AdminAuth'], function () {
         Route::get('vendor-customers/{id}',[VendorController::class,'vendors_customers'])->name('customers');
         Route::get('vendor-orders/{id}',[VendorController::class,'vendors_orders'])->name('orders');
         Route::get('vendor-wishlist/{id}',[VendorController::class,'wishlist'])->name('wishlist');
+        Route::get('vendor-slabs/{id}',[VendorController::class,'slabs'])->name('slabs');
         Route::get('vendor-notifications/{id}',[VendorController::class,'notifications'])->name('notifications');
         Route::post('vendor-customers-delete',[VendorController::class,'vendors_customers_detele'])->name('customers.delete');
         Route::post('vendor-customers-add-customers',[VendorController::class,'add_customers'])->name('customers.add_customers');
@@ -88,6 +89,10 @@ Route::group(['middleware' => 'AdminAuth'], function () {
     Route::post('delete_multiple_images',[ProductController::class,'delete_multiple_images'])->name('product.delete_multiple_images');
     Route::post('update_multiple_products_image',[ProductController::class,'update_multiple_products_image'])->name('update_multiple_products_image');
 
+    Route::post('changes_slab_status',[Controller::class,'changes_slab_status'])->name('changes_slab_status');
+    Route::post('changes_category_status',[Controller::class,'changes_category_status'])->name('changes_category_status');
+    Route::post('changes_product_status',[Controller::class,'changes_product_status'])->name('changes_product_status');
+    Route::post('changes_store_link_status',[Controller::class,'changes_store_link_status'])->name('changes_store_link_status');
 });
 
 Route::get('sentNotification',[Controller::class,'SendNotification']);
