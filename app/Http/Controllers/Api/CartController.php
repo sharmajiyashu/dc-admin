@@ -65,35 +65,40 @@ class CartController extends Controller
 
     public function CartItem(GetCartItemApi $request){
         try{
-            $carts = Cart::where(['user_id'=>$request->user()->id,'store_code' => $request->user()->active_store_code,'status' => '0'] )->get();
-            $cart_total = Cart::where(['user_id'=>$request->user()->id,'store_code' => $request->user()->active_store_code,'status' => '0'])->sum('total');
-            foreach($carts as $key=>$val){
-                $product = $this->getProductData($val->product_id);
-                $val->product_name = isset($product->name) ? $product->name :'';
-                $val->product_image = isset($product->images) ? $product->images :'';
-                $val->packing_quantity = isset($product->packing_quantity) ? $product->packing_quantity :'';
-                $val->category_name = isset($product->category_name) ? $product->category_name :'';
-                $val->category_image = isset($product->category_image) ? $product->category_image :'';
-            }
+            if(!empty($request->user()->active_store_code)){
+                $carts = Cart::where(['user_id'=>$request->user()->id,'store_code' => $request->user()->active_store_code,'status' => '0'] )->get();
+                $cart_total = Cart::where(['user_id'=>$request->user()->id,'store_code' => $request->user()->active_store_code,'status' => '0'])->sum('total');
+                foreach($carts as $key=>$val){
+                    $product = $this->getProductData($val->product_id);
+                    $val->product_name = isset($product->name) ? $product->name :'';
+                    $val->product_image = isset($product->images) ? $product->images :'';
+                    $val->packing_quantity = isset($product->packing_quantity) ? $product->packing_quantity :'';
+                    $val->category_name = isset($product->category_name) ? $product->category_name :'';
+                    $val->category_image = isset($product->category_image) ? $product->category_image :'';
+                }
 
-            $with_cart = WishCart::where(['user_id'=>$request->user()->id,'store_code' => $request->user()->active_store_code,'status' => '0'] )->get();
-            foreach($with_cart as $key=>$val){
-                $product = $this->getProductData($val->product_id);
-                $val->product_name = isset($product->name) ? $product->name :'';
-                $val->product_image = isset($product->images) ? $product->images :'';
-                $val->product_detail = isset($product->detail) ? $product->detail :'';
-                $val->packing_quantity = isset($product->packing_quantity) ? $product->packing_quantity :'';
-                $val->category_name = isset($product->category_name) ? $product->category_name :'';
-                $val->category_image = isset($product->category_image) ? $product->category_image :'';
+                $with_cart = WishCart::where(['user_id'=>$request->user()->id,'store_code' => $request->user()->active_store_code,'status' => '0'] )->get();
+                foreach($with_cart as $key=>$val){
+                    $product = $this->getProductData($val->product_id);
+                    $val->product_name = isset($product->name) ? $product->name :'';
+                    $val->product_image = isset($product->images) ? $product->images :'';
+                    $val->product_detail = isset($product->detail) ? $product->detail :'';
+                    $val->packing_quantity = isset($product->packing_quantity) ? $product->packing_quantity :'';
+                    $val->category_name = isset($product->category_name) ? $product->category_name :'';
+                    $val->category_image = isset($product->category_image) ? $product->category_image :'';
+                }
+                return $this->sendSuccess('CART ITEM FETCH SUCCESSFULLY',['item' => $carts ,'wish_cart_item' => $with_cart , 'detail' => ['total' => $cart_total ,'delivery' => 'FREE' ,'grant_total' =>$cart_total]]);
+            }else{
+                return $this->sendFailed('you do not have any active store plese select an active store',200);
             }
-            return $this->sendSuccess('CART ITEM FETCH SUCCESSFULLY',['item' => $carts ,'wish_cart_item' => $with_cart , 'detail' => ['total' => $cart_total ,'delivery' => 'FREE' ,'grant_total' =>$cart_total]]);
         }catch(\Throwable $e){
             return $this->sendFailed($e->getMessage(). ' On Line '. $e->getLine(),200);
         }
     }
 
     public function wishListItems(Request $request){
-        $with_cart = WishCart::where(['user_id'=>$request->user()->id,'store_code' => $request->user()->active_store_code,'status' => '1'] )->get();
+        if(!empty($request->user()->active_store_code)){
+            $with_cart = WishCart::where(['user_id'=>$request->user()->id,'store_code' => $request->user()->active_store_code,'status' => '1'] )->get();
             foreach($with_cart as $key=>$val){
                 $product = $this->getProductData($val->product_id);
                 $val->product_name = isset($product->name) ? $product->name :'';
@@ -105,6 +110,9 @@ class CartController extends Controller
                 $val->category_id = isset($product->category_id) ? $product->category_id :'';
             }
             return $this->sendSuccess('WISHLIST ITEM FETCH SUCCESSFULLY',$with_cart);
+        }else{
+            return $this->sendFailed('you do not have any active store plese select an active store',200);
+        }
     }
 
     function getProductData($id){

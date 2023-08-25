@@ -23,28 +23,32 @@ class OrderController extends Controller
     use ApiResponse;
     public function CreateOrder( CreateOrderApi $request){
         try{
-            if(Cart::where(['user_id'=>$request->user()->id,'store_code' => $request->user()->active_store_code ,'status' => '0'])->first()){
-                $this->outOfCartPushToWish($request->user()->id,$request->user()->active_store_code);
-                $cart_total = Cart::where(['user_id'=>$request->user()->id,'store_code' => $request->user()->active_store_code ,'status' => '0'])->sum('total');
-                $vendor = Vendor::where('store_code',$request->user()->active_store_code)->first();
-                $order = new Order();
-                $order->order_id = $this->GenerateOrderID($vendor->store_name);
-                $order->user_id = $request->user()->id;
-                $order->vendor_id = $vendor->id;
-                $order->store_code = $vendor->store_code;
-                $order->amount = $cart_total;
-                $order->note = $request->note;
-                if($cart_total > 0){
-                    $order->save();    
-                    Cart::where(['user_id'=>$request->user()->id,'store_code' => $request->user()->active_store_code ,'status' => '0'])->update(['order_id' => $order->id ,'status' => '1']);
-                    WishCart::where(['user_id'=>$request->user()->id,'store_code' => $request->user()->active_store_code ,'status' => '0'])->update(['order_id' => $order->id ,'status' => '1']);
-                    Helper::sentMessageCreateOrder($order->id);
+            if(!empty($request->user()->active_store_code)){
+                if(Cart::where(['user_id'=>$request->user()->id,'store_code' => $request->user()->active_store_code ,'status' => '0'])->first()){
+                    $this->outOfCartPushToWish($request->user()->id,$request->user()->active_store_code);
+                    $cart_total = Cart::where(['user_id'=>$request->user()->id,'store_code' => $request->user()->active_store_code ,'status' => '0'])->sum('total');
+                    $vendor = Vendor::where('store_code',$request->user()->active_store_code)->first();
+                    $order = new Order();
+                    $order->order_id = $this->GenerateOrderID($vendor->store_name);
+                    $order->user_id = $request->user()->id;
+                    $order->vendor_id = $vendor->id;
+                    $order->store_code = $vendor->store_code;
+                    $order->amount = $cart_total;
+                    $order->note = $request->note;
+                    if($cart_total > 0){
+                        $order->save();    
+                        Cart::where(['user_id'=>$request->user()->id,'store_code' => $request->user()->active_store_code ,'status' => '0'])->update(['order_id' => $order->id ,'status' => '1']);
+                        WishCart::where(['user_id'=>$request->user()->id,'store_code' => $request->user()->active_store_code ,'status' => '0'])->update(['order_id' => $order->id ,'status' => '1']);
+                        Helper::sentMessageCreateOrder($order->id);
+                    }else{
+                        WishCart::where(['user_id'=>$request->user()->id,'store_code' => $request->user()->active_store_code ,'status' => '0'])->update(['status' => '1']);
+                    }
+                    return $this->sendSuccess('ORDER CREATE SUCCESSFULLY', $order);
                 }else{
-                    WishCart::where(['user_id'=>$request->user()->id,'store_code' => $request->user()->active_store_code ,'status' => '0'])->update(['status' => '1']);
+                    return $this->sendFailed('YOUR CART IS EMPTY',200);
                 }
-                return $this->sendSuccess('ORDER CREATE SUCCESSFULLY', $order);
             }else{
-                return $this->sendFailed('YOUR CART IS EMPTY',200);
+                return $this->sendFailed('you do not have any active store plese select an active store',200);
             }
         }catch(\Throwable $e){
             return $this->sendFailed($e->getMessage(). ' On Line '. $e->getLine(),200);
@@ -64,20 +68,24 @@ class OrderController extends Controller
 
     public function CustomerOrderHistory(CreateOrderApi $request){
         try{
-            $orders = Order::where(['user_id' => $request->user()->id,'store_code' => $request->user()->active_store_code])->orderBy('id','DESC')->get();
-            foreach($orders as $key=>$val){
-                $user = Vendor::where('id',$val->vendor_id)->first();
-                $val['total_item'] = Cart::where('order_id',$val->id)->count();
-                $val['product_image'] = $this->GetOneImage($val->id);
-                $val['vendor_image'] = asset('public/images/users/'.$user->image);
-                $val['vendor_name'] = isset($user->name) ? $user->name :'';
-                $val['vendor_mobile'] = isset($user->mobile) ? $user->mobile :'';
-                $val['vendor_city'] = isset($user->city) ? $user->city :'';
-                $val['store_name'] = isset($user->store_name) ? $user->store_name :'';
-                $val['order_history'] = route('order-history',$val['order_id']);
-                $val['order_invoice'] = route('order-invoice',$val['order_id']);
+            if(!empty($request->user()->active_store_code)){
+                $orders = Order::where(['user_id' => $request->user()->id,'store_code' => $request->user()->active_store_code])->orderBy('id','DESC')->get();
+                foreach($orders as $key=>$val){
+                    $user = Vendor::where('id',$val->vendor_id)->first();
+                    $val['total_item'] = Cart::where('order_id',$val->id)->count();
+                    $val['product_image'] = $this->GetOneImage($val->id);
+                    $val['vendor_image'] = asset('public/images/users/'.$user->image);
+                    $val['vendor_name'] = isset($user->name) ? $user->name :'';
+                    $val['vendor_mobile'] = isset($user->mobile) ? $user->mobile :'';
+                    $val['vendor_city'] = isset($user->city) ? $user->city :'';
+                    $val['store_name'] = isset($user->store_name) ? $user->store_name :'';
+                    $val['order_history'] = route('order-history',$val['order_id']);
+                    $val['order_invoice'] = route('order-invoice',$val['order_id']);
+                }
+                return $this->sendSuccess('ORDER HISTORY FETCH SUCCESSFULLY', $orders);
+            }else{
+                return $this->sendFailed('you do not have any active store plese select an active store',200);
             }
-            return $this->sendSuccess('ORDER HISTORY FETCH SUCCESSFULLY', $orders);
         }catch(\Throwable $e){
             return $this->sendFailed($e->getMessage(). ' On Line '. $e->getLine(),200);
         }
