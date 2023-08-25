@@ -67,7 +67,12 @@
                     <!-- profile -->
                     <div class="card">
                         <div class="card-header border-bottom">
-                            <h4 class="card-title">Wishlist Details</h4>
+                            <h4 class="card-title">Notifications</h4>
+                            <div class="form-check form-check-primary form-switch">
+                                <input class="form-check-input checked_chackbox" id="systemNotification" type="checkbox" name="is_default" onclick="ChangeSlabStatus({{ $customer->id }})" @if ($customer->is_notify == '1')
+                                    @checked(true) 
+                                @endif   value="1" >
+                            </div>
                         </div>
                         <div class="card-body my-25">
                             <div class="card-datatable">
@@ -121,4 +126,25 @@
     </div>
 </div>
     <!-- END: Content-->
+
+    <script>
+        function ChangeSlabStatus (id){
+            $.ajax({
+                url: "{{ route('changes_notification_status') }}",
+                type: 'POST',
+                dataType: 'json',
+                data: {
+                    _token: "{{ csrf_token() }}",id:id
+                },
+                success: function(response){
+                    console.log(response[0]);
+                    if(response[0] == 1){
+                        toastr.success(response[1]);
+                    }else{
+                        toastr.error(response[1]);
+                    }
+                }
+            });
+        }
+    </script>
 @endsection

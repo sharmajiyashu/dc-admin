@@ -99,7 +99,9 @@ class CustomerController extends Controller
             $data['dob'] = date('Y-m-d H:i:s',strtotime($request->dob));
             $data['is_register'] = '1';
             $data['pin'] = $request->pin;
-            $data['store_name'] = $request->store_name;
+            if(!empty($request->store_name)){
+                $data['store_name'] = $request->store_name;
+            }
             Customer::where('id',$request->user()->id)->update($data);
             $customer = Customer::where('id',$request->user()->id)->first();
             return $this->sendSuccess('CUSTOMER DETAIL UPLOAD SUCCESSFULLY',$customer);

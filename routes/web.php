@@ -93,6 +93,7 @@ Route::group(['middleware' => 'AdminAuth'], function () {
     Route::post('changes_category_status',[Controller::class,'changes_category_status'])->name('changes_category_status');
     Route::post('changes_product_status',[Controller::class,'changes_product_status'])->name('changes_product_status');
     Route::post('changes_store_link_status',[Controller::class,'changes_store_link_status'])->name('changes_store_link_status');
+    Route::post('changes_notification_status',[Controller::class,'changes_notification_status'])->name('changes_notification_status');
 });
 
 Route::get('sentNotification',[Controller::class,'SendNotification']);

@@ -14,6 +14,7 @@ use App\Models\Order;
 use App\Models\Slab;
 use App\Models\SlabLink;
 use App\Models\StoreLink;
+use App\Models\Vendor;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller as BaseController;
 
@@ -74,6 +75,17 @@ class Controller extends BaseController
             $payment_status->update(['status' => StoreLink::$active]);
             Helper::sentNotificationForActiveInactiveUser($payment_status->user_id,$payment_status->vendor_id,StoreLink::$active);
             return json_encode(['1' ,'Status Active Successfully']);
+        }
+    }
+
+    public function changes_notification_status(Request $request){
+        $payment_status = User::where('id',$request->id)->first();
+        if($payment_status->is_notify == '1'){
+            $payment_status->update(['is_notify' => '0']);
+            return json_encode(['0' ,'Is notify Inactive Successfully']);
+        }else{
+            $payment_status->update(['is_notify' => '1']);
+            return json_encode(['1' ,'Is notify Active Successfully']);
         }
     }
 
