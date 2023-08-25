@@ -65,7 +65,7 @@ class CustomerController extends Controller
         $vendor = Vendor::where('id',$id)->Vendor()->status(Vendor::$active)->first();
         if(!empty($vendor)){
             if($vendor->is_register != 1){
-                $products = Category::where('is_admin','1')->get();
+                $products = Category::where('is_admin','1')->where('is_delete','!=','1')->get();
                 foreach($products as $key=>$val){
                     $check_category = Category::where('user_id',$vendor->id)->where('admin_id',$val->id)->count();
                     if($check_category == 0){
@@ -99,6 +99,7 @@ class CustomerController extends Controller
             $data['dob'] = date('Y-m-d H:i:s',strtotime($request->dob));
             $data['is_register'] = '1';
             $data['pin'] = $request->pin;
+            $data['store_name'] = $request->store_name;
             Customer::where('id',$request->user()->id)->update($data);
             $customer = Customer::where('id',$request->user()->id)->first();
             return $this->sendSuccess('CUSTOMER DETAIL UPLOAD SUCCESSFULLY',$customer);

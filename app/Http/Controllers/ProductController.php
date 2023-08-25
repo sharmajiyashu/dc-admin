@@ -334,7 +334,7 @@ class ProductController extends Controller
                 $category_name = Helper::createUpperString($row[1]);
                 $check_product = Product::where('is_admin','1')->where('is_delete','!=','1')->where('name',$product_name)->count();
                 if($check_product < 1){
-                    $check_category = Category::where(['is_delete' => 0 ,'is_admin' => '1' ,'title' => $category_name])->first();
+                    $check_category = Category::where(['is_delete' => '0' ,'is_admin' => '1' ,'title' => $category_name])->first();
                     if(!empty($check_category)){
                         $category_id = $check_category->id;
                     }else{
@@ -344,7 +344,6 @@ class ProductController extends Controller
                     Product::create(['name' => $product_name ,'category_id' => $category_id ,'user_id' => Auth::user()->id ,'sp' => 0 ,'is_admin' => '1']);
                     $total_subscriber_insert ++;
                 }
-
                 
             }
         }

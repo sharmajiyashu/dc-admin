@@ -34,10 +34,14 @@ class OrderController extends Controller
                 $order->store_code = $vendor->store_code;
                 $order->amount = $cart_total;
                 $order->note = $request->note;
-                $order->save();
-                Cart::where(['user_id'=>$request->user()->id,'store_code' => $request->user()->active_store_code ,'status' => '0'])->update(['order_id' => $order->id ,'status' => '1']);
-                WishCart::where(['user_id'=>$request->user()->id,'store_code' => $request->user()->active_store_code ,'status' => '0'])->update(['order_id' => $order->id ,'status' => '1']);
-                Helper::sentMessageCreateOrder($order->id);
+                if($cart_total > 0){
+                    $order->save();    
+                    Cart::where(['user_id'=>$request->user()->id,'store_code' => $request->user()->active_store_code ,'status' => '0'])->update(['order_id' => $order->id ,'status' => '1']);
+                    WishCart::where(['user_id'=>$request->user()->id,'store_code' => $request->user()->active_store_code ,'status' => '0'])->update(['order_id' => $order->id ,'status' => '1']);
+                    Helper::sentMessageCreateOrder($order->id);
+                }else{
+                    WishCart::where(['user_id'=>$request->user()->id,'store_code' => $request->user()->active_store_code ,'status' => '0'])->update(['status' => '1']);
+                }
                 return $this->sendSuccess('ORDER CREATE SUCCESSFULLY', $order);
             }else{
                 return $this->sendFailed('YOUR CART IS EMPTY',200);

@@ -236,7 +236,7 @@ class ProductController extends Controller
                     $categories = Category::where(['status' => Category::$active ,'is_delete' => '0' ,'user_id' => 00 ,'is_admin' => '0'])->get();
                 }
             }elseif($request->user()->role_id == Role::$vendor){
-                $categories = Category::where(['is_delete' => '0' ,'user_id' => $request->user()->id ,'is_admin' => '0'])->get()->map(function($category){
+                $categories = Category::where('is_delete','!=','1')->where(['user_id' => $request->user()->id ,'is_admin' => '0'])->get()->map(function($category){
                     $category->total_product = Product::where('category_id',$category->id)->count();
                     return $category;
                 });
