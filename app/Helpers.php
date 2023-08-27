@@ -270,4 +270,64 @@ class Helper {
 		return Str::upper($name);
 	}
 
+	public static function getCustomerCategories($user_id){
+		$user = Customer::find($user_id);
+		$vendor = Vendor::where('store_code',$user->active_store_code)->first();
+		if(!empty($vendor)){
+			$categories = Category::where(['status' => Category::$active ,'is_delete' => '0' ,'user_id' => $vendor->id ,'is_admin' => '0'])->get();
+		}else{
+			$categories = Category::where(['status' => Category::$active ,'is_delete' => '0' ,'user_id' => 00 ,'is_admin' => '0'])->get();
+		}
+		foreach($categories as $key=>$val){
+			if(!empty($val->image)){
+				$val['image'] = asset('public/images/categories/'.$val->image);
+			}
+		}
+		return $categories;
+	}
+
+	public static function getCustomerArrivalsProducts($user_id){
+		$user = Customer::find($user_id);
+		$vendor = Vendor::where('store_code',$user->active_store_code)->first();
+                $i = 0;
+                $StoreLink = StoreLink::where('user_id',$user->id)->where('vendor_id',$vendor->id)->first();
+                if(!empty($StoreLink)){
+                    if($StoreLink->status == StoreLink::$active){
+                        $products = [];
+                        $slab_link = SlabLink::where(['user_id' => $vendor->id, 'slab_id' => $StoreLink->slab_id])->get();
+                        foreach($slab_link as $key => $val){
+                            $check_slab = Slab::where('id',$val->slab_id)->first();
+                            if($check_slab->status == Slab::$active){
+                                if($i < 10){
+                                    $product = Product::where('id',$val->product_id)->where(['user_id'=>$vendor->id,'status'=>'Active'])->where('is_admin','=','0')->where('is_delete','!=','1')->orderBy('id','DESC')->first();
+									if(!empty($product)){
+                                        $products[] = $product;    
+                                        $i++;
+                                    }
+                                }
+                                
+                            }
+                        }
+                        foreach($products as $key=>$val){
+                            $images = json_decode($val['images']);
+                            if(!empty($images)){
+                                $img = [];
+                                foreach($images as $k){
+                                    $img[] = asset('public/images/products/'.$k);
+                                }
+                                $val['images'] = $img;
+                            }else{
+                                $val['images'] = '';
+                            }
+                        }
+						return $products;
+                    }else{
+                        Customer::where('id',$user->id)->update(['active_store_code' => '']);
+						return [];
+                    }
+                }else{
+					return [];
+                }
+	}
+
 }

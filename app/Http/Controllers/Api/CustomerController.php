@@ -2,11 +2,13 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Helpers\Helper;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\CustomerRegisterLoginMobileRequest;
 use App\Http\Requests\CustomersUpdateDetail;
 use App\Http\Requests\VarifyOtp;
 use App\Http\Requests\UploadApi;
+use App\Models\Cart;
 use App\Models\Category;
 use App\Models\Customer;
 use App\Models\Role;
@@ -159,6 +161,33 @@ class CustomerController extends Controller
         try{
             $states = DB::table('cities')->where('state_id',$request->state_id)->select('id','name')->orderBy('name','ASC')->get();
             return $this->sendSuccess('CITIES FETCH SUCCESSFULLY',$states);
+        }catch(\Throwable $e){
+            return $this->sendFailed($e->getMessage(). ' On Line '. $e->getLine(),200);
+        }
+    }
+
+    public function getHomeData(Request $request){
+        try{
+            if(!empty($request->user()->active_store_code)){
+                $categories = Helper::getCustomerCategories($request->user()->id);
+                $arrival_products = Helper::getCustomerArrivalsProducts($request->user()->id);
+                $user_data = Vendor::find($request->user()->id);
+                $vendor = Vendor::where('store_code',$request->user()->active_store_code)->first();
+                $user_data['active_store_name'] = $vendor->store_name;
+                $cart_count = Cart::where('user_id',$request->user()->id)->where('store_code',$request->user()->active_store_code)->where('status','0')->count();
+                $cart_amount = Cart::where('user_id',$request->user()->id)->where('store_code',$request->user()->active_store_code)->where('status','0')->sum('total');
+                return $this->sendSuccess('Data FETCH SUCCESSFULLY',[
+                    'categories' => $categories,
+                    'arrival_products' => $arrival_products,
+                    'profile' => $user_data,
+                    'cart_detail' => [
+                        'cart_count' => $cart_count,
+                        'cart_amount' => $cart_amount
+                    ]
+                ]);
+            }else{
+                return $this->sendFailed('you do not have any active store plese select an active store',200);
+            }
         }catch(\Throwable $e){
             return $this->sendFailed($e->getMessage(). ' On Line '. $e->getLine(),200);
         }

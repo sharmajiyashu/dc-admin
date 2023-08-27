@@ -18,6 +18,7 @@ use App\Models\SlabLink;
 use App\Models\StoreLink;
 use App\Models\Vendor;
 use App\Traits\ApiResponse;
+use GuzzleHttp\Handler\Proxy;
 use Illuminate\Support\Facades\Redis;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\File;
@@ -229,25 +230,15 @@ class ProductController extends Controller
     public function GetAllCategories(Request $request){
         try{
             if($request->user()->role_id == Role::$customer){
-                $vendor = Vendor::where('store_code',$request->user()->active_store_code)->first();
-                if(!empty($vendor)){
-                    $categories = Category::where(['status' => Category::$active ,'is_delete' => '0' ,'user_id' => $vendor->id ,'is_admin' => '0'])->get();
-                }else{
-                    $categories = Category::where(['status' => Category::$active ,'is_delete' => '0' ,'user_id' => 00 ,'is_admin' => '0'])->get();
-                }
+                $categories = Helper::getCustomerCategories($request->user()->id);
             }elseif($request->user()->role_id == Role::$vendor){
                 $categories = Category::where('is_delete','!=','1')->where(['user_id' => $request->user()->id ,'is_admin' => '0'])->get()->map(function($category){
                     $category->total_product = Product::where('category_id',$category->id)->count();
+                    $category->image = asset('public/images/categories/'.$category->image);
                     return $category;
                 });
             }
-
             if(!empty($categories)){
-                foreach($categories as $key=>$val){
-                    if(!empty($val->image)){
-                        $val['image'] = asset('public/images/categories/'.$val->image);
-                    }
-                }
                 return $this->sendSuccess('CATEGORIES FETCH SUCCESSFULLY', $categories);
             }else{
                 return $this->sendFailed('CATEGORIES NOT FOUND ',200);
@@ -269,20 +260,26 @@ class ProductController extends Controller
                         foreach($slab_link as $key => $val){
                             $check_slab = Slab::where('id',$val->slab_id)->first();
                             if($check_slab->status == Slab::$active){
-                                $products[] = Product::where('id',$val->product_id)->where(['user_id'=>$vendor->id,'status'=>'Active'])->where('is_admin','=','0')->where('is_delete','!=','1')->orderBy('id','DESC')->first();
+                                 $product = Product::where('id',$val->product_id)->where(['user_id'=>$vendor->id,'status'=>'Active'])->where('is_admin','=','0')->where('is_delete','!=','1')->orderBy('id','DESC')->first();
+                                if(!empty($product)){
+                                    $products[] = $product;    
+                                }
                             }
                         }
                         foreach($products as $key=>$val){
-                            $images = json_decode($val['images']);
-                            if(!empty($images)){
-                                $img = [];
-                                foreach($images as $k){
-                                    $img[] = asset('public/images/products/'.$k);
+                            if(!empty($val['images'])){
+                                $images = json_decode($val['images']);
+                                if(!empty($images)){
+                                    $img = [];
+                                    foreach($images as $k){
+                                        $img[] = asset('public/images/products/'.$k);
+                                    }
+                                    $val['images'] = $img;
+                                }else{
+                                    $val['images'] = '';
                                 }
-                                $val['images'] = $img;
-                            }else{
-                                $val['images'] = '';
                             }
+                            
                         }
                         return $this->sendSuccess('PRODUCT FETCH SUCCESSFULLY', $products);
                     }else{
@@ -296,6 +293,7 @@ class ProductController extends Controller
                 return $this->sendFailed('you do not have any active store plese select an active store',200);
             }
         }catch(\Throwable $e){
+            // \Log::error($e->getMessage(). ' On Line '. $e->getLine());
             return $this->sendFailed($e->getMessage(). ' On Line '. $e->getLine(),200);
         }
     }
@@ -303,42 +301,8 @@ class ProductController extends Controller
     public function NewArrivalProducts(CreateOrderApi $request){
         try{
             if(!empty($request->user()->active_store_code)){
-                $vendor = Vendor::where('store_code',$request->user()->active_store_code)->first();
-                $i = 0;
-                $StoreLink = StoreLink::where('user_id',$request->user()->id)->where('vendor_id',$vendor->id)->first();
-                if(!empty($StoreLink)){
-                    if($StoreLink->status == StoreLink::$active){
-                        $products = [];
-                        $slab_link = SlabLink::where(['user_id' => $vendor->id, 'slab_id' => $StoreLink->slab_id])->get();
-                        foreach($slab_link as $key => $val){
-                            $check_slab = Slab::where('id',$val->slab_id)->first();
-                            if($check_slab->status == Slab::$active){
-                                if($i < 10){
-                                    $products[] = Product::where('id',$val->product_id)->where(['user_id'=>$vendor->id,'status'=>'Active'])->where('is_admin','=','0')->where('is_delete','!=','1')->orderBy('id','DESC')->first();
-                                }
-                                
-                            }
-                        }
-                        foreach($products as $key=>$val){
-                            $images = json_decode($val['images']);
-                            if(!empty($images)){
-                                $img = [];
-                                foreach($images as $k){
-                                    $img[] = asset('public/images/products/'.$k);
-                                }
-                                $val['images'] = $img;
-                            }else{
-                                $val['images'] = '';
-                            }
-                        }
-                        return $this->sendSuccess('PRODUCT FETCH SUCCESSFULLY', $products);
-                    }else{
-                        Customer::where('id',$request->user()->id)->update(['active_store_code' => '']);
-                        return $this->sendSuccess('PRODUCT FETCH SUCCESSFULLY', []);
-                    }
-                }else{
-                    return $this->sendSuccess('PRODUCT FETCH SUCCESSFULLY', []);
-                }
+                $products = Helper::getCustomerArrivalsProducts($request->user()->id);
+                return $this->sendSuccess('PRODUCT FETCH SUCCESSFULLY', $products);
             }else{
                 return $this->sendFailed('you do not have any active store plese select an active store',200);
             }
@@ -375,13 +339,12 @@ class ProductController extends Controller
     public function AddBulkProduct(Request $request){
         try{
             $data = $request->all();
-
-            // print_r($data);die;
             $total_create = 0;
             $total_update = 0;
+            $error_s = [];
             foreach($data as $key=>$val){
                 $data = [
-                            'name' => $val['name'],
+                            'name' => Str::upper($val['name']),
                             'category_id' => $val['category_id'],
                             'sp' => isset($val['sp']) ? $val['sp'] :'0',
                             'mrp' => isset($val['mrp']) ? $val['mrp'] :'0',
@@ -413,7 +376,6 @@ class ProductController extends Controller
                         }
 
                 $images = [];
-                // $image = $val['image'];
 
                 if(!empty($val['image'])){
 
@@ -423,11 +385,10 @@ class ProductController extends Controller
                     $decoded = base64_decode($exploded);
 
                     if ($decoded === false) {
-                        // base64 string is not valid
-                        // handle the error or return a response indicating invalid format
+                        $data['error'] = 'Image in invalid';
+                        $error_s[] = $data;
+                        continue;
                     } else {
-                        // base64 string is valid
-                        // $imageName = 'image_' . time() . '.png';
                         $imageName = 'image_'.time() .rand(1,100).'.png';
                         $imagePath = public_path('images/products/' . $imageName);
                         File::put($imagePath, $decoded);
@@ -442,10 +403,6 @@ class ProductController extends Controller
                         $images = json_decode($product->images);
                         if(isset($imageName)){
                             $images[] = $imageName;
-                            // $product->update([
-                            //     'images' => json_encode($images),
-                            // ]);
-                            
                             $data['images'] = json_encode($images);
                         }
                         $product->update($data);
@@ -477,6 +434,12 @@ class ProductController extends Controller
                         $total_create ++;
                     }
                 }else{
+                    $check_duplicate = Product::where('name',$data['name'])->where('user_id',$request->user()->id)->where('is_delete','0')->count();
+                    if($check_duplicate > 0){
+                        $data['error'] = 'Product name is already taken';
+                        $error_s[] = $data;
+                        continue;;
+                    }
                     $product = Product::create($data);
                     $check = SlabLink::where(['user_id' => $request->user()->id ,'product_id'=>$product->id])->count();
                     if($check == 0){
@@ -487,7 +450,7 @@ class ProductController extends Controller
                 }
 
             }
-            return $this->sendSuccess('PRODUCT '.$total_create.' CREATE ,'.$total_update.' UPDATE SUCCESSFULLY','');
+            return $this->sendSuccess('PRODUCT '.$total_create.' CREATE ,'.$total_update.' UPDATE SUCCESSFULLY',$error_s);
         }catch(\Throwable $e){
             return $this->sendFailed($e->getMessage(). ' On Line '. $e->getLine(),200);
         }
