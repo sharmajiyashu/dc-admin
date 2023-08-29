@@ -131,6 +131,31 @@ class SlabController extends Controller
     public function removeProductFromSlab(Request $request){
         try{
             $slab_link = SlabLink::where(['slab_id' => $request->slab_id ,'product_id' => $request->product_id ,'user_id' => $request->user()->id])->first();     
+
+            if(!empty($request->products)){
+                $count = 0;
+                $js = json_decode($request->products);
+                foreach($js as $key => $val){
+                    $slab_link_2 = SlabLink::where(['slab_id' => $request->slab_id ,'product_id' => $val ,'user_id' => $request->user()->id])->first();     
+                    if(!empty($slab_link_2)){
+                        if($slab_link_2->slab_id == Helper::getDefaultSlab()){
+                        }else{
+                            $slab_link_2->delete();
+                            $count ++;
+                        }
+                    }
+                }
+                if(!empty($slab_link)){
+                    if($slab_link->slab_id == Helper::getDefaultSlab()){
+                   
+                    }else{
+                        $slab_link->delete();
+                        $count ++;
+                    }
+                }
+                return $this->sendSuccess($count.'  Product remove from slab','');
+            }
+
             if(!empty($slab_link)){
                 if($slab_link->slab_id == Helper::getDefaultSlab()){
                     return $this->sendFailed('You Cant Delete product from default slab',200);

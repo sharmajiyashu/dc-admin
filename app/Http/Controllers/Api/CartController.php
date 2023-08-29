@@ -26,11 +26,41 @@ class CartController extends Controller
                 $product = Product::where('id',$request->product_id)->first();
                 $vendor = Vendor::where('id',$product->user_id)->first();
 
-                if($request->quantity % $product->packing_quantity) {
+                if($request->quantity % $product->packing_quantity){
                     return $this->sendFailed('PLEASE ENTER QUANTITY BY PACKING',200);
                 }
                 if($request->quantity < $product->packing_quantity){
                     return $this->sendFailed('PLEASE ENTER MINIMUM QUANTITY '.$product->packing_quantity,200);
+                }
+
+                if($product->is_limited == '1'){
+                    if($product->stock == 0){
+                        $cart_2 = $request->validated();
+                        $cart_2['user_id'] = $request->user()->id;
+                        $cart_2['product_id'] = $product->id;
+                        $cart_2['p_price'] = $product->sp;
+                        $cart_2['p_mrp'] = $product->mrp;
+                        $cart_2['status'] = '0';
+                        $cart_2['store_code'] = $vendor->store_code;
+                        $cart_2['vendor_id'] =$vendor->id;
+                        $last_cart_2 = WishCart::where(['user_id' => $request->user()->id ,'product_id' => $request->product_id ,'status' => '0'])->first();
+                        if(empty($last_cart_2)){
+                            $quantity = $request->quantity;
+                            $cart_total = $quantity * $product->sp;
+                            $cart_2['quantity'] = $quantity;
+                            $cart_2['total'] = $cart_total;
+                            $cart = WishCart::create($cart_2);
+                            $cart_id = $cart->id;
+                        }else{
+                            $quantity = $request->quantity + $last_cart_2->quantity;
+                            $cart_total = $quantity * $product->sp;
+                            $cart_2['quantity'] = $quantity;
+                            $cart_2['total'] = $cart_total;
+                            $cart = WishCart::where('id',$last_cart_2->id)->update($cart_2);
+                            $cart_id = $last_cart_2->id;
+                        }
+                        return $this->sendSuccess('ADD PRODUCT IN WISHLIST SUCCESSFULLY');
+                    }
                 }
 
                 $cart = $request->validated();
@@ -144,6 +174,7 @@ class CartController extends Controller
     public function RemoveCartItem(RemoveCartItemApi $request){
         try{
             Cart::where(['id'=>$request->cart_id,'user_id' => $request->user()->id ,'status' => '0'])->delete();
+            WishCart::where(['id'=>$request->cart_id,'user_id' => $request->user()->id ,'status' => '0'])->delete();
             return $this->sendSuccess('CART ITEM REMOVE SUCCESSFULLY','');
         }catch(\Throwable $e){
             return $this->sendFailed($e->getMessage(). ' On Line '. $e->getLine(),200);

@@ -267,12 +267,13 @@ class OrderController extends Controller
                     $packing_stocks = 0;
                     if($product_stock > 0){
                         for($i = 1 ; $i<= $product_stock ; $i++){
-                            if($i % $product_data->packing_quantity) {
-                            }else{
+                            // if($i % $product_data->packing_quantity){
+                            // }else{
                                 $packing_stocks = $i;
-                            }
+                            // }
                         }
                     }
+
                     $remaining_stocks = $product_stock - $packing_stocks;
                     $product_data->update(['stock' => $remaining_stocks]);
                     $check_wish = WishCart::where(['user_id' => $val->user_id ,'product_id' => $val->product_id ,'status' => '0'])->first();

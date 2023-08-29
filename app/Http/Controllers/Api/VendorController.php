@@ -79,7 +79,7 @@ class VendorController extends Controller
 
     public function WithListItem(Request $request){
         try {
-            $carts = WishCart::where('vendor_id',$request->user()->id)->orderBy('id','DESC')->get();
+            $carts = WishCart::where('vendor_id',$request->user()->id)->where(['status' => '1'])->orderBy('id','DESC')->get();
             foreach($carts as $key=>$val){
                 $customer = Customer::where('id',$val->user_id)->first();
                 $val['customer_name'] = isset($customer->name) ? $customer->name :'';

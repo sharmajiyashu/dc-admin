@@ -319,7 +319,9 @@ class Helper {
                             }else{
                                 $val['images'] = '';
                             }
+							$val['cart_count'] = Cart::where('product_id',$val['id'])->where('status','0')->count();
                         }
+						
 						return $products;
                     }else{
                         Customer::where('id',$user->id)->update(['active_store_code' => '']);

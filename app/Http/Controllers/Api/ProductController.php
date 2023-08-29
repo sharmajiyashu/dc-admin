@@ -12,6 +12,7 @@ use App\Http\Requests\CreateUpdateProductApi;
 use App\Http\Requests\CreateOrderApi;
 use App\Http\Requests\GetVendorProductsApi;
 use App\Http\Requests\GetSlabCustomerApi;
+use App\Models\Cart;
 use App\Models\Customer;
 use App\Models\Slab;
 use App\Models\SlabLink;
@@ -279,6 +280,7 @@ class ProductController extends Controller
                                     $val['images'] = '';
                                 }
                             }
+                            $val['cart_count'] = Cart::where('product_id',$val['id'])->where('status','0')->count();
                             
                         }
                         return $this->sendSuccess('PRODUCT FETCH SUCCESSFULLY', $products);
