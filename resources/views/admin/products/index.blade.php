@@ -100,14 +100,15 @@
                                                 <th>Action</th>
                                             </tr>
 
-
-                                            
-
                                         </thead>
                                         <tbody>
                                             @php  $i=1; @endphp
                                             @foreach($products as $key => $val)
                                             <tr>
+
+                                                <script>
+                                                   checkedValues_all_type.push({{ $val->id }});
+                                                </script>
                                                 <th scope="row">{{ $i }} </th>
                                                 <td><img src="{{ asset('public/images/products/'.$val->image) }}" alt="" width="100"></td>
                                                 <td><input type="checkbox" onclick="checkAllProducts()" name="checked_products" value="{{ $val->id }}">
@@ -217,6 +218,10 @@
                     </div>
                 </section>
 
+                <script>
+                    const checkedValues_all_type = [];
+                </script>
+
                 <!--/ Ajax Sourced Server-side -->
 
                 <script>
@@ -271,11 +276,36 @@
                     </div>
                     <div class="card-body">
                         <div class="row">
-                            <div class="col-md-4">
+                            <div class="col-md-2">
 
                             </div>
                             <div class="col-md-3">
                                 <h3 > <span class="badge rounded-pill badge-light-success"  id="selected_product_count">0</span> Product Selected</h3>
+                            </div>
+
+                            <script>
+                                function CheckAll(){
+                                    const checkboxes_12356 = document.querySelectorAll('input[type="checkbox"][name="checked_products"]');
+                                    const checkAllCheckbox_2563 = document.getElementById('check-all');
+
+                                    console.log(checkedValues_all_type);
+
+                                    
+                                    checkboxes_12356.forEach((checkbox) => {
+                                            if (checkAllCheckbox_2563.checked){
+                                                checkbox.checked = true;
+                                            }else{
+                                                checkbox.checked = false;
+                                            }
+                                    });
+                                    checkAllProducts();
+                                }
+                                
+                              </script>
+
+                            <div class="col-md-2">
+                                <label for="" style="font-size: 19px;">Check All</label>
+                                <input type="checkbox" id="check-all" onclick="CheckAll()"   style="width: 18px;height: 18px;">
                             </div>
 
                             <div class="col-md-3">
