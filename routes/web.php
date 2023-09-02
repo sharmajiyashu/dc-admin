@@ -105,3 +105,5 @@ Route::post('check-login', [LoginController::class, 'check_login'])->name('check
 
 Route::get('order-history/{id}',[OrderController::class,'OrderHistory'])->name('order-history');
 Route::get('order-invoice/{id}',[OrderController::class,'OrderInvoice'])->name('order-invoice');
+
+Route::get('create_thumbnil_image',[Controller::class,'createthumbnil']);

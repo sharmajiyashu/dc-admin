@@ -24,6 +24,7 @@ use Illuminate\Support\Facades\Redis;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Str;
+use Intervention\Image\Facades\Image;
 
 class ProductController extends Controller
 {
@@ -83,6 +84,10 @@ class ProductController extends Controller
                         $image_name = time().rand(1,100).'-'.$request->image_1->getClientOriginalName();
                         $image_name = preg_replace('/\s+/', '', $image_name);
                         $request->image_1->move(public_path('images/products'), $image_name);
+                        $thumbnail = Image::make(public_path('images/products') . '/' . $image_name)->fit(100, 100);
+                        $thumbnail->save(public_path('images/products/thumb1') . '/' . $image_name);
+                        $thumbnail_1 = Image::make(public_path('images/products') . '/' . $image_name)->fit(200, 200);
+                        $thumbnail_1->save(public_path('images/products/thumb2') . '/' . $image_name);
                         if(isset($images[0])){
                             $images[0] = $image_name;
                         }else{
@@ -94,6 +99,10 @@ class ProductController extends Controller
                         $image_name = time().rand(1,100).'-'.$request->image_2->getClientOriginalName();
                         $image_name = preg_replace('/\s+/', '', $image_name);
                         $request->image_2->move(public_path('images/products'), $image_name);
+                        $thumbnail = Image::make(public_path('images/products') . '/' . $image_name)->fit(100, 100);
+                        $thumbnail->save(public_path('images/products/thumb1') . '/' . $image_name);
+                        $thumbnail_1 = Image::make(public_path('images/products') . '/' . $image_name)->fit(200, 200);
+                        $thumbnail_1->save(public_path('images/products/thumb2') . '/' . $image_name);
                         if(isset($images[1])){
                             $images[1] = $image_name;
                         }else{
@@ -105,6 +114,10 @@ class ProductController extends Controller
                         $image_name = time().rand(1,100).'-'.$request->image_3->getClientOriginalName();
                         $image_name = preg_replace('/\s+/', '', $image_name);
                         $request->image_3->move(public_path('images/products'), $image_name);
+                        $thumbnail = Image::make(public_path('images/products') . '/' . $image_name)->fit(100, 100);
+                        $thumbnail->save(public_path('images/products/thumb1') . '/' . $image_name);
+                        $thumbnail_1 = Image::make(public_path('images/products') . '/' . $image_name)->fit(200, 200);
+                        $thumbnail_1->save(public_path('images/products/thumb2') . '/' . $image_name);
                         if(isset($images[2])){
                             $images[2] = $image_name;
                         }else{
@@ -116,6 +129,10 @@ class ProductController extends Controller
                         $image_name = time().rand(1,100).'-'.$request->image_4->getClientOriginalName();
                         $image_name = preg_replace('/\s+/', '', $image_name);
                         $request->image_4->move(public_path('images/products'), $image_name);
+                        $thumbnail = Image::make(public_path('images/products') . '/' . $image_name)->fit(100, 100);
+                        $thumbnail->save(public_path('images/products/thumb1') . '/' . $image_name);
+                        $thumbnail_1 = Image::make(public_path('images/products') . '/' . $image_name)->fit(200, 200);
+                        $thumbnail_1->save(public_path('images/products/thumb2') . '/' . $image_name);
                         if(isset($images[3])){
                             $images[3] = $image_name;
                         }else{
@@ -187,7 +204,7 @@ class ProductController extends Controller
                     $img = [];
                     if(!empty($images)){
                         foreach($images as $k){
-                            $img[] = asset('public/images/products/'.$k);
+                            $img[] = asset('public/images/products/thumb2/'.$k);
                         }
                     }
                     $slabs = SlabLink::where(['user_id' => $request->user()->id ,'product_id' => $val->id])->get()->map(function($slabs){
@@ -273,7 +290,7 @@ class ProductController extends Controller
                                 if(!empty($images)){
                                     $img = [];
                                     foreach($images as $k){
-                                        $img[] = asset('public/images/products/'.$k);
+                                        $img[] = asset('public/images/products/thumb2/'.$k);
                                     }
                                     $val['images'] = $img;
                                 }else{
@@ -394,6 +411,11 @@ class ProductController extends Controller
                         $imageName = 'image_'.time() .rand(1,100).'.png';
                         $imagePath = public_path('images/products/' . $imageName);
                         File::put($imagePath, $decoded);
+
+                        $thumbnail = Image::make(public_path('images/products') . '/' . $imageName)->fit(100, 100);
+                        $thumbnail->save(public_path('images/products/thumb1') . '/' . $imageName);
+                        $thumbnail_1 = Image::make(public_path('images/products') . '/' . $imageName)->fit(200, 200);
+                        $thumbnail_1->save(public_path('images/products/thumb2') . '/' . $imageName);
                         $images[] = $imageName;
                         $data['images'] = json_encode($images);
                     }
@@ -469,7 +491,7 @@ class ProductController extends Controller
                 if(!empty($images)){
                     $img = [];
                     foreach($images as $k){
-                        $img[] = asset('public/images/products/'.$k);
+                        $img[] = asset('public/images/products/thumb2/'.$k);
                     }
                     $val['images'] = $img;
                 }else{

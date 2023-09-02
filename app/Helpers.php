@@ -318,7 +318,7 @@ class Helper {
                             if(!empty($images)){
                                 $img = [];
                                 foreach($images as $k){
-                                    $img[] = asset('public/images/products/'.$k);
+                                    $img[] = asset('public/images/products/thumb2/'.$k);
                                 }
                                 $val['images'] = $img;
                             }else{

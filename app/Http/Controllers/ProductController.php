@@ -13,6 +13,8 @@ use GuzzleHttp\Handler\Proxy;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Redis;
+use Intervention\Image\Facades\Image;
+use Illuminate\Support\Facades\File;
 
 class ProductController extends Controller
 {
@@ -63,6 +65,13 @@ class ProductController extends Controller
                 $image_name = time().rand(1,100).'-'.$val->getClientOriginalName();
                 $image_name = preg_replace('/\s+/', '', $image_name);
                 $val->move(public_path('images/products'), $image_name);
+
+                $thumbnail = Image::make(public_path('images/products') . '/' . $image_name)->fit(100, 100);
+                $thumbnail->save(public_path('images/products/thumb1') . '/' . $image_name);
+
+                $thumbnail_1 = Image::make(public_path('images/products') . '/' . $image_name)->fit(200, 200);
+                $thumbnail_1->save(public_path('images/products/thumb2') . '/' . $image_name);
+
                 $image[] = $image_name;
             }
             $dd_image = json_encode($image);
@@ -133,6 +142,12 @@ class ProductController extends Controller
             $image_name = time().rand(1,100).'-'.$request->image_1->getClientOriginalName();
             $image_name = preg_replace('/\s+/', '', $image_name);
             $request->image_1->move(public_path('images/products'), $image_name);
+
+            $thumbnail = Image::make(public_path('images/products') . '/' . $image_name)->fit(100, 100);
+            $thumbnail->save(public_path('images/products/thumb1') . '/' . $image_name);
+            $thumbnail_1 = Image::make(public_path('images/products') . '/' . $image_name)->fit(200, 200);
+            $thumbnail_1->save(public_path('images/products/thumb2') . '/' . $image_name);
+
             if(isset($images[0])){
                 $images[0] = $image_name;
             }else{
@@ -144,6 +159,10 @@ class ProductController extends Controller
             $image_name = time().rand(1,100).'-'.$request->image_2->getClientOriginalName();
             $image_name = preg_replace('/\s+/', '', $image_name);
             $request->image_2->move(public_path('images/products'), $image_name);
+            $thumbnail = Image::make(public_path('images/products') . '/' . $image_name)->fit(100, 100);
+            $thumbnail->save(public_path('images/products/thumb1') . '/' . $image_name);
+            $thumbnail_1 = Image::make(public_path('images/products') . '/' . $image_name)->fit(200, 200);
+            $thumbnail_1->save(public_path('images/products/thumb2') . '/' . $image_name);
             if(isset($images[1])){
                 $images[1] = $image_name;
             }else{
@@ -155,6 +174,10 @@ class ProductController extends Controller
             $image_name = time().rand(1,100).'-'.$request->image_3->getClientOriginalName();
             $image_name = preg_replace('/\s+/', '', $image_name);
             $request->image_3->move(public_path('images/products'), $image_name);
+            $thumbnail = Image::make(public_path('images/products') . '/' . $image_name)->fit(100, 100);
+            $thumbnail->save(public_path('images/products/thumb1') . '/' . $image_name);
+            $thumbnail_1 = Image::make(public_path('images/products') . '/' . $image_name)->fit(200, 200);
+            $thumbnail_1->save(public_path('images/products/thumb2') . '/' . $image_name);
             if(isset($images[2])){
                 $images[2] = $image_name;
             }else{
@@ -166,6 +189,10 @@ class ProductController extends Controller
             $image_name = time().rand(1,100).'-'.$request->image_4->getClientOriginalName();
             $image_name = preg_replace('/\s+/', '', $image_name);
             $request->image_4->move(public_path('images/products'), $image_name);
+            $thumbnail = Image::make(public_path('images/products') . '/' . $image_name)->fit(100, 100);
+            $thumbnail->save(public_path('images/products/thumb1') . '/' . $image_name);
+            $thumbnail_1 = Image::make(public_path('images/products') . '/' . $image_name)->fit(200, 200);
+            $thumbnail_1->save(public_path('images/products/thumb2') . '/' . $image_name);
             if(isset($images[3])){
                 $images[3] = $image_name;
             }else{
@@ -252,6 +279,11 @@ class ProductController extends Controller
             $image_name = time().rand(1,100).'-'.$request->image_1->getClientOriginalName();
             $image_name = preg_replace('/\s+/', '', $image_name);
             $request->image_1->move(public_path('images/products'), $image_name);
+            $thumbnail = Image::make(public_path('images/products') . '/' . $image_name)->fit(100, 100);
+            $thumbnail->save(public_path('images/products/thumb1') . '/' . $image_name);
+            $thumbnail_1 = Image::make(public_path('images/products') . '/' . $image_name)->fit(200, 200);
+            $thumbnail_1->save(public_path('images/products/thumb2') . '/' . $image_name);
+
             if(isset($images[0])){
                 $images[0] = $image_name;
             }else{
@@ -263,6 +295,10 @@ class ProductController extends Controller
             $image_name = time().rand(1,100).'-'.$request->image_2->getClientOriginalName();
             $image_name = preg_replace('/\s+/', '', $image_name);
             $request->image_2->move(public_path('images/products'), $image_name);
+            $thumbnail = Image::make(public_path('images/products') . '/' . $image_name)->fit(100, 100);
+            $thumbnail->save(public_path('images/products/thumb1') . '/' . $image_name);
+            $thumbnail_1 = Image::make(public_path('images/products') . '/' . $image_name)->fit(200, 200);
+            $thumbnail_1->save(public_path('images/products/thumb2') . '/' . $image_name);
             if(isset($images[1])){
                 $images[1] = $image_name;
             }else{
@@ -274,6 +310,10 @@ class ProductController extends Controller
             $image_name = time().rand(1,100).'-'.$request->image_3->getClientOriginalName();
             $image_name = preg_replace('/\s+/', '', $image_name);
             $request->image_3->move(public_path('images/products'), $image_name);
+            $thumbnail = Image::make(public_path('images/products') . '/' . $image_name)->fit(100, 100);
+            $thumbnail->save(public_path('images/products/thumb1') . '/' . $image_name);
+            $thumbnail_1 = Image::make(public_path('images/products') . '/' . $image_name)->fit(200, 200);
+            $thumbnail_1->save(public_path('images/products/thumb2') . '/' . $image_name);
             if(isset($images[2])){
                 $images[2] = $image_name;
             }else{
@@ -285,6 +325,10 @@ class ProductController extends Controller
             $image_name = time().rand(1,100).'-'.$request->image_4->getClientOriginalName();
             $image_name = preg_replace('/\s+/', '', $image_name);
             $request->image_4->move(public_path('images/products'), $image_name);
+            $thumbnail = Image::make(public_path('images/products') . '/' . $image_name)->fit(100, 100);
+            $thumbnail->save(public_path('images/products/thumb1') . '/' . $image_name);
+            $thumbnail_1 = Image::make(public_path('images/products') . '/' . $image_name)->fit(200, 200);
+            $thumbnail_1->save(public_path('images/products/thumb2') . '/' . $image_name);
             if(isset($images[3])){
                 $images[3] = $image_name;
             }else{
@@ -392,6 +436,10 @@ class ProductController extends Controller
                     $image_name = time().rand(1,100).'-'.$request->$name->getClientOriginalName();
                     $image_name = preg_replace('/\s+/', '', $image_name);
                     $request->$name->move(public_path('images/products'), $image_name);
+                    $thumbnail = Image::make(public_path('images/products') . '/' . $image_name)->fit(100, 100);
+                    $thumbnail->save(public_path('images/products/thumb1') . '/' . $image_name);
+                    $thumbnail_1 = Image::make(public_path('images/products') . '/' . $image_name)->fit(200, 200);
+                    $thumbnail_1->save(public_path('images/products/thumb2') . '/' . $image_name);
                     $kk = $i-1;
                     if(isset($images[$kk])){
                         $images[$kk] = $image_name;

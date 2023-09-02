@@ -16,6 +16,8 @@ use App\Models\SlabLink;
 use App\Models\StoreLink;
 use App\Models\Vendor;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\File;
+use Intervention\Image\Facades\Image;
 use Illuminate\Routing\Controller as BaseController;
 
 class Controller extends BaseController
@@ -87,6 +89,39 @@ class Controller extends BaseController
             $payment_status->update(['is_notify' => '1']);
             return json_encode(['1' ,'Is notify Active Successfully']);
         }
+    }
+
+    public function createthumbnil(Request $request){
+
+        $sourceFolder = public_path('images/products/');
+        $targetFolder = public_path('images/products/thumb1/');
+        $targetFolder2 = public_path('images/products/thumb2/');
+
+        // Ensure the target folder exists, create if necessary
+        if (!File::exists($targetFolder)) {
+            File::makeDirectory($targetFolder, 0777, true);
+        }
+
+        if (!File::exists($targetFolder2)) {
+            File::makeDirectory($targetFolder2, 0777, true);
+        }
+
+        // Get all image files from the source folder
+        $imageFiles = File::glob($sourceFolder . '*.{jpg,jpeg,png,gif}', GLOB_BRACE);
+
+        foreach ($imageFiles as $imageFile) {
+            // Generate a unique name for the thumbnail
+            $thumbnailName = pathinfo($imageFile, PATHINFO_FILENAME) . '.jpg';
+
+            // Open the image using Intervention Image
+            $img = Image::make($imageFile);
+
+            // Resize and save the thumbnail
+            $img->fit(100, 100)->save($targetFolder . $thumbnailName);
+            $img->fit(200, 200)->save($targetFolder2 . $thumbnailName);
+        }
+
+        return 'Thumbnails created and moved to the target folder.';
     }
 
 }

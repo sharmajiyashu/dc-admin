@@ -157,7 +157,7 @@ class CartController extends Controller
         if(!empty($images)){
             $new_img = [];
             foreach($images as $val){
-                $new_img[] = asset('public/images/products/'.$val);
+                $new_img[] = asset('public/images/products/thumb2/'.$val);
             }
         }
         $product->images = isset($new_img)  ? $new_img :'';
