@@ -21,7 +21,7 @@ use Illuminate\Support\Str;
 class Helper {
     
 
-    public static function SendNotification($device_id,$title,$body,$image){
+    public static function SendNotification($device_id,$title,$body,$image,$id){
 
         $url = 'https://fcm.googleapis.com/fcm/send';
 
@@ -45,7 +45,7 @@ class Helper {
 				'badge'             => '1',
 				'action_type'       => 'transfer',
 				'image' => $image,
-				'id' =>  isset($post_id) ? $post_id : '',
+				'id' =>  isset($id) ? $id : '',
 			),
 			"data" =>
 			array(
@@ -56,7 +56,7 @@ class Helper {
 				'badge'             => '1',
 				'action_type'       => 'transfer',
 				'image' => $image ,
-				'id' =>  isset($post_id) ? $post_id : '',
+				'id' =>  isset($id) ? $id : '',
 			)
 		);
 		$ch = curl_init();
@@ -87,10 +87,10 @@ class Helper {
 					$image = asset('public/images/notifications/'.$sent->image);
 					$body = $sent->body;
 					$device_id =  $val->remember_token; 
+					$notification = Notification::create(['user_id' => $val->id ,'title' => $title ,'body' => $body ,'image' => $image]);
 					if($customers->is_notify == 1){
-						Helper::SendNotification($device_id,$title,$body,$image);
+						Helper::SendNotification($device_id,$title,$body,$image,$notification->id);
 					}
-					Notification::create(['user_id' => $val->id ,'title' => $title ,'body' => $body ,'image' => $image]);
 				}
 			}
 			if($sent->to_vendors == '1'){
@@ -100,10 +100,10 @@ class Helper {
 					$body = $sent->body;
 					$image = asset('public/images/notifications/'.$sent->image);
 					$device_id =  $val->remember_token;
+					$notification = Notification::create(['user_id' => $val->id ,'title' => $title ,'body' => $body ,'image' => $image]);
 					if($customers->is_notify == 1){
-						Helper::SendNotification($device_id,$title,$body,$image);
+						Helper::SendNotification($device_id,$title,$body,$image,$notification->id);
 					}
-					Notification::create(['user_id' => $val->id ,'title' => $title ,'body' => $body ,'image' => $image]);
 				}
 			}
 			SentNotification::where('id',$id)->update(['count' => $count]);
@@ -142,10 +142,11 @@ class Helper {
 					$image = '';
 				}
 				$image = asset('public/images/products/'.$image);
+				$notification = Notification::create(['user_id' => $user->id ,'title' => $title ,'body' => $body ,'image' => $image]);
 				if($user->is_notify == 1){
-					Helper::SendNotification($device_id,$title,$body,$image);
+					Helper::SendNotification($device_id,$title,$body,$image,$notification->id);
 				}
-				Notification::create(['user_id' => $user->id ,'title' => $title ,'body' => $body ,'image' => $image]);
+				
 			}
 		}
 	}
@@ -161,10 +162,11 @@ class Helper {
 		$title = 'Knock knock! Your Order has been '.$status.'!';
 		$body = 'Order Id : '.$order_detail->order_id;
 		$order_image = Helper::getOrderProductImage($order_id);
+		$notification = Notification::create(['user_id' => $user->id ,'title' => $title ,'body' => $body ,'image' => $order_image]);
 		if($user->is_notify == 1){
-			Helper::SendNotification($device_id,$title,$body,$order_image);
+			Helper::SendNotification($device_id,$title,$body,$order_image,$notification->id);
 		}
-		Notification::create(['user_id' => $user->id ,'title' => $title ,'body' => $body ,'image' => $order_image]);
+		
 	}
 
 	public static function getOrderProductImage($order_id){
@@ -211,19 +213,21 @@ class Helper {
 		$user_body = 'Order Id : '.$order->order_id;
 		$user_device_id = isset($user->remember_token) ? $user->remember_token :'';
 		$order_user_image = Helper::getOrderProductImage($order_id);
+		$notification = Notification::create(['user_id' => $user->id ,'title' => $user_title ,'body' => $user_body ,'image' => $order_user_image]);
 		if($user->is_notify == 1){
-			Helper::SendNotification($user_device_id,$user_title,$user_body,$order_user_image);
+			Helper::SendNotification($user_device_id,$user_title,$user_body,$order_user_image,$notification->id);
 		}
-		Notification::create(['user_id' => $user->id ,'title' => $user_title ,'body' => $user_body ,'image' => $order_user_image]);
+		
 
 		$vendor = Helper::getUserDetail($order->vendor_id);
 		$vendor_title = "A new order has been placed by ".$user->name;
 		$body = "Mobile : ".$user->mobile.', City : '.$user->city;
 		$vendor_device_id = isset($vendor->remember_token) ? $vendor->remember_token :'';
+		$notification = Notification::create(['user_id' => $vendor->id ,'title' => $vendor_title ,'body' => $body ,'image' => $order_user_image]);
 		if($vendor->is_notify == 1){
-			Helper::SendNotification($vendor_device_id,$vendor_title,$body,$order_user_image);
+			Helper::SendNotification($vendor_device_id,$vendor_title,$body,$order_user_image,$notification->id);
 		}
-		Notification::create(['user_id' => $vendor->id ,'title' => $vendor_title ,'body' => $body ,'image' => $order_user_image]);
+		
 
 	}
 
@@ -236,10 +240,11 @@ class Helper {
 		$title = "You have been added to ".$vendor->store_name.'!';
 		$body = "“".$vendor->name."” added you kindly enjoy the shooping";
 		$image = asset('public/images/users/'.$vendor->store_image);
+		$notification = Notification::create(['user_id' => $user->id ,'title' => $title ,'body' => $body ,'image' => $image]);
 		if($user->is_notify == 1){
-			Helper::SendNotification($device_id,$title,$body,$image);
+			Helper::SendNotification($device_id,$title,$body,$image,$notification->id);
 		}
-		Notification::create(['user_id' => $user->id ,'title' => $title ,'body' => $body ,'image' => $image]);
+		
 	}
 
 	public static function sentNotificationForActiveInactiveUser($user_id,$vendor_id,$type){
@@ -254,10 +259,10 @@ class Helper {
 			$title = 'Store '.$vendor->store_name.' have been deactivated!';
 			$body = "“".$vendor->name."” your account has been deactivated, kindly contact the store";
 		}
+		$notification = Notification::create(['user_id' => $user->id ,'title' => $title ,'body' => $body ,'image' => $image]);
 		if($user->is_notify == 1){
-			Helper::SendNotification($device_id,$title,$body,$image);
+			Helper::SendNotification($device_id,$title,$body,$image,$notification->id);
 		}
-		Notification::create(['user_id' => $user->id ,'title' => $title ,'body' => $body ,'image' => $image]);
 	}
 
 	public static function removeBefore7daysData(){

@@ -209,12 +209,12 @@ class VendorController extends Controller
     public function getNotificatons(Request $request){
         try{
             $notifications = Notification::where('user_id',$request->user()->id)->orderBy('id','desc')->get();
-            $count = Notification::where('user_id',$request->user()->id)->orderBy('id','desc')->count();
+            $count = Notification::where('user_id',$request->user()->id)->where('status','1')->orderBy('id','desc')->count();
             Helper::removeBefore7daysData();
             if(!empty($notifications)){
-                return $this->sendSuccess('There are '.$count.' messages',['is_notify' => $request->user()->is_notify, 'notifications' => $notifications]);
+                return $this->sendSuccess('There are '.$count.' unseen  messages',['count'=> $count ,'is_notify' => $request->user()->is_notify, 'notifications' => $notifications]);
             }else{
-                return $this->sendSuccess('There are '.$count.' messages',['is_notify' => $request->user()->is_notify, 'notifications' => $notifications]);
+                return $this->sendSuccess('There are '.$count.' unseen messages',[ 'count'=> $count ,'is_notify' => $request->user()->is_notify, 'notifications' => $notifications]);
             }
         }catch(\Throwable $e){
             return $this->sendFailed($e->getMessage(). ' On Line '. $e->getLine(),200);
@@ -238,6 +238,24 @@ class VendorController extends Controller
         }catch(\Throwable $e){
             return $this->sendFailed($e->getMessage(). ' On Line '. $e->getLine(),200);
         }
+    }
+
+    public function seenNotification(Request $request){
+        try{
+            $notification = Notification::find($request->notification_id);
+            if(!empty($notification)){
+                if($notification->status == '1'){
+                    $notification->update(['status' => '0']);
+                    return $this->sendSuccess('Notification unseen successfully',$notification);
+                }else{
+                    return $this->sendSuccess('Notification is already seen',$notification);
+                }
+            }else{
+                return $this->sendFailed('selected id is invalid',200);
+            }
+        }catch(\Throwable $e){
+            return $this->sendFailed($e->getMessage(). ' On Line '. $e->getLine(),200);
+        } 
     }
 
 }

@@ -80,6 +80,7 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
     Route::post('remove_product_from_slab',[SlabController::class,'removeProductFromSlab']);
     Route::post('delete_slab',[SlabController::class,'deleteSlab']);
     Route::get('notify_on_off',[VendorController::class,'changeNotifyStatus']);
+    Route::post('seen_notification',[VendorController::class,'seenNotification']);
 });
 Route::post('customer_register_login_mobile',[CustomerController::class,'customerRegisterLoginMobile']);
 Route::post('vendor_register_login_mobile',[VendorController::class,'VendorRegisterLoginMobile']);

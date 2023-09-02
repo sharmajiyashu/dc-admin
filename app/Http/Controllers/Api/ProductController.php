@@ -280,7 +280,7 @@ class ProductController extends Controller
                                     $val['images'] = '';
                                 }
                             }
-                            $val['cart_count'] = Cart::where('product_id',$val['id'])->where('status','0')->count();
+                            $val['cart_count'] = Cart::where('user_id',$request->user()->id)->where('product_id',$val['id'])->where('status','0')->count();
                             
                         }
                         return $this->sendSuccess('PRODUCT FETCH SUCCESSFULLY', $products);
