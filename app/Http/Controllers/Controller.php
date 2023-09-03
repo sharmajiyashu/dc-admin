@@ -107,17 +107,33 @@ class Controller extends BaseController
         }
 
         // Get all image files from the source folder
-        $imageFiles = File::glob($sourceFolder . '*.{jpg,jpeg,png,gif}', GLOB_BRACE);
+        $imageFiles = File::glob($sourceFolder . '*.{jpg,jpeg,png,gif,bmp,webp,JPEG,PNG,JPG,GIF}', GLOB_BRACE);
 
+        $imgessss = [];
         foreach ($imageFiles as $imageFile) {
+            // Check if the file is a valid image
+            $imageInfo = getimagesize($imageFile);
+
+            if ($imageInfo === false) {
+                // Skip this file if it's not a valid image
+
+                $imgessss[] = $imageInfo;
+                continue;
+            }
+
+            // Get the original file name
+            $originalFileName = pathinfo($imageFile, PATHINFO_BASENAME);
+
             // Generate a unique name for the thumbnail
-            $thumbnailName = pathinfo($imageFile, PATHINFO_FILENAME) . '.jpg';
+            $thumbnailName = $originalFileName;
 
             // Open the image using Intervention Image
             $img = Image::make($imageFile);
 
-            // Resize and save the thumbnail
+            // Resize and save the thumbnail to targetFolder
             $img->fit(100, 100)->save($targetFolder . $thumbnailName);
+
+            // Resize and save another thumbnail to targetFolder2
             $img->fit(200, 200)->save($targetFolder2 . $thumbnailName);
         }
 

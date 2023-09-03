@@ -48,15 +48,15 @@ class ProductController extends Controller
                     $data['is_limited'] = '0';
                 }
 
-                if(!empty($request->id)){
+                if($request->id){
                     $type = 1;
-                    $check = Product::where('user_id',$request->user()->id)->where('id','!=',$request->id)->where('name',$data['name'])->count();
+                    $check = Product::where('user_id',auth()->user()->id)->whereNot('id',$request->id)->where('name',$data['name'])->exists();
                 }else{
-                    $check = Product::where('user_id',$request->user()->id)->where('name',$data['name'])->count();
+                    $check = Product::where('user_id',auth()->user()->id)->where('name',$data['name'])->exists();
                     $type = 0;
                 }
 
-                if($check > 0){
+                if($check){
                     return $this->sendFailed('The name has already been taken.',200);
                 }
 

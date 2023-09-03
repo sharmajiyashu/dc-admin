@@ -25,6 +25,10 @@ class CreateUpdateProductApi extends FormRequest
      */
     public function rules()
     {
+
+// dd($this->request);
+
+
         return [
             'name' => 'required',
             'category_id' => 'required|exists:categories,id',

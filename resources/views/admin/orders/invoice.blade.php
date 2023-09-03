@@ -119,7 +119,7 @@
                                             {{ $i }}
                                         </td>
                                         <td class="py-1">
-                                            <img src="{{ asset('public/images/products/'.$item->image) }}" alt="product Image" width="90" >
+                                            <img src="{{ asset('public/images/products/thumb1/'.$item->image) }}" alt="product Image" width="90" >
                                             
                                         </td>
                                         <td class="py-1">

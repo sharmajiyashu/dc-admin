@@ -127,7 +127,7 @@
                                                 <tr>
                                                     <td>{{ $i }}</td>
                                                     <td>
-                                                        <img src="{{ asset('public/images/products/'.$item->image) }}" alt="product Image" style=" width: 8%;">
+                                                        <img src="{{ asset('public/images/products/thumb2/'.$item->image) }}" alt="product Image" style=" width: 8%;">
                                                         {{ $item->product_name }}</td>
                                                     <td>{{ $item->p_mrp }}</td>
                                                     <td>{{ $item->p_price }}</td>
