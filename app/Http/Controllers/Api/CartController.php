@@ -59,7 +59,7 @@ class CartController extends Controller
                             $cart = WishCart::where('id',$last_cart_2->id)->update($cart_2);
                             $cart_id = $last_cart_2->id;
                         }
-                        return $this->sendSuccess('ADD PRODUCT IN WISHLIST SUCCESSFULLY');
+                        return $this->sendSuccess('Product is added successfully in the whishlist');
                     }
                 }
 
@@ -88,7 +88,7 @@ class CartController extends Controller
                     $cart = Cart::where('id',$last_cart->id)->update($cart);
                     $cart_id = $last_cart->id;
                 }
-                return $this->sendSuccess('ADD PRODUCT IN CART SUCCESSFULLY');
+                return $this->sendSuccess('Product is added successfully in the cart');
             }else{
                 return $this->sendFailed('you do not have any active store plese select an active store',200);
             }
@@ -133,7 +133,7 @@ class CartController extends Controller
 
     public function wishListItems(Request $request){
         if(!empty($request->user()->active_store_code)){
-            $with_cart = WishCart::where(['user_id'=>$request->user()->id,'store_code' => $request->user()->active_store_code,'status' => '1'] )->get();
+            $with_cart = WishCart::where(['user_id'=>$request->user()->id,'store_code' => $request->user()->active_store_code,'status' => '1'] )->orderBy('id','desc')->get();
             foreach($with_cart as $key=>$val){
                 $product = $this->getProductData($val->product_id);
                 $val->product_name = isset($product->name) ? $product->name :'';

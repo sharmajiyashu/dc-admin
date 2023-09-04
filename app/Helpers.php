@@ -235,10 +235,10 @@ class Helper {
 		$user = Helper::getUserDetail($user_id);
 		$vendor = Helper::getUserDetail($vendor_id); 
 		$device_id = isset($user->remember_token) ? $user->remember_token :'';
-		// $title = $vendor->name." added you Kindly enjoy the shooping ";
+		// $title = $vendor->name." added you Kindly enjoy the shopping ";
 		// $body = "Store Code : ".$vendor->store_code .', City : '.$vendor->city;
 		$title = "You have been added to ".$vendor->store_name.'!';
-		$body = "“".$vendor->name."” added you kindly enjoy the shooping";
+		$body = "“".$vendor->name."” added you kindly enjoy the shopping";
 		$image = asset('public/images/users/'.$vendor->store_image);
 		$notification = Notification::create(['user_id' => $user->id ,'title' => $title ,'body' => $body ,'image' => $image]);
 		if($user->is_notify == 1){
@@ -254,7 +254,7 @@ class Helper {
 		$device_id = isset($user->remember_token) ? $user->remember_token :'';
 		if($type == StoreLink::$active){
 			$title = 'Store '.$vendor->store_name.' have been activated!';
-			$body = "“".$vendor->name."” activate your account kindly enjoy the shooping";
+			$body = "“".$vendor->name."” activate your account kindly enjoy the shopping";
 		}else{
 			$title = 'Store '.$vendor->store_name.' have been deactivated!';
 			$body = "“".$vendor->name."” your account has been deactivated, kindly contact the store";

@@ -16,7 +16,9 @@ use App\Models\Product;
 use App\Models\User;
 use App\Models\Vendor;
 use App\Traits\ApiResponse;
+use Doctrine\Common\Lexer\Token;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Intervention\Image\ImageManagerStatic as Image;
 
@@ -188,6 +190,15 @@ class CustomerController extends Controller
             }else{
                 return $this->sendFailed('you do not have any active store plese select an active store',200);
             }
+        }catch(\Throwable $e){
+            return $this->sendFailed($e->getMessage(). ' On Line '. $e->getLine(),200);
+        }
+    }
+
+    public function deleteAccount(){
+        try{
+            User::where('id',auth()->user()->id)->delete();
+            return $this->sendSuccess('USER DELETE SUCCESSFULLY',);
         }catch(\Throwable $e){
             return $this->sendFailed($e->getMessage(). ' On Line '. $e->getLine(),200);
         }
