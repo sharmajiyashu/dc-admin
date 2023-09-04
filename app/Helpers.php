@@ -291,50 +291,119 @@ class Helper {
 		return $categories;
 	}
 
-	public static function getCustomerArrivalsProducts($user_id){
-		$user = Customer::find($user_id);
-		$vendor = Vendor::where('store_code',$user->active_store_code)->first();
-                $i = 0;
-                $StoreLink = StoreLink::where('user_id',$user->id)->where('vendor_id',$vendor->id)->first();
-                if(!empty($StoreLink)){
-                    if($StoreLink->status == StoreLink::$active){
-                        $products = [];
-                        $slab_link = SlabLink::where(['user_id' => $vendor->id, 'slab_id' => $StoreLink->slab_id])->get();
-                        foreach($slab_link as $key => $val){
-                            $check_slab = Slab::where('id',$val->slab_id)->first();
-                            if($check_slab->status == Slab::$active){
-                                if($i < 10){
-                                    $product = Product::where('id',$val->product_id)->where(['user_id'=>$vendor->id,'status'=>'Active'])->where('is_admin','=','0')->where('is_delete','!=','1')->orderBy('id','DESC')->first();
-									if(!empty($product)){
-                                        $products[] = $product;    
-                                        $i++;
-                                    }
-                                }
+	// public static function getCustomerArrivalsProducts($user_id){
+	// 	$user = Customer::find($user_id);
+	// 	$vendor = Vendor::where('store_code',$user->active_store_code)->first();
+    //             $i = 0;
+    //             $StoreLink = StoreLink::where('user_id',$user->id)->where('vendor_id',$vendor->id)->first();
+    //             if(!empty($StoreLink)){
+    //                 if($StoreLink->status == StoreLink::$active){
+    //                     $products = [];
+    //                     $slab_link = SlabLink::where(['user_id' => $vendor->id, 'slab_id' => $StoreLink->slab_id])->get();
+    //                     foreach($slab_link as $key => $val){
+    //                         $check_slab = Slab::where('id',$val->slab_id)->first();
+    //                         if($check_slab->status == Slab::$active){
+    //                             if($i < 10){
+    //                                 $product = Product::where('id',$val->product_id)->where(['user_id'=>$vendor->id,'status'=>'Active'])->where('is_admin','=','0')->where('is_delete','!=','1')->orderBy('id','DESC')->first();
+	// 								if(!empty($product)){
+    //                                     $products[] = $product;    
+    //                                     $i++;
+    //                                 }
+    //                             }
                                 
-                            }
-                        }
-                        foreach($products as $key=>$val){
-                            $images = json_decode($val['images']);
-                            if(!empty($images)){
-                                $img = [];
-                                foreach($images as $k){
-                                    $img[] = asset('public/images/products/thumb2/'.$k);
-                                }
-                                $val['images'] = $img;
-                            }else{
-                                $val['images'] = '';
-                            }
-							$val['cart_count'] = Cart::where('product_id',$val['id'])->where('status','0')->count();
-                        }
+    //                         }
+    //                     }
+    //                     foreach($products as $key=>$val){
+    //                         $images = json_decode($val['images']);
+    //                         if(!empty($images)){
+    //                             $img = [];
+    //                             foreach($images as $k){
+    //                                 $img[] = asset('public/images/products/thumb2/'.$k);
+    //                             }
+    //                             $val['images'] = $img;
+    //                         }else{
+    //                             $val['images'] = '';
+    //                         }
+	// 						$val['cart_count'] = Cart::where('product_id',$val['id'])->where('status','0')->count();
+    //                     }
 						
-						return $products;
-                    }else{
-                        Customer::where('id',$user->id)->update(['active_store_code' => '']);
-						return [];
-                    }
-                }else{
-					return [];
-                }
+	// 					return $products;
+    //                 }else{
+    //                     Customer::where('id',$user->id)->update(['active_store_code' => '']);
+	// 					return [];
+    //                 }
+    //             }else{
+	// 				return [];
+    //             }
+	// }
+
+	public static function getCustomerArrivalsProducts($user_id){
+		// Retrieve the customer and their active store code
+		$user = Customer::with('activeStore.vendor')
+			->find($user_id);
+
+		if (!$user) {
+			return [];
+		}
+
+		// Check if the user has an active store link
+		$storeLink = $user->activeStore;
+
+		$slab_id = isset($storeLink->slab_id) ? $storeLink->slab_id :'';
+		
+		// echo $slab_id;die;
+
+		if (!$storeLink || $storeLink->status !== StoreLink::$active) {
+			Customer::where('id', $user->id)->update(['active_store_code' => '']);
+			return [];
+		}
+
+		// echo $user->activeStore->vendor->id;die;
+
+
+		// Retrieve the products related to the active store's slab
+		$products = Product::where('user_id', $user->activeStore->vendor->id)
+			->where('status', 'Active')
+			->where('is_admin', '0')
+			->latest()
+			->get()->map(function ($product) use($slab_id){
+				$product->images = self::transformImages($product->images);
+				$slab_check = SlabLink::where(['product_id' => $product->id ,'user_id' => $product->user_id,'slab_id' => $slab_id])->exists();
+				$slab_data = Slab::find($slab_id);
+				if($slab_check && $slab_data->status == Slab::$active){
+					return $product ? $product :'';
+				}
+			})->filter()->take(10);
+
+		return $products;
+	}
+
+
+	public static function transformImages($images){
+		$imageUrls = [];
+		$images = json_decode($images, true);
+		if(!empty($images)){
+			foreach ($images as $image) {
+				$imageUrls[] = asset('public/images/products/thumb2/' . $image);
+			}
+		}
+		return $imageUrls;
+	}
+
+	public static function getSlabNames($productId, $userId)
+	{
+		return SlabLink::where(['user_id' => $userId, 'product_id' => $productId])
+			->get()
+			->map(function ($slabLink) {
+				$slab = Slab::find($slabLink->slab_id);
+				return $slab ? $slab->name : '';
+			});
+	}
+
+	public static function getCategoryTitle($categoryId)
+	{
+		$category = Category::find($categoryId);
+		return $category ? $category->title : '';
 	}
 
 }

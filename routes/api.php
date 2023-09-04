@@ -33,7 +33,7 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
     Route::post('vendors_update_details',[VendorController::class,'VendorsUpdateDetail']);
     Route::post('create_update_product',[ProductController::class,'CreateUpdateProduct']);
     Route::post('delete_product',[ProductController::class,'DeleteProduct']);
-    Route::post('get_vendor_products',[ProductController::class,'GetVendorProducts']);
+    Route::get('get_vendor_products',[ProductController::class,'GetVendorProducts']);
     Route::post('get_admin_products',[ProductController::class,'GetAdminProducts']);
     Route::post('get_all_categories',[ProductController::class,'GetAllCategories']);
     Route::post('add_product_in_cart',[CartController::class,'AddProductInCart']);
@@ -42,7 +42,7 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
     Route::post('remove_cart_item',[CartController::class,'RemoveCartItem']);
     Route::post('decrement_cart_quantity',[CartController::class,'DecrementCartQuantity']);
     Route::post('create_order',[OrderController::class,'CreateOrder']);
-    Route::post('get_products',[ProductController::class,'GetProduct']);
+    Route::get('get_products',[ProductController::class,'GetProduct']);
     Route::post('new_arrival_products',[ProductController::class,'NewArrivalProducts']);
     Route::post('customer_order_history',[OrderController::class,'CustomerOrderHistory']);
     Route::post('customer_order_detail',[OrderController::class,'CustomerOrderDetail']);

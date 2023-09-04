@@ -20,6 +20,12 @@ class Customer extends Authenticatable
     function index(){
         Customer::create(['role_id',Role::$customer]);
     }
+
+    public function activeStore()
+    {
+        return $this->hasOne(StoreLink::class, 'user_id')
+            ->where('status', StoreLink::$active);
+    }
     
 
 

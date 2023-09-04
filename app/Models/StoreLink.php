@@ -14,5 +14,10 @@ class StoreLink extends Model
     static $active = '1';
     static $inactive = '2';
 
+    public function vendor()
+    {
+        return $this->belongsTo(Vendor::class, 'vendor_id');
+    }
+
     
 }

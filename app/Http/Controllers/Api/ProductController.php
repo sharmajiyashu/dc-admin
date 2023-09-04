@@ -20,6 +20,7 @@ use App\Models\StoreLink;
 use App\Models\Vendor;
 use App\Traits\ApiResponse;
 use GuzzleHttp\Handler\Proxy;
+use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Facades\Redis;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\File;
@@ -188,7 +189,7 @@ class ProductController extends Controller
 
     public function DeleteProduct(Request $request){
         try{
-            Product::where('id',$request->product_id)->update(['is_delete' => '1']);
+            Product::where('id',$request->product_id)->delete();
             return $this->sendSuccess('PRODUCT DELETE SUCCESSFULLY','');
         }catch(\Throwable $e){
             return $this->sendFailed($e->getMessage(). ' On Line '. $e->getLine(),200);
@@ -198,22 +199,17 @@ class ProductController extends Controller
     public function GetVendorProducts(GetVendorProductsApi $request){
         try{
             if($request->user()->role_id == Role::$vendor){
-                $products = Product::where('user_id',$request->user()->id)->where('is_delete','=','0')->orderBy('id','DESC')->get();
+
+                $page = $request->input('page',1);
+                $products = Product::where('user_id', $request->user()->id)
+                    ->where('is_delete', '=', '0')
+                    ->orderBy('id', 'DESC')
+                    ->paginate(10, ['*'], 'page',$page);
+
                 foreach($products as $key=>$val){
-                    $images = json_decode($val['images']);
-                    $img = [];
-                    if(!empty($images)){
-                        foreach($images as $k){
-                            $img[] = asset('public/images/products/thumb2/'.$k);
-                        }
-                    }
-                    $slabs = SlabLink::where(['user_id' => $request->user()->id ,'product_id' => $val->id])->get()->map(function($slabs){
-                        $slabs->slab_name = isset(Slab::where('id',$slabs->slab_id)->first()->name) ? Slab::where('id',$slabs->slab_id)->first()->name :'';
-                        return $slabs->slab_name;
-                    });
-                    $val['slabs'] = $slabs;
-                    $val['images'] = $img;
-                    $val['category_name'] = isset($this->GetCategoryDetail($val->category_id)->title) ? $this->GetCategoryDetail($val->category_id)->title : '';
+                    $val['images'] = Helper::transformImages($val['images']);
+                    $val['slabs'] = Helper::getSlabNames($val->id, $val['user_id']);
+                    $val['category_name'] = Helper::getCategoryTitle($val->category_id);
                 }
                 return $this->sendSuccess('PRODUCT FETCH SUCCESSFULLY', $products);
             }else{
@@ -266,51 +262,64 @@ class ProductController extends Controller
         }
     }
 
-    public function GetProduct(CreateOrderApi $request){
+    public function GetProduct(Request $request){
         try{
-            if(!empty($request->user()->active_store_code)){
-                $vendor = Vendor::where('store_code',$request->user()->active_store_code)->first();
-                $StoreLink = StoreLink::where('user_id',$request->user()->id)->where('vendor_id',$vendor->id)->first();
-                if(!empty($StoreLink)){
-                    if($StoreLink->status == StoreLink::$active){
-                        $products = [];
-                        $slab_link = SlabLink::where(['user_id' => $vendor->id, 'slab_id' => $StoreLink->slab_id])->get();
-                        foreach($slab_link as $key => $val){
-                            $check_slab = Slab::where('id',$val->slab_id)->first();
-                            if($check_slab->status == Slab::$active){
-                                 $product = Product::where('id',$val->product_id)->where(['user_id'=>$vendor->id,'status'=>'Active'])->where('is_admin','=','0')->where('is_delete','!=','1')->orderBy('id','DESC')->first();
-                                if(!empty($product)){
-                                    $products[] = $product;    
-                                }
-                            }
-                        }
-                        foreach($products as $key=>$val){
-                            if(!empty($val['images'])){
-                                $images = json_decode($val['images']);
-                                if(!empty($images)){
-                                    $img = [];
-                                    foreach($images as $k){
-                                        $img[] = asset('public/images/products/thumb2/'.$k);
-                                    }
-                                    $val['images'] = $img;
-                                }else{
-                                    $val['images'] = '';
-                                }
-                            }
-                            $val['cart_count'] = Cart::where('user_id',$request->user()->id)->where('product_id',$val['id'])->where('status','0')->count();
-                            
-                        }
-                        return $this->sendSuccess('PRODUCT FETCH SUCCESSFULLY', $products);
-                    }else{
-                        Customer::where('id',$request->user()->id)->update(['active_store_code' => '']);
-                        return $this->sendSuccess('PRODUCT FETCH SUCCESSFULLY', []);
-                    }
-                }else{
-                    return $this->sendSuccess('PRODUCT FETCH SUCCESSFULLY', []);
-                }
-            }else{
-                return $this->sendFailed('you do not have any active store plese select an active store',200);
+            $user_id = auth()->user()->id;
+            $user = Customer::with('activeStore.vendor')
+			->find($user_id);
+
+            if (!$user) {
+                return $this->sendSuccess('PRODUCT FETCH SUCCESSFULLY', []);
             }
+
+            // Check if the user has an active store link
+            $storeLink = $user->activeStore;
+
+            $slab_id = isset($storeLink->slab_id) ? $storeLink->slab_id :'';
+
+            if (!$storeLink || $storeLink->status !== StoreLink::$active) {
+                Customer::where('id', $user->id)->update(['active_store_code' => '']);
+                return $this->sendSuccess('PRODUCT FETCH SUCCESSFULLY', []);
+            }
+
+            // Retrieve the products related to the active store's slab
+            $products = Product::where('user_id', $user->activeStore->vendor->id)
+                ->where('status', 'Active')
+                ->where('is_admin', '0')
+                ->latest()
+                ->get()->map(function ($product) use($slab_id){
+                    $product->images = Helper::transformImages($product->images);
+                    $slab_check = SlabLink::where(['product_id' => $product->id ,'user_id' => $product->user_id,'slab_id' => $slab_id])->exists();
+                    $slab_data = Slab::find($slab_id);
+                    if($slab_check && $slab_data->status == Slab::$active){
+                        return $product ? $product :'';
+                    }
+                })->filter();
+
+                $perPage = 10;
+                $page = $request->input('page',1);
+                $products = new LengthAwarePaginator(
+                    $products->forPage($page, $perPage),
+                    $products->count(),
+                    $perPage,
+                    $page,
+                    ['path' => request()->url()]
+                );
+
+                $responseData = [
+                    'current_page' => $products->currentPage(),
+                    'data' => $products->values(),
+                    'first_page_url' => $products->url(1),
+                    'last_page' => $products->lastPage(),
+                    'last_page_url' => $products->url($products->lastPage()),
+                    'links' => [
+                        'prev_page_url' => $products->previousPageUrl(),
+                        'next_page_url' => $products->nextPageUrl(),
+                    ],
+                    'per_page' => $products->perPage(),
+                    'total' => $products->total(),
+                ];
+            return $this->sendSuccess('PRODUCT FETCH SUCCESSFULLY', $responseData);
         }catch(\Throwable $e){
             // \Log::error($e->getMessage(). ' On Line '. $e->getLine());
             return $this->sendFailed($e->getMessage(). ' On Line '. $e->getLine(),200);
