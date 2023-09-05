@@ -107,3 +107,5 @@ Route::get('order-history/{id}',[OrderController::class,'OrderHistory'])->name('
 Route::get('order-invoice/{id}',[OrderController::class,'OrderInvoice'])->name('order-invoice');
 
 Route::get('create_thumbnil_image',[Controller::class,'createthumbnil']);
+
+Route::get('test-pagenation',[Controller::class,'test_pagination']);

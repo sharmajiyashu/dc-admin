@@ -140,4 +140,13 @@ class Controller extends BaseController
         return 'Thumbnails created and moved to the target folder.';
     }
 
+    function test_pagination(Request $request){
+        $page = $request->input('page',1);
+        $categories = Category::paginate(10, ['*'], 'page',$page);
+
+        // echo "<pre>";
+        // echo json_encode($categories);die;
+        return view('admin.pagination.index',compact('categories'));
+    }
+
 }
