@@ -51,9 +51,9 @@ class ProductController extends Controller
 
                 if($request->id){
                     $type = 1;
-                    $check = Product::where('user_id',auth()->user()->id)->whereNot('id',$request->id)->where('name',$data['name'])->exists();
+                    $check = Product::where('user_id',auth()->user()->id)->whereNot('is_admin','1')->where('is_delete','0')->whereNot('id',$request->id)->where('name',$data['name'])->exists();
                 }else{
-                    $check = Product::where('user_id',auth()->user()->id)->where('name',$data['name'])->exists();
+                    $check = Product::where('user_id',auth()->user()->id)->where('is_delete','0')->where('name',$data['name'])->exists();
                     $type = 0;
                 }
 
@@ -144,6 +144,8 @@ class ProductController extends Controller
                     if(!empty($images)){
                         $data['images'] = json_encode($images);
                     }
+
+                
                     
                 if(!empty($request->fetch_product_id)){
                     $fetch_prod = Product::where('id',$request->fetch_product_id)->first();
@@ -151,7 +153,7 @@ class ProductController extends Controller
                     $data['category_id'] = isset($category_admin_user->id) ? $category_admin_user->id :'';
                     $type = 0;
                 }
-                $product = Product::updateOrCreate(['id' => $request->id],$data);
+                $product = Product::updateOrCreate(['id' => $request->id ,'user_id' => $request->user()->id],$data);
                 $images = json_decode($product->images);
                 if(!empty($images)){
                     foreach($images as $k){
@@ -246,11 +248,14 @@ class ProductController extends Controller
             if($request->user()->role_id == Role::$customer){
                 $categories = Helper::getCustomerCategories($request->user()->id);
             }elseif($request->user()->role_id == Role::$vendor){
-                $categories = Category::where('is_delete','!=','1')->where(['user_id' => $request->user()->id ,'is_admin' => '0'])->get()->map(function($category){
+                $categories = Category::where('is_delete','!=','1')->where(['user_id' => $request->user()->id ,'is_admin' => '0'])->orderBy('title','asc')->get()->map(function($category){
                     $category->total_product = Product::where('category_id',$category->id)->count();
                     $category->image = asset('public/images/categories/'.$category->image);
-                    return $category;
-                });
+                    $check_Category = Category::find($category->admin_id);
+                    if($check_Category->status == Category::$active){
+                        return $category;
+                    }
+                })->filter()->values();
             }
             if(!empty($categories)){
                 return $this->sendSuccess('CATEGORIES FETCH SUCCESSFULLY', $categories);
@@ -341,17 +346,23 @@ class ProductController extends Controller
 
     public function GetProductByName(Request $request){
         try{
-            $products = Product::where(['is_admin' => '1' ,'status' => 'Active' ,'is_delete' => '0'])->where('products.name',$request->name)->orderBy('products.id','DESC')->first();
-            if(!empty($products)){
-                $images = json_decode($products->images);
-                if(!empty($images)){
-                    foreach($images as $k){
-                        $img[] = asset('public/images/products/'.$k);
-                    }
+
+            $product = Product::where(['user_id' => auth()->user()->id ,'is_delete' => '0' ,'name' => $request->name ])->first();
+            if(!$product){
+                $product = Product::where(['is_admin' => '1' ,'status' => 'Active' ,'is_delete' => '0'])->where('products.name',$request->name)->orderBy('products.id','DESC')->first();
+                $admin_cat = Category::where('id',$product->category_id)->first();
+                if($admin_cat->ctatus != Category::$active){
+                    return $this->sendFailed('PRODUCT NOT FOUND',200);
                 }
-                $products->images = isset($img) ? $img :'';
-                $products->category_name = isset($this->GetCategoryDetail($products->category_id)->title) ? $this->GetCategoryDetail($products->category_id)->title :'';
-                return $this->sendSuccess('PRODUCT FETCH SUCCESSFULLY', $products);
+                $vendor_category = Category::where('admin_id',$product->category_id)->where('user_id',auth()->user()->id)->first();
+                $product->category_id = isset($vendor_category->id) ? $vendor_category->id :'';
+                $product->sp = '';
+                $product->packing_quantity = isset($vendor_category->packing_quantity) ? $vendor_category->packing_quantity :'';
+            }
+            if(!empty($product)){
+                $product->images = Helper::transformImages($product->images);
+                $product->category_name = isset($this->GetCategoryDetail($product->category_id)->title) ? $this->GetCategoryDetail($product->category_id)->title :'';
+                return $this->sendSuccess('PRODUCT FETCH SUCCESSFULLY', $product);
             }else{
                 return $this->sendFailed('PRODUCT NOT FOUND',200);
             }
@@ -494,7 +505,8 @@ class ProductController extends Controller
             
             // $products = Product::select('product.*')->join('')
 
-            $products = SlabLink::select('products.*')->join('products','products.id','=','slab_links.product_id')->where(['slab_links.user_id' => $request->user()->id ,'slab_links.slab_id' => $request->slab_id])->get();
+            $products = SlabLink::select('products.*')->join('products','products.id','=','slab_links.product_id')
+            ->where(['slab_links.user_id' => $request->user()->id ,'slab_links.slab_id' => $request->slab_id,'products.status' => Product::$active ,'products.is_delete' => '0'])->get();
             foreach($products as $key=>$val){
                 $images = json_decode($val['images']);
                 if(!empty($images)){
