@@ -440,6 +440,7 @@ class ProductController extends Controller
                         $data['images'] = json_encode($images);
                     }
                 }
+                
 
                 if(!empty($val['id'])) {
                     $product = Product::where('is_admin','!=','1')->find($val['id']); // Retrieve the existing record
@@ -456,6 +457,26 @@ class ProductController extends Controller
                             SlabLink::create(['user_id' => $request->user()->id ,'product_id'=>$product->id ,'slab_id' => $get_default_slab]);
                         }
                         $total_update ++;
+                    }else{
+                        $product = Product::where('is_admin','1')->find($val['id']); // Retrieve the existing record
+                        if(!empty($product)){
+                            if(!empty($imageName)){
+                                $images = json_decode($product->images);
+                                $images[] = $imageName;
+                                $data['images'] = json_encode($images);
+                            }else{
+                                $data['images'] = $product->images;
+                            }
+                            $category_admin_user = Category::where('admin_id',$product->category_id)->where('user_id',$request->user()->id)->first();
+                            $data['category_id'] = isset($category_admin_user->id) ? $category_admin_user->id :'';
+                                        $product = Product::create($data);
+                                        $check = SlabLink::where(['user_id' => $request->user()->id ,'product_id'=>$product->id])->count();
+                                        if($check == 0){
+                                            $get_default_slab = Helper::getDefaultSlab();
+                                            SlabLink::create(['user_id' => $request->user()->id ,'product_id'=>$product->id ,'slab_id' => $get_default_slab]);
+                                        }
+                            $total_create ++;
+                        }
                     }
                 }elseif(!empty($val['fetch_product_id'])){
                     $product = Product::where('is_admin','1')->find($val['fetch_product_id']); // Retrieve the existing record
