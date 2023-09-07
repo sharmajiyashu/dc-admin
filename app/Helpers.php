@@ -329,9 +329,12 @@ class Helper {
 		$products = Product::where('user_id', $user->activeStore->vendor->id)
 			->where('status', 'Active')
 			->where('is_admin', '0')
+			->whereNot('is_delete','1')
 			->latest()
 			->get()->map(function ($product) use($slab_id){
-				$product->images = self::transformImages($product->images);
+				$image = $product->images;
+				$product->images = self::transformImages($image);
+				$product->original_images = Helper::transformOrignilImages($image);
 				$slab_check = SlabLink::where(['product_id' => $product->id ,'user_id' => $product->user_id,'slab_id' => $slab_id])->exists();
 				$slab_data = Slab::find($slab_id);
 				if($slab_check && $slab_data->status == Slab::$active){
@@ -349,6 +352,23 @@ class Helper {
 		if(!empty($images)){
 			foreach ($images as $image) {
 				$imageUrls[] = asset('public/images/products/thumb2/' . $image);
+			}
+		}else{
+			return '';
+		}
+		return $imageUrls;
+	}
+
+	public static function transformOrignilImages($images){
+		$imageUrls = [];
+		if(empty($images)){
+			$images = "";
+		}else{
+			$images = json_decode($images, true);
+		}
+		if(!empty($images)){
+			foreach ($images as $image) {
+				$imageUrls[] = asset('public/images/products/' . $image);
 			}
 		}else{
 			return '';

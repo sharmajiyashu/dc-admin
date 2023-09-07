@@ -209,7 +209,9 @@ class ProductController extends Controller
                     ->paginate(10, ['*'], 'page',$page);
 
                 foreach($products as $key=>$val){
-                    $val['images'] = Helper::transformImages($val['images']);
+                    $image = $val['images'];
+                    $val['images'] = Helper::transformImages($image);
+                    $val['original_images'] = Helper::transformOrignilImages($image);
                     $val['slabs'] = Helper::getSlabNames($val->id, $val['user_id']);
                     $val['category_name'] = Helper::getCategoryTitle($val->category_id);
                 }
@@ -290,10 +292,13 @@ class ProductController extends Controller
             // Retrieve the products related to the active store's slab
             $products = Product::where('user_id', $user->activeStore->vendor->id)
                 ->where('status', 'Active')
+                ->whereNot('is_delete','1')
                 ->where('is_admin', '0')
                 ->latest()
                 ->get()->map(function ($product) use($slab_id){
-                    $product->images = Helper::transformImages($product->images);
+                    $image = $product->images;
+                    $product->images = Helper::transformImages($image);
+                    $product->original_images = Helper::transformOrignilImages($image);
                     $slab_check = SlabLink::where(['product_id' => $product->id ,'user_id' => $product->user_id,'slab_id' => $slab_id])->exists();
                     $slab_data = Slab::find($slab_id);
                     if($slab_check && $slab_data->status == Slab::$active){
