@@ -271,29 +271,22 @@ class ProductController extends Controller
 
     public function GetProduct(Request $request){
         try{
-            $user_id = auth()->user()->id;
-            $user = Customer::with('activeStore.vendor')
-			->find($user_id);
-
-            if (!$user) {
-                return $this->sendSuccess('PRODUCT FETCH SUCCESSFULLY', []);
-            }
-
-            // Check if the user has an active store link
-            $storeLink = $user->activeStore;
-
+            $user_id = $request->user()->id;
+            $user = $request->user();
+            $active_store = $request->user()->active_store_code;
+            $storeLink = StoreLink::where('user_id',$user_id)->where('store_code',$active_store)->first();
             $slab_id = isset($storeLink->slab_id) ? $storeLink->slab_id :'';
 
             if (!$storeLink || $storeLink->status !== StoreLink::$active) {
                 Customer::where('id', $user->id)->update(['active_store_code' => '']);
                 return $this->sendSuccess('PRODUCT FETCH SUCCESSFULLY', []);
             }
-
+            
             // Retrieve the products related to the active store's slab
-            $products = Product::where('user_id', $user->activeStore->vendor->id)
+            $products = Product::where('user_id',$storeLink->vendor_id)
                 ->where('status', 'Active')
-                ->whereNot('is_delete','1')
                 ->where('is_admin', '0')
+                ->whereNot('is_delete','1')
                 ->latest()
                 ->get()->map(function ($product) use($slab_id){
                     $image = $product->images;
@@ -304,7 +297,7 @@ class ProductController extends Controller
                     if($slab_check && $slab_data->status == Slab::$active){
                         return $product ? $product :'';
                     }
-                })->filter();
+                })->filter()->values();
 
                 $perPage = 10;
                 $page = $request->input('page',1);

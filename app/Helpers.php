@@ -302,17 +302,13 @@ class Helper {
 	
 
 	public static function getCustomerArrivalsProducts($user_id){
-		// Retrieve the customer and their active store code
-		$user = Customer::with('activeStore.vendor')
-			->find($user_id);
-
+		$user = User::find($user_id);
+        $active_store = $user->active_store_code;
+        $storeLink = StoreLink::where('user_id',$user_id)->where('store_code',$active_store)->first();
 		if (!$user) {
 			return [];
 		}
-
-		// Check if the user has an active store link
-		$storeLink = $user->activeStore;
-
+		
 		$slab_id = isset($storeLink->slab_id) ? $storeLink->slab_id :'';
 		
 		// echo $slab_id;die;
@@ -322,11 +318,8 @@ class Helper {
 			return [];
 		}
 
-		// echo $user->activeStore->vendor->id;die;
-
-
 		// Retrieve the products related to the active store's slab
-		$products = Product::where('user_id', $user->activeStore->vendor->id)
+		$products = Product::where('user_id', $storeLink->vendor_id)
 			->where('status', 'Active')
 			->where('is_admin', '0')
 			->whereNot('is_delete','1')
@@ -340,7 +333,7 @@ class Helper {
 				if($slab_check && $slab_data->status == Slab::$active){
 					return $product ? $product :'';
 				}
-			})->filter()->take(10);
+			})->filter()->values()->take(10);
 
 		return $products;
 	}
