@@ -131,10 +131,10 @@ class Controller extends BaseController
             $img = Image::make($imageFile);
 
             // Resize and save the thumbnail to targetFolder
-            $img->fit(100, 100)->save($targetFolder . $thumbnailName);
+            $img->fit(300, 300)->save($targetFolder . $thumbnailName);
 
             // Resize and save another thumbnail to targetFolder2
-            $img->fit(200, 200)->save($targetFolder2 . $thumbnailName);
+            $img->fit(400, 400)->save($targetFolder2 . $thumbnailName);
         }
 
         return 'Thumbnails created and moved to the target folder.';

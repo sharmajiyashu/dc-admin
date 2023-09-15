@@ -21,6 +21,7 @@ use App\Models\Vendor;
 use App\Traits\ApiResponse;
 use GuzzleHttp\Handler\Proxy;
 use Illuminate\Pagination\LengthAwarePaginator;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Redis;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\File;
@@ -85,9 +86,9 @@ class ProductController extends Controller
                         $image_name = time().rand(1,100).'-'.$request->image_1->getClientOriginalName();
                         $image_name = preg_replace('/\s+/', '', $image_name);
                         $request->image_1->move(public_path('images/products'), $image_name);
-                        $thumbnail = Image::make(public_path('images/products') . '/' . $image_name)->fit(100, 100);
+                        $thumbnail = Image::make(public_path('images/products') . '/' . $image_name)->fit(300, 300);
                         $thumbnail->save(public_path('images/products/thumb1') . '/' . $image_name);
-                        $thumbnail_1 = Image::make(public_path('images/products') . '/' . $image_name)->fit(200, 200);
+                        $thumbnail_1 = Image::make(public_path('images/products') . '/' . $image_name)->fit(400, 400);
                         $thumbnail_1->save(public_path('images/products/thumb2') . '/' . $image_name);
                         if(isset($images[0])){
                             $images[0] = $image_name;
@@ -100,9 +101,9 @@ class ProductController extends Controller
                         $image_name = time().rand(1,100).'-'.$request->image_2->getClientOriginalName();
                         $image_name = preg_replace('/\s+/', '', $image_name);
                         $request->image_2->move(public_path('images/products'), $image_name);
-                        $thumbnail = Image::make(public_path('images/products') . '/' . $image_name)->fit(100, 100);
+                        $thumbnail = Image::make(public_path('images/products') . '/' . $image_name)->fit(300, 300);
                         $thumbnail->save(public_path('images/products/thumb1') . '/' . $image_name);
-                        $thumbnail_1 = Image::make(public_path('images/products') . '/' . $image_name)->fit(200, 200);
+                        $thumbnail_1 = Image::make(public_path('images/products') . '/' . $image_name)->fit(400, 400);
                         $thumbnail_1->save(public_path('images/products/thumb2') . '/' . $image_name);
                         if(isset($images[1])){
                             $images[1] = $image_name;
@@ -115,9 +116,9 @@ class ProductController extends Controller
                         $image_name = time().rand(1,100).'-'.$request->image_3->getClientOriginalName();
                         $image_name = preg_replace('/\s+/', '', $image_name);
                         $request->image_3->move(public_path('images/products'), $image_name);
-                        $thumbnail = Image::make(public_path('images/products') . '/' . $image_name)->fit(100, 100);
+                        $thumbnail = Image::make(public_path('images/products') . '/' . $image_name)->fit(300, 300);
                         $thumbnail->save(public_path('images/products/thumb1') . '/' . $image_name);
-                        $thumbnail_1 = Image::make(public_path('images/products') . '/' . $image_name)->fit(200, 200);
+                        $thumbnail_1 = Image::make(public_path('images/products') . '/' . $image_name)->fit(400, 400);
                         $thumbnail_1->save(public_path('images/products/thumb2') . '/' . $image_name);
                         if(isset($images[2])){
                             $images[2] = $image_name;
@@ -130,9 +131,9 @@ class ProductController extends Controller
                         $image_name = time().rand(1,100).'-'.$request->image_4->getClientOriginalName();
                         $image_name = preg_replace('/\s+/', '', $image_name);
                         $request->image_4->move(public_path('images/products'), $image_name);
-                        $thumbnail = Image::make(public_path('images/products') . '/' . $image_name)->fit(100, 100);
+                        $thumbnail = Image::make(public_path('images/products') . '/' . $image_name)->fit(300, 300);
                         $thumbnail->save(public_path('images/products/thumb1') . '/' . $image_name);
-                        $thumbnail_1 = Image::make(public_path('images/products') . '/' . $image_name)->fit(200, 200);
+                        $thumbnail_1 = Image::make(public_path('images/products') . '/' . $image_name)->fit(400, 400);
                         $thumbnail_1->save(public_path('images/products/thumb2') . '/' . $image_name);
                         if(isset($images[3])){
                             $images[3] = $image_name;
@@ -191,9 +192,15 @@ class ProductController extends Controller
 
     public function DeleteProduct(Request $request){
         try{
-            Product::where('id',$request->product_id)->delete();
+            DB::beginTransaction();
+            if($request->product_id){
+                $id = json_decode($request->product_id);
+                Product::whereIn('id',$id)->delete();
+            }
+            DB::commit();
             return $this->sendSuccess('PRODUCT DELETE SUCCESSFULLY','');
         }catch(\Throwable $e){
+            DB::rollBack();
             return $this->sendFailed($e->getMessage(). ' On Line '. $e->getLine(),200);
         }
     }

@@ -32,7 +32,7 @@ class StoreLinkController extends Controller
                 $title = 'Kapil Jangid Sent You request to join';
                 $body = '';
                 $image = "";
-                Helper::SendNotification($device_id,$title,$body,$image);
+                // Helper::SendNotification($device_id,$title,$body,$image);
                 return $this->sendSuccess('SENT REQUEST SUCCESS SUCCESSFULLY', $store);
             }
         }catch(\Throwable $e){
@@ -58,10 +58,22 @@ class StoreLinkController extends Controller
         try{
             $stores = StoreLink::where('user_id',$request->user()->id)->orderBy('id','DESC')->get();
             foreach($stores as $key=>$val){
-                $vendor = $this->GetVendorDetail($val->vendor_id);
-                $val->store_name = isset($vendor->store_name) ? $vendor->store_name :'';
-                $val->store_image = isset($vendor->store_image) ? $vendor->store_image :'';
-                $val->vendor_name = isset($vendor->name) ? $vendor->name :'';
+                $vendor = $this->GetVendorDetail($val->user_id);
+                $slab = Slab::where('id',$val->slab_id)->first();
+                $val->customer_name = isset($vendor->name)  ? $vendor->name :'';
+                $val->customer_mobile = isset($vendor->mobile)  ? $vendor->mobile :'';
+                $val->customer_city = isset($vendor->city)  ? $vendor->city :'';
+                $val->slab_name = isset($slab->name) ? $slab->name :'';
+                if(!empty($vendor)){
+                    if($vendor->is_register != '1'){
+                        unset($stores[$key]);
+                    }else{
+                        $results[] = $val;
+                    }    
+                }else{
+                    unset($stores[$key]);
+                }
+                
             }
             return $this->sendSuccess('STORES DATA FETCH SUCCESSFULLY',$stores);
         }catch(\Throwable $e){
@@ -70,9 +82,13 @@ class StoreLinkController extends Controller
     }
 
     public function GetVendorDetail($id){
-        $vendor = Vendor::where('id',$id)->first();
-        $vendor->store_image = asset('public/images/users/'.$vendor->image);
-        return $vendor;
+        $vendor = Vendor::find($id);
+        if(!empty($vendor)){
+            $vendor->store_image = asset('public/images/users/'.$vendor->image);
+            return $vendor;    
+        }else{
+            return "";
+        }
     }
 
     public function CustomersList(CustomersListApi $request){
