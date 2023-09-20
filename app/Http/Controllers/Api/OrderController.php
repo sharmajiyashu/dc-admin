@@ -69,7 +69,7 @@ class OrderController extends Controller
     public function CustomerOrderHistory(CreateOrderApi $request){
         try{
             if(!empty($request->user()->active_store_code)){
-                $orders = Order::where(['user_id' => $request->user()->id,'store_code' => $request->user()->active_store_code])->where('is_delete','!=','1')->orderBy('id','DESC')->get();
+                $orders = Order::where(['user_id' => $request->user()->id,'store_code' => $request->user()->active_store_code])->orderBy('id','DESC')->get();
                 foreach($orders as $key=>$val){
                     $user = Vendor::where('id',$val->vendor_id)->first();
                     $val['total_item'] = Cart::where('order_id',$val->id)->count();
@@ -134,7 +134,7 @@ class OrderController extends Controller
     
     public function VendorOrderHistory(Request $request){
         try{
-            $orders = Order::where(['vendor_id' => $request->user()->id])->where('is_delete','0')->orderBy('id','DESC')->get();
+            $orders = Order::where(['vendor_id' => $request->user()->id])->orderBy('id','DESC')->get();
             foreach($orders as $key=>$val){
                 $user = Vendor::where('id',$val->user_id)->first();
                 $val['total_item'] = Cart::where('order_id',$val->id)->count();
@@ -159,7 +159,6 @@ class OrderController extends Controller
      { 
         try{
              $orders = Order::where(['vendor_id' => $request->user()->id]) 
-             ->where('is_delete', '0') 
              ->orderBy('id', 'DESC') 
              ->with(['vendor:id,store_image']) 
              ->withCount('cart')
@@ -241,13 +240,13 @@ class OrderController extends Controller
     public function DeleteByDate(DeleteOrderApi $request){
         try{
             if(!empty($request->order_id)){
-                Order::where('id',$request->order_id)->update(['is_delete' => '1']);
+                Order::where('id',$request->order_id)->delete();
                 return $this->sendSuccess('ORDER DELETED SUCCESSFULLY');
             }
             if(!empty($request->from_date) && !empty($request->to_date)){
                 $from_date = date('Y-m-d',strtotime($request->from_date));
                 $to_date = date('Y-m-d',strtotime($request->to_date));
-                Order::whereDate('created_at','>=',$from_date)->whereDate('created_at','<=',$to_date)->update(['is_delete' => '1']);
+                Order::whereDate('created_at','>=',$from_date)->whereDate('created_at','<=',$to_date)->delete();
                 return $this->sendSuccess('ORDER DELETED SUCCESSFULLY');
             }
             return $this->sendFailed('PLEASE ENTER VALID INPUT ',200);

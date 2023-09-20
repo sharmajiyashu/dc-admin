@@ -16,7 +16,9 @@ return new class extends Migration
         Schema::create('slab_links', function (Blueprint $table) {
             $table->id();
             $table->bigInteger('product_id');
-            $table->bigInteger('slab_id');
+            $table->bigInteger('user_id')->nullable();
+            $table->bigInteger('slab_id')->nullable();
+            $table->softDeletes();
             $table->timestamps();
         });
     }

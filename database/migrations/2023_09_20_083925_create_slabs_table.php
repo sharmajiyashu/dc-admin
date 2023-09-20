@@ -13,10 +13,14 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('roles', function (Blueprint $table) {
+        Schema::create('slabs', function (Blueprint $table) {
             $table->id();
-            $table->string('name',50);
-            $table->enum('status', ['0', '1'])->default('1')->comment('1 = Active, 0 = Inactive ');
+            $table->bigInteger('user_id')->nullable();
+            $table->string('name')->nullable();
+            $table->string('status')->default(1);
+            $table->string('is_default')->default(0);
+            $table->string('days')->nullable();
+            $table->softDeletes();
             $table->timestamps();
         });
     }
@@ -28,6 +32,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('roles');
+        Schema::dropIfExists('slabs');
     }
 };

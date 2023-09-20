@@ -52,9 +52,9 @@ class ProductController extends Controller
 
                 if($request->id){
                     $type = 1;
-                    $check = Product::where('user_id',auth()->user()->id)->whereNot('is_admin','1')->where('is_delete','0')->whereNot('id',$request->id)->where('name',$data['name'])->exists();
+                    $check = Product::where('user_id',auth()->user()->id)->whereNot('is_admin','1')->whereNot('id',$request->id)->where('name',$data['name'])->exists();
                 }else{
-                    $check = Product::where('user_id',auth()->user()->id)->where('is_delete','0')->where('name',$data['name'])->exists();
+                    $check = Product::where('user_id',auth()->user()->id)->where('name',$data['name'])->exists();
                     $type = 0;
                 }
 
@@ -208,12 +208,11 @@ class ProductController extends Controller
     public function GetVendorProducts(GetVendorProductsApi $request){
         try{
             if($request->user()->role_id == Role::$vendor){
-
                 $page = $request->input('page',1);
                 $products = Product::where('user_id', $request->user()->id)
-                    ->where('is_delete', '=', '0')
                     ->orderBy('id', 'DESC')
-                    ->paginate(10, ['*'], 'page',$page);
+                    ->get();
+                    // ->paginate(10, ['*'], 'page',$page);
 
                 foreach($products as $key=>$val){
                     $image = $val['images'];
@@ -257,7 +256,7 @@ class ProductController extends Controller
             if($request->user()->role_id == Role::$customer){
                 $categories = Helper::getCustomerCategories($request->user()->id);
             }elseif($request->user()->role_id == Role::$vendor){
-                $categories = Category::where('is_delete','!=','1')->where(['user_id' => $request->user()->id ,'is_admin' => '0'])->orderBy('title','asc')->get()->map(function($category){
+                $categories = Category::where(['user_id' => $request->user()->id ,'is_admin' => '0'])->orderBy('title','asc')->get()->map(function($category){
                     $category->total_product = Product::where('category_id',$category->id)->count();
                     $category->image = asset('public/images/categories/'.$category->image);
                     $check_Category = Category::find($category->admin_id);
@@ -288,12 +287,10 @@ class ProductController extends Controller
                 Customer::where('id', $user->id)->update(['active_store_code' => '']);
                 return $this->sendSuccess('PRODUCT FETCH SUCCESSFULLY', []);
             }
-            
             // Retrieve the products related to the active store's slab
             $products = Product::where('user_id',$storeLink->vendor_id)
                 ->where('status', 'Active')
                 ->where('is_admin', '0')
-                ->whereNot('is_delete','1')
                 ->latest()
                 ->get()->map(function ($product) use($slab_id){
                     $image = $product->images;
@@ -305,31 +302,7 @@ class ProductController extends Controller
                         return $product ? $product :'';
                     }
                 })->filter()->values();
-
-                $perPage = 10;
-                $page = $request->input('page',1);
-                $products = new LengthAwarePaginator(
-                    $products->forPage($page, $perPage),
-                    $products->count(),
-                    $perPage,
-                    $page,
-                    ['path' => request()->url()]
-                );
-
-                $responseData = [
-                    'current_page' => $products->currentPage(),
-                    'data' => $products->values(),
-                    'first_page_url' => $products->url(1),
-                    'last_page' => $products->lastPage(),
-                    'last_page_url' => $products->url($products->lastPage()),
-                    'links' => [
-                        'prev_page_url' => $products->previousPageUrl(),
-                        'next_page_url' => $products->nextPageUrl(),
-                    ],
-                    'per_page' => $products->perPage(),
-                    'total' => $products->total(),
-                ];
-            return $this->sendSuccess('PRODUCT FETCH SUCCESSFULLY', $responseData);
+            return $this->sendSuccess('PRODUCT FETCH SUCCESSFULLY', $products);
         }catch(\Throwable $e){
             // \Log::error($e->getMessage(). ' On Line '. $e->getLine());
             return $this->sendFailed($e->getMessage(). ' On Line '. $e->getLine(),200);
@@ -352,9 +325,9 @@ class ProductController extends Controller
     public function GetProductByName(Request $request){
         try{
 
-            $product = Product::where(['user_id' => auth()->user()->id ,'is_delete' => '0' ,'name' => $request->name ])->first();
+            $product = Product::where(['user_id' => auth()->user()->id  ,'name' => $request->name ])->first();
             if(!$product){
-                $product = Product::where(['is_admin' => '1' ,'status' => 'Active' ,'is_delete' => '0'])->where('products.name',$request->name)->orderBy('products.id','DESC')->first();
+                $product = Product::where(['is_admin' => '1' ,'status' => 'Active'])->where('products.name',$request->name)->orderBy('products.id','DESC')->first();
                 $admin_cat = Category::where('id',$product->category_id)->first();
                 if($admin_cat->ctatus != Category::$active){
                     return $this->sendFailed('PRODUCT NOT FOUND',200);
@@ -504,7 +477,7 @@ class ProductController extends Controller
                         $total_create ++;
                     }
                 }else{
-                    $check_duplicate = Product::where('name',$data['name'])->where('user_id',$request->user()->id)->where('is_delete','0')->count();
+                    $check_duplicate = Product::where('name',$data['name'])->where('user_id',$request->user()->id)->count();
                     if($check_duplicate > 0){
                         $data['error'] = 'Product name is already taken';
                         $error_s[] = $data;
@@ -532,7 +505,7 @@ class ProductController extends Controller
             // $products = Product::select('product.*')->join('')
 
             $products = SlabLink::select('products.*')->join('products','products.id','=','slab_links.product_id')
-            ->where(['slab_links.user_id' => $request->user()->id ,'slab_links.slab_id' => $request->slab_id,'products.status' => Product::$active ,'products.is_delete' => '0'])->get();
+            ->where(['slab_links.user_id' => $request->user()->id ,'slab_links.slab_id' => $request->slab_id,'products.status' => Product::$active])->get();
             foreach($products as $key=>$val){
                 $images = json_decode($val['images']);
                 if(!empty($images)){

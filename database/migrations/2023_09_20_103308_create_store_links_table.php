@@ -13,14 +13,15 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('products', function (Blueprint $table) {
+        Schema::create('store_links', function (Blueprint $table) {
             $table->id();
             $table->bigInteger('user_id');
-            $table->string('name',50);
-            $table->bigInteger('category_id');
-            $table->enum('status', ['Active', 'Inactive'])->default('Active');
-            $table->longtext('detail')->nullable();
-            $table->longtext('images')->nullable();
+            $table->bigInteger('vendor_id');
+            $table->string('store_code')->nullable();
+            $table->string('status')->default(0)->comment('0 => pending , 1=> active , 2 => inactive');
+            $table->string('in_add')->default(0);
+            $table->string('slab_id')->nullable();
+            $table->softDeletes();
             $table->timestamps();
         });
     }
@@ -32,6 +33,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('products');
+        Schema::dropIfExists('store_links');
     }
 };

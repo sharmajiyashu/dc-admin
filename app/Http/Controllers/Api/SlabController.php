@@ -94,17 +94,6 @@ class SlabController extends Controller
         try{
             if(!empty($request->all())){
                 $total_added = 0;
-                // foreach($request->all() as $key=>$val){
-                //     $product = Product::where('id',$val['product_id'])->where('is_delete','!=','1')->where('is_admin','!=','1')->first();
-                //     $slab = Slab::where('id',$val['slab_id'])->first();
-                //     if(!empty($product) && !empty($slab)){
-                //         $check = SlabLink::where(['product_id' => $product->id ,'slab_id' => $slab->id ,'user_id' => $request->user()->id])->count();
-                //         if($check == 0){
-                //             SlabLink::create(['product_id' => $product->id ,'slab_id' => $slab->id ,'user_id' => $request->user()->id]);
-                //             $total_added ++;
-                //         }
-                //     }
-                // }
                 $data = $request->all();
                 $product = $data['product_id'];
                 $slabs = $data['slab_id'];

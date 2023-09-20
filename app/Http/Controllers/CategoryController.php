@@ -22,7 +22,7 @@ class CategoryController extends Controller
 
     public function index()
     {
-        $categories = Category::orderBy('title','asc')->where('is_admin','1')->where('is_delete','!=','1')->get();
+        $categories = Category::orderBy('title','asc')->where('is_admin','1')->get();
         foreach($categories as $key=>$val){
             $val['total_products'] = Product::where('category_id',$val->id)->count();
             if(empty($val->image)){
@@ -114,7 +114,7 @@ class CategoryController extends Controller
     public function update(UpdateCategoryRequest $request, Category $category)
     {
 
-        $check = Category::where('id','!=',$category->id)->where('title',$request->title)->where('is_admin','1')->where('is_delete','!=','1')->count();
+        $check = Category::where('id','!=',$category->id)->where('title',$request->title)->where('is_admin','1')->count();
         if($check > 0){
             return back()->withErrors([
                 'email' => 'The name has already been taken.',
@@ -151,8 +151,11 @@ class CategoryController extends Controller
      */
     public function destroy(Category $category)
     {
-        $category->update(['is_delete' => '1' ,'status' => Category::$inactive]);
-        Category::where('admin_id',$category->id)->update(['is_delete' => '1' ,'status' => Category::$inactive]);
+        $category->update(['status' => Category::$inactive]);
+        $category->delete();
+        $categroy_id = $category->id;
+        Category::where('admin_id',$categroy_id)->update(['status' => Category::$inactive]);
+        Category::where('admin_id',$categroy_id)->delete();
         return redirect()->route('categories.index')->with('success','Category Delete Success');
     }
 }

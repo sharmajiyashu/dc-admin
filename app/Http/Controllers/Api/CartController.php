@@ -254,8 +254,10 @@ class CartController extends Controller
     public function RemoveAllItem(Request $request){
         try{
             $cart = Cart::where('user_id',$request->user()->id)->where('status','0');
-            if($cart->count() > 0){
+            $WishCart = WishCart::where('user_id',$request->user()->id)->where('status','0');
+            if($cart->count() > 0 || $WishCart->count() > 0){
                 $cart->delete();
+                $WishCart->delete();
                 return $this->sendSuccess('DELETE CART ITEM SUCCESSFULLY','');
             }else{
                 return $this->sendFailed('CART ITEM IS EMPITY ',200);

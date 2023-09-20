@@ -69,7 +69,7 @@ class CustomerController extends Controller
         $vendor = Vendor::where('id',$id)->Vendor()->status(Vendor::$active)->first();
         if(!empty($vendor)){
             if($vendor->is_register != 1){
-                $products = Category::where('is_admin','1')->where('is_delete','!=','1')->get();
+                $products = Category::where('is_admin','1')->get();
                 foreach($products as $key=>$val){
                     $check_category = Category::where('user_id',$vendor->id)->where('admin_id',$val->id)->count();
                     if($check_category == 0){
@@ -152,8 +152,19 @@ class CustomerController extends Controller
 
     public function GetStates(){
         try{
-            $states = DB::table('states')->select('id','name','iso2 as code')->orderBy('name','ASC')->get();
-            return $this->sendSuccess('STATES FETCH SUCCESSFULLY',$states);
+            // $states = DB::table('states')->select('id','name','iso2 as code')->orderBy('name','ASC')->get();
+
+            $states = config('states');
+
+            $collect = collect($states);
+            $filteredCollection = $collect->map(function ($item) {
+                return [
+                    'id' => $item['id'],
+                    'name' => $item['name'],
+                    'code' => $item['iso2']
+                ];
+            });
+            return $this->sendSuccess('STATES FETCH SUCCESSFULLY',$filteredCollection);
         }catch(\Throwable $e){
             return $this->sendFailed($e->getMessage(). ' On Line '. $e->getLine(),200);
         }
@@ -161,8 +172,19 @@ class CustomerController extends Controller
 
     public function GetCities(Request $request){
         try{
-            $states = DB::table('cities')->where('state_id',$request->state_id)->select('id','name')->orderBy('name','ASC')->get();
-            return $this->sendSuccess('CITIES FETCH SUCCESSFULLY',$states);
+            $state_id = $request->state_id;
+            $states = config('cities');
+            $collect = collect($states)->map(function($item) use($state_id){
+                if($state_id == $item['state_id']){
+                    return[
+                        'id' => $item['id'],
+                        'name' => $item['name']
+                    ];
+                }
+            })->filter()
+            ->sortBy('name', SORT_NATURAL|SORT_FLAG_CASE)
+            ->values();
+            return $this->sendSuccess('CITIES FETCH SUCCESSFULLY',$collect);
         }catch(\Throwable $e){
             return $this->sendFailed($e->getMessage(). ' On Line '. $e->getLine(),200);
         }

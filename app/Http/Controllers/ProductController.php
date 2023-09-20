@@ -42,7 +42,7 @@ class ProductController extends Controller
      */
     public function create()
     {
-        $categories = Category::where('is_admin','1')->where('is_delete','!=','1')->where('status',Category::$active)->get();
+        $categories = Category::where('is_admin','1')->where('status',Category::$active)->get();
         return view('admin.products.create',compact('categories'));
     }
 
@@ -100,7 +100,7 @@ class ProductController extends Controller
      */
     public function edit(Product $product)
     {   
-        $categories = Category::where('is_admin','1')->where('is_delete','!=','1')->where('status',Category::$active)->get();
+        $categories = Category::where('is_admin','1')->where('status',Category::$active)->get();
         $images = json_decode($product->images);
         $product['images'] = $images;
         $product['image_1'] = isset($images[0]) ? $images[0] :'no_image.png';
@@ -119,7 +119,7 @@ class ProductController extends Controller
      */
     public function update(UpdateProductRequest $request, Product $product)
     {   
-        $check = Product::where('id','!=',$product->id)->where('name',$request->name)->where('is_delete','!=','1')->where('is_admin','1')->count();
+        $check = Product::where('id','!=',$product->id)->where('name',$request->name)->where('is_admin','1')->count();
         if($check > 0){
             return back()->withErrors([
                 'email' => 'The name has already been taken.',
@@ -235,7 +235,7 @@ class ProductController extends Controller
 
     public function edit_2($id){
         $product = Product::where('id',$id)->first();
-        $categories = Category::where('user_id',$product->user_id)->where('is_delete','!=','1')->get();
+        $categories = Category::where('user_id',$product->user_id)->get();
         $images = json_decode($product->images);
         $product['images'] = $images;
         $product['image_1'] = isset($images[0]) ? $images[0] :'no_image.png';
@@ -376,9 +376,9 @@ class ProductController extends Controller
             if($length == 2){
                 $product_name = Helper::createUpperString($row[0]);
                 $category_name = Helper::createUpperString($row[1]);
-                $check_product = Product::where('is_admin','1')->where('is_delete','!=','1')->where('name',$product_name)->count();
+                $check_product = Product::where('is_admin','1')->where('name',$product_name)->count();
                 if($check_product < 1){
-                    $check_category = Category::where(['is_delete' => '0' ,'is_admin' => '1' ,'title' => $category_name])->first();
+                    $check_category = Category::where(['is_admin' => '1' ,'title' => $category_name])->first();
                     if(!empty($check_category)){
                         $category_id = $check_category->id;
                     }else{

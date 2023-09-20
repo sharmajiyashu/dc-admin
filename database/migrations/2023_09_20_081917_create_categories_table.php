@@ -15,9 +15,14 @@ return new class extends Migration
     {
         Schema::create('categories', function (Blueprint $table) {
             $table->id();
-            $table->string('title',50);
-            $table->string('packing_quantity')->nullable();
-            $table->enum('status', ['Active', 'Inactive'])->default('Active');
+            $table->bigInteger('user_id');
+            $table->string('title')->nullable();
+            $table->string('image')->nullable();
+            $table->integer('packing_quantity')->default(1);
+            $table->string('status')->default(1);
+            $table->string('is_admin')->default(0);
+            $table->bigInteger('admin_id')->default(0);
+            $table->softDeletes();
             $table->timestamps();
         });
     }
