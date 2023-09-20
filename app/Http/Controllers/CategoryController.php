@@ -50,6 +50,7 @@ class CategoryController extends Controller
      */
     public function store(StoreCategoryRequest $request)
     {
+        $check = Category::where('title',Helper::createUpperString($request->title))->count();
         if($request->hasFile('image')) {
             $image       = $request->file('image');
             $image_name = time().rand(1,100).'-'.$request->image->getClientOriginalName();

@@ -71,7 +71,7 @@
                                                 <td><strong><a href="{{ route('categories.show',$val->id) }}">{{ $val->title }}</a></strong></td>
                                                 <td>
                                                     <div class="form-check form-check-primary form-switch">
-                                                        <input class="form-check-input checked_chackbox" id="systemNotification" type="checkbox" name="is_default" onclick="ChangeSlabStatus({{ $val->id }})" @if ($val->status == 'Active')
+                                                        <input class="form-check-input checked_chackbox" id="systemNotification" type="checkbox" name="is_default" onclick="ChangeSlabStatus({{ $val->id }})" @if ($val->status == 1)
                                                             @checked(true) 
                                                         @endif   value="1" >
                                                     </div>

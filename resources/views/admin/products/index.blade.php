@@ -88,7 +88,7 @@
                                     
                                 </div>
                                 <div class="card-datatable">
-                                    <table class="datatables-ajax table table-responsive datatable_data">
+                                    <table class="datatables-ajax table table-responsive ">
                                         <thead>
                                             <tr>
                                                 <th>Sr.no</th>
@@ -102,6 +102,10 @@
 
                                         </thead>
                                         <tbody>
+
+                                           
+                        
+
                                             @php  $i=1; @endphp
                                             @foreach($products as $key => $val)
                                             <tr>
@@ -212,6 +216,10 @@
                                             @endforeach
                                         </tbody>
                                     </table>
+
+                                    @include('admin._pagination', ['data' => $products_2])
+
+                                    
                                 </div>
                             </div>
                         </div>

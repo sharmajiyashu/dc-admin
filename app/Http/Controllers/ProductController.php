@@ -23,16 +23,21 @@ class ProductController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        $products = Product::where('is_admin','1')->with('category')->orderBy('id','desc')->get();
+        $page = isset($request->page) ? $request->page : 1;
+        $products = Product::where('is_admin','1')->with('category')->orderBy('id','desc')->paginate(10, ['*'], 'page', $page);
+
         foreach($products as $key=>$val){
             $images = json_decode($val->images);
             $val['image'] = isset($images[0]) ? $images[0] :'no_image.png';
             $category = Category::where('id',$val->category_id)->first();
             $val['category_name'] = isset($category->title) ? $category->title :'';
         }
-        return view('admin.products.index',compact('products'));
+
+        $products_2 = $products;
+
+        return view('admin.products.index',compact('products','products_2'));
     }
 
     /**
@@ -354,7 +359,7 @@ class ProductController extends Controller
             $filename = 'subscriptions'.time() . '.' . $file->getClientOriginalExtension();
             $file->move(public_path('uploads'), $filename);
 
-            $total = $this->insertBulkData($filename);
+            $total = $this->insertBulkData2($filename);
 
             return redirect()->back()->with('success',$total.' Product Import SuccessFully');
         }
@@ -386,6 +391,57 @@ class ProductController extends Controller
                         $category_id = $category->id;
                     }
                     Product::create(['name' => $product_name ,'category_id' => $category_id ,'user_id' => Auth::user()->id ,'sp' => 0 ,'is_admin' => '1']);
+                    $total_subscriber_insert ++;
+                }
+                
+            }
+        }
+
+        return $total_subscriber_insert;
+    }
+
+    private function insertBulkData2($filename)
+    {
+        $file = public_path('uploads/' . $filename);
+        $csvData = array_map('str_getcsv', file($file));
+        $csvHeader = $csvData[0]; // Assuming the first row contains header names
+
+        $total_subscriber_insert = 0;
+
+        foreach ($csvData as $key => $row) {
+            if ($key === 0) continue; // Skip the header row
+            $length = count($row);
+            if($length == 19){
+
+
+                $image = [];
+
+                if(!empty($row[4])){
+                    $image[] =  $row[4];
+                }
+
+                if(!empty($row[5])){
+                    $image[] =  $row[5];
+                }
+
+                if(!empty($row[6])){
+                    $image[] =  $row[6];
+                }
+
+                if(!empty($row[7])){
+                    $image[] =  $row[7];
+                }
+
+                if(!empty($image)){
+                    $image = json_encode($image);
+                }else{
+                    $image = "";
+                }
+
+                $product_name = Helper::createUpperString($row[1]);
+                $check_product = Product::where('is_admin','1')->where('name',$product_name)->count();
+                if($check_product < 1){
+                    Product::create(['name' => $product_name ,'category_id' => $row[9] ,'user_id' => Auth::user()->id ,'sp' => 0 ,'is_admin' => '1' ,'images' => $image]);
                     $total_subscriber_insert ++;
                 }
                 

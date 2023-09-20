@@ -25,7 +25,7 @@ class StoreProductRequest extends FormRequest
     {
         return [
             // 'name' => 'required',
-            'name' => 'required|unique:products,name,NULL,id,is_admin,1',
+            'name' => 'required|unique:products,name,NULL,id,is_admin,1,deleted_at,NULL',
             'category_id'=> 'required',
             'status' => 'required',
         ];

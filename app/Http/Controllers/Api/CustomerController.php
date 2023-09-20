@@ -11,8 +11,12 @@ use App\Http\Requests\UploadApi;
 use App\Models\Cart;
 use App\Models\Category;
 use App\Models\Customer;
+use App\Models\Order;
 use App\Models\Role;
 use App\Models\Product;
+use App\Models\Slab;
+use App\Models\SlabLink;
+use App\Models\StoreLink;
 use App\Models\User;
 use App\Models\Vendor;
 use App\Traits\ApiResponse;
@@ -219,7 +223,12 @@ class CustomerController extends Controller
 
     public function deleteAccount(){
         try{
-            User::where('id',auth()->user()->id)->delete();
+            $user_id = auth()->user()->id;
+            User::where('id',$user_id)->delete();
+            SlabLink::where('user_id',$user_id)->delete();
+            StoreLink::where('vendor_id',$user_id)->delete();
+            StoreLink::where('user_id',$user_id)->delete();
+            Slab::where('user_id',$user_id)->delete();
             return $this->sendSuccess('USER DELETE SUCCESSFULLY',);
         }catch(\Throwable $e){
             return $this->sendFailed($e->getMessage(). ' On Line '. $e->getLine(),200);

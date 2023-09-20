@@ -24,8 +24,7 @@ class StoreCategoryRequest extends FormRequest
     public function rules()
     {
         return [
-            // 'title'=>'required|unique:categories,is_admin,1',
-            'title' => 'required|unique:categories,title,NULL,id,is_admin,1,is_delete,0',
+            'title' => 'required|unique:categories,title,NULL,id,is_admin,1,deleted_at,NULL',
             'status'=> 'required|In:Inactive,Active',
             'image'=> 'required|mimes:png,jpg',
         ];

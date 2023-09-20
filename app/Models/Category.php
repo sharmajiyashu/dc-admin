@@ -4,13 +4,14 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Category extends Model
 {
-    use HasFactory;
+    use HasFactory,SoftDeletes;
 
-    protected $fillable = ['title','image','status','user_id','admin_id','is_admin','is_delete'];
+    protected $fillable = ['title','image','status','user_id','admin_id','is_admin'];
 
-    static $active = 'Active';
-    static $inactive = 'Inactive';
+    static $active = 1;
+    static $inactive = 0;
 }

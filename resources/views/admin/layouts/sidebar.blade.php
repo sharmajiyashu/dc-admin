@@ -19,24 +19,24 @@
             </li>
             
             
-            <li class=" nav-item {{ \Request::is('categories') ? 'active' : ''  }}"><a class="d-flex align-items-center" href="{{ route('categories.index') }}"><i data-feather="file-text"></i><span class="menu-title text-truncate" data-i18n="Invoice">Category</span></a>
+            <li class="nav-item {{ Request::routeIs('categories.index','categories.create','categories.edit','categories.show') ? 'active' : '' }}"><a class="d-flex align-items-center" href="{{ route('categories.index') }}"><i data-feather="file-text"></i><span class="menu-title text-truncate" data-i18n="Invoice">Category</span></a>
                 
             </li>
 
-            <li class=" nav-item {{ \Request::is('products') ? 'active' : ''  }} "><a class="d-flex align-items-center" href="{{ route('products.index') }}"><i data-feather="file-text"></i><span class="menu-title text-truncate" data-i18n="Invoice">Product</span></a>
+            <li class="nav-item {{ Request::routeIs('products.index','products.create','products.edit','products.show') ? 'active' : '' }} "><a class="d-flex align-items-center" href="{{ route('products.index') }}"><i data-feather="file-text"></i><span class="menu-title text-truncate" data-i18n="Invoice">Product</span></a>
                 
             </li>
 
-            <li class="nav-item {{ \Request::is('vendors') ? 'active' : ''  }}"><a class="d-flex align-items-center  " href="{{ route('vendors.index') }}"><i data-feather="user"></i><span class="menu-title text-truncate" data-i18n="File Manager">Vendor</span></a>
+            <li class="nav-item {{ Request::routeIs('vendors.index','vendors.create','vendors.edit','vendors.show') ? 'active' : '' }}"><a class="d-flex align-items-center  " href="{{ route('vendors.index') }}"><i data-feather="user"></i><span class="menu-title text-truncate" data-i18n="File Manager">Vendor</span></a>
             </li>
 
-            <li class="nav-item {{ \Request::is('customers') ? 'active' : ''  }} "><a class="d-flex align-items-center" href="{{ route('customers.index') }}"><i data-feather="user"></i><span class="menu-title text-truncate" data-i18n="File Manager">Customer</span></a>
+            <li class="nav-item  {{ Request::routeIs('customers.index','customers.create','customers.edit','customers.show') ? 'active' : '' }}"><a class="d-flex align-items-center" href="{{ route('customers.index') }}"><i data-feather="user"></i><span class="menu-title text-truncate" data-i18n="File Manager">Customer</span></a>
             </li>
 
-            <li class="nav-item {{ \Request::is('orders') ? 'active' : ''  }} "><a class="d-flex align-items-center" href="{{ route('orders.index') }}"><i data-feather="shopping-cart"></i><span class="menu-title text-truncate" data-i18n="File Manager">Orders</span></a>
+            <li class="nav-item {{ Request::routeIs('orders.index','orders.create','orders.edit','orders.show') ? 'active' : '' }}"><a class="d-flex align-items-center" href="{{ route('orders.index') }}"><i data-feather="shopping-cart"></i><span class="menu-title text-truncate" data-i18n="File Manager">Orders</span></a>
             </li>
             
-            <li class="nav-item {{ \Request::is('notifications') ? 'active' : ''  }} "><a class="d-flex align-items-center" href="{{ route('notifications.index') }}"><i data-feather="shopping-cart"></i><span class="menu-title text-truncate" data-i18n="File Manager">Notification</span></a>
+            <li class="nav-item {{ Request::routeIs('notifications.index','notifications.create','notifications.edit','notifications.show') ? 'active' : '' }}"><a class="d-flex align-items-center" href="{{ route('notifications.index') }}"><i data-feather="shopping-cart"></i><span class="menu-title text-truncate" data-i18n="File Manager">Notification</span></a>
             </li>
             
             
