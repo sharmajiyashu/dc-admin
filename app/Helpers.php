@@ -285,7 +285,6 @@ class Helper {
 
 		$categories = Category::where([
 			'status' => Category::$active,
-			'is_delete' => '0',
 			'user_id' => $userIdToQuery,
 			'is_admin' => '0',
 		])->orderBy('title','asc')->get()->map(function($category){
@@ -322,7 +321,6 @@ class Helper {
 		$products = Product::where('user_id', $storeLink->vendor_id)
 			->where('status', 'Active')
 			->where('is_admin', '0')
-			->whereNot('is_delete','1')
 			->latest()
 			->get()->map(function ($product) use($slab_id){
 				$image = $product->images;

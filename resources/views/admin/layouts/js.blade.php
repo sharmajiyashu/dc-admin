@@ -29,6 +29,8 @@
     })
 </script>
 
+<script src="{{ asset('public/sweet-alert/sweet.min.js') }}"></script>
+
 
 {{-- <script src="{{ asset('public/admin/asset/datatable/jquery.js') }}"></script> --}}
 {{-- <script src="https://cdn.datatables.net/1.10.25/js/jquery.dataTables.min.js"></script> --}}
@@ -42,7 +44,7 @@
 });
 </script>
 
-<script>
+{{-- <script>
     $(document).ready(function() {
         
         toastr.options.timeOut = 10000;
@@ -54,4 +56,28 @@
         @endif
 
     });
-</script>
+</script> --}}
+
+@if (session('success'))
+    <script>
+        Swal.fire({
+            title: 'Success!',
+            text: '{{ session('success') }}',
+            icon: 'success',
+            confirmButtonText: 'OK'
+        });
+    </script>
+@endif
+
+@if (session('error'))
+    <script>
+        Swal.fire({
+            title: 'Failure!',
+            text: '{{ session('error') }}',
+            icon: 'error',
+            confirmButtonText: 'OK'
+        });
+    </script>
+@endif
+<script src="{{ asset('public/admin/app-assets/vendors/js/forms/select/select2.full.min.js')}}"></script>
+<script src="{{ asset('public/admin/app-assets/js/scripts/forms/form-select2.js')}}"></script>

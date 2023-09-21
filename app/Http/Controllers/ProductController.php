@@ -26,7 +26,17 @@ class ProductController extends Controller
     public function index(Request $request)
     {
         $page = isset($request->page) ? $request->page : 1;
-        $products = Product::where('is_admin','1')->with('category')->orderBy('id','desc')->paginate(10, ['*'], 'page', $page);
+        $products = Product::where('is_admin','1')->with('category')->orderBy('id','desc');
+        
+        if(!empty($request->category_id)){
+            $products->where('category_id',$request->category_id);
+        }
+
+        if(!empty($request->product_name)){
+            $products = $products->where('name', 'LIKE', '%' . $request->product_name . '%');
+        }
+        $products = $products->paginate(50, ['*'], 'page', $page);
+        $categories = Category::where('status',1)->where('is_admin',1)->orderBy('title','asc')->get();
 
         foreach($products as $key=>$val){
             $images = json_decode($val->images);
@@ -37,7 +47,7 @@ class ProductController extends Controller
 
         $products_2 = $products;
 
-        return view('admin.products.index',compact('products','products_2'));
+        return view('admin.products.index',compact('products','products_2','categories'));
     }
 
     /**
@@ -359,7 +369,7 @@ class ProductController extends Controller
             $filename = 'subscriptions'.time() . '.' . $file->getClientOriginalExtension();
             $file->move(public_path('uploads'), $filename);
 
-            $total = $this->insertBulkData2($filename);
+            $total = $this->insertBulkData3($filename);
 
             return redirect()->back()->with('success',$total.' Product Import SuccessFully');
         }
@@ -400,7 +410,7 @@ class ProductController extends Controller
         return $total_subscriber_insert;
     }
 
-    private function insertBulkData2($filename)
+    private function insertBulkData2($filename) // upload dc csv products
     {
         $file = public_path('uploads/' . $filename);
         $csvData = array_map('str_getcsv', file($file));
@@ -442,6 +452,42 @@ class ProductController extends Controller
                 $check_product = Product::where('is_admin','1')->where('name',$product_name)->count();
                 if($check_product < 1){
                     Product::create(['name' => $product_name ,'category_id' => $row[9] ,'user_id' => Auth::user()->id ,'sp' => 0 ,'is_admin' => '1' ,'images' => $image]);
+                    $total_subscriber_insert ++;
+                }
+                
+            }
+        }
+
+        return $total_subscriber_insert;
+    }
+
+    private function insertBulkData3($filename) // upload dc csv category
+    {
+        $file = public_path('uploads/' . $filename);
+        $csvData = array_map('str_getcsv', file($file));
+        $csvHeader = $csvData[0]; // Assuming the first row contains header names
+
+        $total_subscriber_insert = 0;
+
+        foreach ($csvData as $key => $row) {
+            if ($key === 0) continue; // Skip the header row
+            $length = count($row);
+
+            
+            if($length == 12){
+
+                // print_r($row);die;
+
+                $product_name = Helper::createUpperString($row[2]);
+                $check_product = Category::where('is_admin','1')->where('title',$product_name)->count();
+                if($check_product < 1){
+                    Category::create([
+                                        'id' => $row[0],
+                                        'title' => $product_name ,
+                                        'user_id' => Auth::user()->id ,
+                                        'sp' => 0 ,
+                                        'is_admin' => '1' ,
+                                    ]);
                     $total_subscriber_insert ++;
                 }
                 

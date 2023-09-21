@@ -92,7 +92,7 @@ class Controller extends BaseController
     }
 
     public function createthumbnil(Request $request){
-
+            ini_set('max_execution_time', 50000);
         $sourceFolder = public_path('images/products/');
         $targetFolder = public_path('images/products/thumb1/');
         $targetFolder2 = public_path('images/products/thumb2/');
@@ -148,5 +148,51 @@ class Controller extends BaseController
         // echo json_encode($categories);die;
         return view('admin.pagination.index',compact('categories'));
     }
+
+    // public function createthumbnil(Request $request){
+    //     ini_set('max_execution_time', 300);
+    //     $sourceFolder = public_path('images/products/');
+    //     // $targetFolder = public_path('images/products/thumb1/');
+    //     // $targetFolder2 = public_path('images/products/thumb2/');
+
+    //     // Ensure the target folder exists, create if necessary
+    //     // if (!File::exists($targetFolder)) {
+    //         // File::makeDirectory($targetFolder, 0777, true);
+    //     // }
+
+    //     // if (!File::exists($targetFolder2)) {
+    //         // File::makeDirectory($targetFolder2, 0777, true);
+    //     // }
+
+    //     // Get all image files from the source folder
+    //     $imageFiles = File::glob($sourceFolder . '*.{jpg,jpeg,png,gif,bmp,webp,JPEG,PNG,JPG,GIF}', GLOB_BRACE);
+
+    //     $imgessss = [];
+    //     foreach ($imageFiles as $imageFile) {
+    //         // Check if the file is a valid image
+    //         $imageInfo = getimagesize($imageFile);
+
+    //         if ($imageInfo === false) {
+    //             // Skip this file if it's not a valid image
+
+    //             $imgessss[] = $imageInfo;
+    //             continue;
+    //         }
+
+    //         // Get the original file name
+    //         $originalFileName = pathinfo($imageFile, PATHINFO_BASENAME);
+    //         $pathInfo = pathinfo($originalFileName);
+    //         // Remove the extension
+    //         $filenameWithoutExtension = $pathInfo['filename'];
+    //         $get_product = Product::where('name', 'LIKE', '%' . $filenameWithoutExtension . '%')->first();
+    //         if(!empty($get_product)){
+    //             $image = [];
+    //             $image[] = $originalFileName;
+    //             $get_product->update(['images' => json_encode($image)]);
+    //         }
+    //     }
+
+    //     return 'Thumbnails created and moved to the target folder.';
+    // }
 
 }

@@ -42,16 +42,45 @@
             <div class="content-body">
                 <!-- Ajax Sourced Server-side -->
                 <section id="ajax-datatable">
-                    <div class="row">
+                    <div class="row"> <form action="">
                         <div class="col-12">
                             <div class="card">
                                 <div class="card-body border-bottom row">
                                     
-                                    <div class="col-md-7">
+                                    <div class="col-md-3">
                                         <h4 class="card-title">List</h4>
                                     </div>
-                                    <div class="col-md-3" style="    text-align: end;">
+
+                                   
+
+                                    <div class="col-md-2">
+                                        <label for="">Select Category</label>
+                                        <select name="category_id" id="department" class="select2 form-select">
+                                            <option value="">All</option>
+                                            @foreach ($categories as $item)
+                                                <option value="{{ $item->id }}" @if (request()->has('category_id') && request('category_id') == $item->id)
+                                                    selected
+                                                @endif>{{ $item->title }}</option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+
+                                    <div class="col-md-2">
+                                        <label for="">Search By Name</label>
+                                        <input type="text" class="form-control" name="product_name" value="@if(request()->has('product_name')){{ request('product_name') }}@endif" placeholder="Product name ...">
+                                    </div>
+
+                                    
+                                    
+
+                                    <div class="col-md-3" style="    text-align: ;">
+
+                                        <button class="btn btn-info" >Search</button>
+
                                         <a href="#" class=" btn btn-success btn-gradient round  "  data-bs-toggle="modal" data-bs-target="#add_bulk_product">Add Bulk Product</a>
+
+                                    </form>
+
 
                                         <div class="modal fade modal-success text-start" id="add_bulk_product" tabindex="-1" aria-labelledby="myModalLabel120" aria-hidden="true">
                                             <div class="modal-dialog modal-dialog-centered">
@@ -85,6 +114,7 @@
                                         <a href="{{route('products.create')}}" class=" btn btn-primary btn-gradient round  ">Add Product</a>
                                     </div>
                                     
+                                
                                     
                                 </div>
                                 <div class="card-datatable">
@@ -174,7 +204,7 @@
                                                 </td>
                                                 <td>{{ isset($val->category_name)  ? $val->category_name :'' }}</td>
                                                 <td ><div class="form-check form-check-primary form-switch">
-                                                        <input class="form-check-input checked_chackbox" id="systemNotification" type="checkbox" name="is_default" onclick="ChangeSlabStatus({{ $val->id }})" @if ($val->status == 'Active')
+                                                        <input class="form-check-input checked_chackbox" id="systemNotification" type="checkbox" name="is_default" onclick="ChangeSlabStatus({{ $val->id }})" @if ($val->status == 1)
                                                             @checked(true) 
                                                         @endif   value="1" >
                                                     </div>

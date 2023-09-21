@@ -40,6 +40,11 @@
     <link rel="stylesheet" type="text/css" href="{{ asset('public/admin/assets/css/style.css')}}">
     <!-- END: Custom CSS-->
     <link rel="stylesheet" href="{{ asset('public/admin/assets/datatable/datatable.css') }}">
+
+    <link rel="stylesheet" href="{{ asset('public/sweet-alert/sweet.min.css') }}">
+
+    <link rel="stylesheet" type="text/css" href="{{ asset('public/admin/app-assets/vendors/css/forms/select/select2.min.css')}}">
+    <link rel="stylesheet" type="text/css" href="{{ asset('public/admin/app-assets/css/components.css')}}">
     <style>
         .card-datatable{
             padding: 9px;
