@@ -383,4 +383,66 @@ class Helper {
 		return $category ? $category->title : '';
 	}
 
+
+	public static function sendOtp($mobile,$otp){
+		// $message = "Hi, Your Login OTP is 2563. From DC JEWELRY.";
+		$message = "Hi, Your Login OTP is ".$otp.". From DC JEWELRY.";
+		$DLT_TE_ID = "1207161967508062368";
+
+		/* SMS API Configuration */
+		$authKeyAPI = "333977656c727938373873"; //Your authentication key
+		$senderIdAPI = "DCJLRY"; // Sender ID, While using route4 sender id should be 6 characters long.
+		$routeAPI = 2; // route=1 for promotional, route=4 for transactional SMS. 
+		$dev_mode = 0; // 1 for testing ; 0 for Live
+		$country_code = 0;
+
+		//Multiple mobiles numbers separated by comma
+		$mobileNumber = $mobile;
+
+		//Your message to send, Add URL encoding here.
+		//$message = urlencode("Thanks for registering at Mr.Grocer, kindly note your ID:$userId & Password:$password2");
+
+		//Prepare you post parameters
+		$postData = array(
+			'authkey' => $authKeyAPI,
+			'country' => '91',
+			'unicode' => '0',
+			'mobiles' => $mobileNumber,
+			'message' => $message,
+			'sender' => $senderIdAPI,
+			'route' => $routeAPI,
+			'DLT_TE_ID' => $DLT_TE_ID,
+			'dev_mode' => $dev_mode,
+			'country' => $country_code
+		);
+
+		//API URL
+		$url="http://control.yourbulksms.com/api/sendhttp.php";
+
+		// init the resource
+		$ch = curl_init();
+		curl_setopt_array($ch, array(
+			CURLOPT_URL => $url,
+			CURLOPT_RETURNTRANSFER => true,
+			CURLOPT_POST => true,
+			CURLOPT_POSTFIELDS => $postData
+			//,CURLOPT_FOLLOWLOCATION => true
+		));
+
+		//Ignore SSL certificate verification
+		curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 0);
+		curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, 0);
+
+		//get response
+		$output = curl_exec($ch);
+
+		//Print error if any
+		if(curl_errno($ch))
+		{
+			echo 'error:' . curl_error($ch);
+		}
+
+		curl_close($ch);
+	}
+
 }

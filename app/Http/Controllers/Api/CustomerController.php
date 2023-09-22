@@ -32,10 +32,11 @@ class CustomerController extends Controller
     function customerRegisterLoginMobile(CustomerRegisterLoginMobileRequest $request){
         try{
             $customer = Customer::updateOrCreate(['mobile' => $request->mobile,'role_id' => Role::$customer]);
-            // $otp = rand(1000,9999);
-            $otp = 1234;
+            $otp = rand(1000,9999);
+            // $otp = 1234;
             $customer->otp = $otp;
             $customer->save();
+            Helper::sendOtp($request->mobile,$otp);
             return $this->sendSuccess('USER OTP SENT SUCCESSFULLY',['is_register' => $customer->is_register,'otp' => $otp,'user_id' => $customer->id,'pin' => $customer->pin]);
         }catch(\Throwable $e){
             return $this->sendFailed($e->getMessage(). ' On Line '. $e->getLine(),200);
