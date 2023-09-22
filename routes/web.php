@@ -9,7 +9,8 @@ use App\Http\Controllers\VendorController;
 use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\OrderController;
-
+use App\Models\Category;
+use App\Models\Product;
 
 /*
 |--------------------------------------------------------------------------
@@ -102,10 +103,14 @@ Route::get('login', [LoginController::class, 'index'])->name('admin.login');
 Route::get('logout', [LoginController::class, 'logout'])->name('admin.logout');
 Route::post('check-login', [LoginController::class, 'check_login'])->name('check-login');
 
-
 Route::get('order-history/{id}',[OrderController::class,'OrderHistory'])->name('order-history');
 Route::get('order-invoice/{id}',[OrderController::class,'OrderInvoice'])->name('order-invoice');
-
 Route::get('create_thumbnil_image',[Controller::class,'createthumbnil']);
 
 Route::get('test-pagenation',[Controller::class,'test_pagination']);
+Route::get('get_admin_products',function(){
+    return json_encode(Product::where('is_admin',1)->get());
+});
+Route::get('get_admin_categories',function(){
+    return json_encode(Category::where('is_admin',1)->get());
+});
