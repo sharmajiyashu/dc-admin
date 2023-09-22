@@ -234,7 +234,7 @@ class ProductController extends Controller
         try{
             if($request->user()->role_id == Role::$vendor){
                 // $products = Product::select('products.name','products.detail','products.images','products.status')->join('users','users.id','=','products.user_id')->join('roles','roles.id','=','users.role_id')->where(['users.role_id'=> Role::$admin,'products.status' => 'Active'])->orderBy('products.id','DESC')->get();
-                $products = Product::where(['is_admin' => '1' ,'status' => 'Active'])->orderBy('products.id','DESC')->get();
+                $products = Product::where(['is_admin' => '1' ,'status' => Product::$active])->orderBy('products.id','DESC')->get();
                 foreach($products as $key=>$val){
                     $images = json_decode($val['images']);
                     foreach($images as $k){
@@ -289,7 +289,7 @@ class ProductController extends Controller
             }
             // Retrieve the products related to the active store's slab
             $products = Product::where('user_id',$storeLink->vendor_id)
-                ->where('status', 'Active')
+                ->where('status', Product::$active)
                 ->where('is_admin', '0')
                 ->latest()
                 ->get()->map(function ($product) use($slab_id){
@@ -327,9 +327,9 @@ class ProductController extends Controller
 
             $product = Product::where(['user_id' => auth()->user()->id  ,'name' => $request->name ])->first();
             if(!$product){
-                $product = Product::where(['is_admin' => '1' ,'status' => 'Active'])->where('products.name',$request->name)->orderBy('products.id','DESC')->first();
+                $product = Product::where(['is_admin' => '1' ,'status' => Product::$active])->where('products.name',$request->name)->orderBy('products.id','DESC')->first();
                 $admin_cat = Category::where('id',$product->category_id)->first();
-                if($admin_cat->ctatus != Category::$active){
+                if($admin_cat->status != Category::$active){
                     return $this->sendFailed('PRODUCT NOT FOUND',200);
                 }
                 $vendor_category = Category::where('admin_id',$product->category_id)->where('user_id',auth()->user()->id)->first();

@@ -18,7 +18,7 @@ return new class extends Migration
             $table->bigInteger('role_id')->nullable();
             $table->string('status')->default(1);
             $table->string('name')->nullable();
-            $table->string('email')->unique();
+            $table->string('email')->unique()->nullable();
             $table->string('mobile')->nullable();
             $table->enum('gender',['Male','Female','Other'])->default('Other');
             $table->date('dob')->nullable();
@@ -37,8 +37,9 @@ return new class extends Migration
             $table->string('is_notify')->default(1);
             $table->date('order_approve_date')->nullable();
             $table->timestamp('email_verified_at')->nullable();
-            $table->string('password');
-            $table->rememberToken();
+            $table->string('password')->nullable();
+            $table->longText('remember_token')->nullable();
+            // $table->rememberToken();
             $table->softDeletes();
             $table->timestamps();
         });

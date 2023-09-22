@@ -58,14 +58,23 @@ class StoreLinkController extends Controller
         try{
             $stores = StoreLink::where('user_id',$request->user()->id)->orderBy('id','DESC')->get();
             foreach($stores as $key=>$val){
-                $vendor = $this->GetVendorDetail($val->user_id);
+                $customer = $this->GetVendorDetail($val->user_id);
                 $slab = Slab::where('id',$val->slab_id)->first();
-                $val->customer_name = isset($vendor->name)  ? $vendor->name :'';
-                $val->customer_mobile = isset($vendor->mobile)  ? $vendor->mobile :'';
-                $val->customer_city = isset($vendor->city)  ? $vendor->city :'';
+                $val->customer_name = isset($customer->name)  ? $customer->name :'';
+                $val->customer_mobile = isset($customer->mobile)  ? $customer->mobile :'';
+                $val->customer_city = isset($customer->city)  ? $customer->city :'';
                 $val->slab_name = isset($slab->name) ? $slab->name :'';
-                if(!empty($vendor)){
-                    if($vendor->is_register != '1'){
+                $vendor = $this->GetVendorDetail($val->vendor_id);
+                if($vendor){
+                    $image = asset('public/images/users/'.$vendor->store_image);
+                }
+                $val->store_image =  isset($image) ? $image :'';
+                $val->store_name = isset($vendor->store_name)  ? $vendor->store_name :'';
+                $val->vendor_name = isset($vendor->name)  ? $vendor->name :'';
+
+                
+                if(!empty($customer)){
+                    if($customer->is_register != '1'){
                         unset($stores[$key]);
                     }else{
                         $results[] = $val;

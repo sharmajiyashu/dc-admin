@@ -44,7 +44,7 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
     Route::post('create_order',[OrderController::class,'CreateOrder']);
     Route::get('get_products',[ProductController::class,'GetProduct']);
     Route::post('new_arrival_products',[ProductController::class,'NewArrivalProducts']);
-    Route::post('customer_order_history',[OrderController::class,'CustomerOrderHistory']);
+    Route::get('customer_order_history',[OrderController::class,'CustomerOrderHistory']);
     Route::post('customer_order_detail',[OrderController::class,'CustomerOrderDetail']);
     Route::post('send_request_to_store',[StoreLinkController::class,'SentRequest']);
     Route::post('delete_store_request',[StoreLinkController::class,'DeleteRequest']);
