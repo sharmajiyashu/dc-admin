@@ -10,6 +10,7 @@ use App\Models\Product;
 use App\Models\Role;
 use App\Models\Vendor;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Http\Request;
 use Intervention\Image\ImageManagerStatic as Image;
 
 class CategoryController extends Controller
@@ -22,14 +23,16 @@ class CategoryController extends Controller
 
     public function index()
     {
-        $categories = Category::orderBy('title','asc')->where('is_admin','1')->get();
+        $categories = Category::orderBy('title','asc')->where('is_admin','1');
+        $total_category = $categories->count();
+        $categories = $categories->get();
         foreach($categories as $key=>$val){
             $val['total_products'] = Product::where('category_id',$val->id)->count();
             if(empty($val->image)){
                 $val['image'] = 'no_image.png';
             }
         }
-        return view('admin.categories.index',compact('categories'));
+        return view('admin.categories.index',compact('categories','total_category'));
     }
 
     /**
@@ -82,16 +85,31 @@ class CategoryController extends Controller
      * @param  \App\Models\Category  $category
      * @return \Illuminate\Http\Response
      */
-    public function show(Category $category)
+    public function show(Category $category,Request $request)
     {
-        $products = Product::where('is_admin','1')->with('category')->orderBy('id','desc')->where('category_id',$category->id)->get();
+        $products = Product::where('is_admin','1')->with('category')->orderBy('id','desc')->where('category_id',$category->id);
+        
+        $page = isset($request->page) ? $request->page : 1;
+        $keyword = request('keyword');
+        $get = [];
+        if(!empty($request->product_name)){
+            $products = $products->where('name', 'LIKE', '%' . $request->product_name . '%');
+            $get['product_name'] = $request->product_name;
+        }elseif(!empty($keyword['product_name'])){
+            $product_name = $keyword['product_name'];
+            $products = $products->where('name', 'LIKE', '%' . $product_name . '%');
+            $get['product_name'] = $product_name;
+        }
+        $total_products = $products->count();
+        $products = $products->paginate(50, ['*'], 'page', $page);
+        $products_2 = $products;
         foreach($products as $key=>$val){
             $images = json_decode($val->images);
             $val['image'] = isset($images[0]) ? $images[0] :'no_image.png';
             $category = Category::where('id',$val->category_id)->first();
             $val['category_name'] = isset($category->title) ? $category->title :'';
         }
-        return view('admin.products.category_products',compact('products','category'));   
+        return view('admin.products.category_products',compact('products','category','total_products','products_2','get'));   
     }
 
     /**

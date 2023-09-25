@@ -31,7 +31,7 @@
                                     </li>
                                     <li class="breadcrumb-item"><a href="{{ route('categories.index') }}">Categories</a>
                                     </li>
-                                    <li class="breadcrumb-item active">List
+                                    <li class="breadcrumb-item active">List ({{ $total_category }})
                                     </li>
                                 </ol>
                             </div>
@@ -57,7 +57,7 @@
                                                 <th>icon</th>
                                                 <th>title</th>
                                                 <th>status</th>
-                                                {{-- <th>packing quantity</th> --}}
+                                                <th>Total Product</th>
                                                 <th>Created Date</th>
                                                 <th>Action</th>
                                             </tr>
@@ -76,6 +76,7 @@
                                                         @endif   value="1" >
                                                     </div>
                                                 </td>
+                                                <td>{{ $val->total_products }}</td>
                                                 <td>{{ date('d-M-y H:i:s',strtotime($val->created_at)) }}</td>
                                                 <td>
                                                     <a  href="{{route('categories.edit',$val->id)}}">

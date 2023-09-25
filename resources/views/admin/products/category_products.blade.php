@@ -35,7 +35,7 @@
                                     </li> --}}
                                     <li class="breadcrumb-item"><a href="{{ route('categories.index') }}">Products</a>
                                     </li>
-                                    <li class="breadcrumb-item active">List
+                                    <li class="breadcrumb-item active">List ({{ $total_products }})
                                     </li>
                                 </ol>
                             </div>
@@ -49,11 +49,26 @@
                     <div class="row">
                         <div class="col-12">
                             <div class="card">
+                                <form action="" method="GET">
                                 <div class="card-body border-bottom row">
                                     
-                                    <div class="col-md-7">
+                                    {{-- <div class="col-md-7">
                                         <h4 class="card-title">List</h4>
+                                    </div> --}}
+
+                                   
+
+                                    <div class="col-md-2">
+                                        <label for="">Search By Name</label>
+                                        <input type="text" class="form-control" name="product_name" value="@isset($get['product_name']){{ $get['product_name'] }}@endisset" placeholder="Product name ...">
                                     </div>
+
+                                    <div class="col-md-2" style="    text-align: ;align-self: end;">
+                                        <button class="btn btn-info" >Search</button>
+                                    </div>
+
+                                    </form>
+
                                     
                                     <script>
                                         const checkedValues_all_type = [];
@@ -108,7 +123,7 @@
                                     
                                 </div>
                                 <div class="card-datatable">
-                                    <table class="datatables-ajax table table-responsive datatable_data">
+                                    <table class="datatables-ajax table table-responsive ">
                                         <thead>
                                             <tr>
                                                 <th>Sr.no</th>
@@ -224,6 +239,8 @@
                                             @endforeach
                                         </tbody>
                                     </table>
+
+                                    @include('admin._pagination_filter', ['data' => $products_2,'keyword' => $get])
                                 </div>
 
                                 

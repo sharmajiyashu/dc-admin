@@ -25,17 +25,32 @@ class ProductController extends Controller
      */
     public function index(Request $request)
     {
+
+        $keyword = request('keyword');
+        $get = [];
         $page = isset($request->page) ? $request->page : 1;
         $products = Product::where('is_admin','1')->with('category')->orderBy('id','desc');
         
         if(!empty($request->category_id)){
             $products->where('category_id',$request->category_id);
+            $get['category_id'] = $request->category_id;
+        }elseif(!empty($keyword['category_id'])){
+            $category_id = $keyword['category_id'];
+            $products->where('category_id',$category_id);
+            $get['category_id'] = $category_id;
         }
 
         if(!empty($request->product_name)){
             $products = $products->where('name', 'LIKE', '%' . $request->product_name . '%');
+            $get['product_name'] = $request->product_name;
+        }elseif(!empty($keyword['product_name'])){
+            $product_name = $keyword['product_name'];
+            $products = $products->where('name', 'LIKE', '%' . $product_name . '%');
+            $get['product_name'] = $product_name;
         }
+        $product_count = $products->count();
         $products = $products->paginate(50, ['*'], 'page', $page);
+        
         $categories = Category::where('status',1)->where('is_admin',1)->orderBy('title','asc')->get();
 
         foreach($products as $key=>$val){
@@ -46,8 +61,7 @@ class ProductController extends Controller
         }
 
         $products_2 = $products;
-
-        return view('admin.products.index',compact('products','products_2','categories'));
+        return view('admin.products.index',compact('products','products_2','categories','get','product_count'));
     }
 
     /**

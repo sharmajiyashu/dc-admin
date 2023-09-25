@@ -31,7 +31,7 @@
                                     </li>
                                     <li class="breadcrumb-item"><a href="{{ route('products.index') }}">Products</a>
                                     </li>
-                                    <li class="breadcrumb-item active">List
+                                    <li class="breadcrumb-item active">List ({{ $product_count }})
                                     </li>
                                 </ol>
                             </div>
@@ -47,9 +47,11 @@
                             <div class="card">
                                 <div class="card-body border-bottom row">
                                     
-                                    <div class="col-md-3">
-                                        <h4 class="card-title">List</h4>
-                                    </div>
+                                    {{-- <div class="col-md-2"> --}}
+                                        {{-- <h4 class="card-title">List</h4>
+                                        <br>
+                                        <h6></h6> --}}
+                                    {{-- </div> --}}
 
                                    
 
@@ -58,8 +60,11 @@
                                         <select name="category_id" id="department" class="select2 form-select">
                                             <option value="">All</option>
                                             @foreach ($categories as $item)
-                                                <option value="{{ $item->id }}" @if (request()->has('category_id') && request('category_id') == $item->id)
-                                                    selected
+                                                <option value="{{ $item->id }}" @if (isset($get['category_id']))
+                                                    @if ($get['category_id'] == $item->id)
+                                                        selected    
+                                                    @endif
+                                                    
                                                 @endif>{{ $item->title }}</option>
                                             @endforeach
                                         </select>
@@ -67,21 +72,17 @@
 
                                     <div class="col-md-2">
                                         <label for="">Search By Name</label>
-                                        <input type="text" class="form-control" name="product_name" value="@if(request()->has('product_name')){{ request('product_name') }}@endif" placeholder="Product name ...">
+                                        <input type="text" class="form-control" name="product_name" value="@isset($get['product_name']){{ $get['product_name'] }}@endisset" placeholder="Product name ...">
                                     </div>
 
-                                    
-                                    
-
-                                    <div class="col-md-3" style="    text-align: ;">
-
+                                    <div class="col-md-2" style="    text-align: ;align-self: end;">
                                         <button class="btn btn-info" >Search</button>
-
-                                        <a href="#" class=" btn btn-success btn-gradient round  "  data-bs-toggle="modal" data-bs-target="#add_bulk_product">Add Bulk Product</a>
-
                                     </form>
 
+                                    </div>
 
+                                    <div class="col-md-3" style="text-align: end; align-self: end;" >
+                                        <a href="#" class=" btn btn-success btn-gradient round  "  data-bs-toggle="modal" data-bs-target="#add_bulk_product">Add Bulk  Product</a>
                                         <div class="modal fade modal-success text-start" id="add_bulk_product" tabindex="-1" aria-labelledby="myModalLabel120" aria-hidden="true">
                                             <div class="modal-dialog modal-dialog-centered">
                                                 
@@ -108,9 +109,8 @@
                                                     </div>
                                             </div>
                                         </div>
-
                                     </div>
-                                    <div class="col-md-2">
+                                    <div class="col-md-3" style="align-self: end;">
                                         <a href="{{route('products.create')}}" class=" btn btn-primary btn-gradient round  ">Add Product</a>
                                     </div>
                                     
@@ -247,7 +247,7 @@
                                         </tbody>
                                     </table>
 
-                                    @include('admin._pagination', ['data' => $products_2])
+                                    @include('admin._pagination_filter', ['data' => $products_2,'keyword' => $get])
 
                                     
                                 </div>
