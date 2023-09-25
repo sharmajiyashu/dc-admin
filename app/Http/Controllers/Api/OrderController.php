@@ -15,6 +15,7 @@ use App\Models\Cart;
 use App\Traits\ApiResponse;
 use PhpParser\Node\Expr\FuncCall;
 use App\Http\Requests\DeleteOrderApi;
+use App\Models\User;
 use App\Models\WishCart;
 use Illuminate\Support\Str;
 
@@ -225,9 +226,15 @@ class OrderController extends Controller
     public function ChangeOrderStatus(CustomerOrderDetailApi $request){
         try{
             if(!empty($request->status)){
-                Order::where('id',$request->order_id)->update(['status' => $request->status]);
-                Helper::sentOrderChange($request->order_id,$request->status);
-                return $this->sendSuccess('ORDER STATUS CHANGE SUCCESSFULLY');
+                $order = Order::where('id',$request->order_id)->first();
+                $user = User::find($order->user_id);
+                if($user){
+                    $order->update(['status' => $request->status]);
+                    Helper::sentOrderChange($request->order_id,$request->status);
+                    return $this->sendSuccess('ORDER STATUS CHANGE SUCCESSFULLY');
+                }else{
+                    return $this->sendFailed('The customer account has been deleted, so it is not available to update the order status!',200);
+                }
             }else{
                 return $this->sendFailed('ORDER STATUS MUST BE VALID',200);
             }

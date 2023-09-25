@@ -168,30 +168,35 @@ class OrderController extends Controller
 
     public function changeOrderStatus($id,$status){
         $order = Order::where('id',$id)->first();
-
-        if($status == 'accept' && $order->status == 'pending'){
-            $order->update(['status' => 'accepted']);
-            Helper::sentOrderChange($order->id,'accepted');
-            return redirect()->back()->with('success','Order Accepted Successfully');
+        $customer = User::find($order->user_id);
+        if($customer){
+            if($status == 'accept' && $order->status == 'pending'){
+                $order->update(['status' => 'accepted']);
+                Helper::sentOrderChange($order->id,'accepted');
+                return redirect()->back()->with('success','Order Accepted Successfully');
+            }
+    
+            if($status == 'reject' && $order->status == 'pending'){
+                $order->update(['status' => 'rejected']);
+                Helper::sentOrderChange($order->id,'rejected');
+                return redirect()->back()->with('success','Order Rejected Successfully');
+            }
+    
+            if($status == 'dispach' && $order->status == 'accepted'){
+                $order->update(['status' => 'dispatched']);
+                Helper::sentOrderChange($order->id,'dispatched');
+                return redirect()->back()->with('success','Order Dispatched Successfully');
+            }
+    
+            if($status == 'deliver' && $order->status == 'dispatched'){
+                $order->update(['status' => 'delivered']);
+                Helper::sentOrderChange($order->id,'delivered');
+                return redirect()->back()->with('success','Order Delivered Successfully');
+            }
+        }else{
+            return redirect()->back()->with('error','The customer account has been deleted, so it is not available to update the order status!');
         }
-
-        if($status == 'reject' && $order->status == 'pending'){
-            $order->update(['status' => 'rejected']);
-            Helper::sentOrderChange($order->id,'rejected');
-            return redirect()->back()->with('success','Order Rejected Successfully');
-        }
-
-        if($status == 'dispach' && $order->status == 'accepted'){
-            $order->update(['status' => 'dispatched']);
-            Helper::sentOrderChange($order->id,'dispatched');
-            return redirect()->back()->with('success','Order Dispatched Successfully');
-        }
-
-        if($status == 'deliver' && $order->status == 'dispatched'){
-            $order->update(['status' => 'delivered']);
-            Helper::sentOrderChange($order->id,'delivered');
-            return redirect()->back()->with('success','Order Delivered Successfully');
-        }
+        
 
         
     }
