@@ -78,8 +78,8 @@
                                                 <div class="mb-1">
                                                     <label class="form-label"  for="last-name-column">Status</label>
                                                     <select class="form-select" name="status" id="basicSelect">
-                                                        <option value="1"  {{ (isset($product->status) && $product->status == '1') ? 'selected' : '' }}>Active</option>
-                                                        <option value="0" {{ (isset($product->status) && $product->status == '0') ? 'selected' : '' }}>Inactive</option>
+                                                        <option value="1"  {{ (isset($product->status) && $product->status == 1) ? 'selected' : '' }}>Active</option>
+                                                        <option value="0" {{ (isset($product->status) && $product->status == 0) ? 'selected' : '' }}>Inactive</option>
                                                     </select>
                                                 </div>
                                             </div>
