@@ -82,8 +82,8 @@
                                                 <div class="mb-1">
                                                     <label class="form-label"  for="last-name-column">Status</label>
                                                     <select class="form-select" name="status" id="basicSelect">
-                                                        <option value="Active" {{ (old("status") == 'Active' ? "selected":"") }}>Active</option>
-                                                        <option value="Inactive" {{ (old("status") == 'Inactive' ? "selected":"") }}>Inactive</option>
+                                                        <option value="1" {{ (old("status") == '1' ? "selected":"") }}>Active</option>
+                                                        <option value="0" {{ (old("status") == '0' ? "selected":"") }}>Inactive</option>
                                                     </select>
                                                 </div>
                                             </div>

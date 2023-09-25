@@ -29,8 +29,8 @@ class OrderController extends Controller
         $order->sum_quantity = Cart::where('order_id',$order->id)->sum('quantity');
         $order->sum_price = Cart::where('order_id',$order->id)->sum('p_price');
         $order->in_word = $this->numberToWord($order->amount);
-        $customer = User::where('id',$order->user_id)->first();
-        $vendor = User::where('id',$order->vendor_id)->first();
+        $customer = User::where('id',$order->user_id)->withTrashed()->first();
+        $vendor = User::where('id',$order->vendor_id)->withTrashed()->first();
         $carts = Cart::where('order_id',$order->id)->get();
         foreach($carts as $key=>$val){
             $product = Product::where('id',$val->product_id)->first();
@@ -54,8 +54,8 @@ class OrderController extends Controller
         $order->sum_quantity = Cart::where('order_id',$id)->sum('quantity');
         $order->sum_price = Cart::where('order_id',$id)->sum('p_price');
         $order->in_word = $this->numberToWord($order->amount);
-        $customer = User::where('id',$order->user_id)->first();
-        $vendor = User::where('id',$order->vendor_id)->first();
+        $customer = User::where('id',$order->user_id)->withTrashed()->first();
+        $vendor = User::where('id',$order->vendor_id)->withTrashed()->first();
         $carts = Cart::where('order_id',$id)->get();
         foreach($carts as $key=>$val){
             $product = Product::where('id',$val->product_id)->first();
@@ -78,7 +78,7 @@ class OrderController extends Controller
     }
 
     function getUserDetail($id){
-        return User::where('id',$id)->first();
+        return User::where('id',$id)->withTrashed()->first();
     }
 
     public function numberToWord($num = '')
@@ -147,8 +147,8 @@ class OrderController extends Controller
         $order->sum_quantity = Cart::where('order_id',$order->id)->sum('quantity');
         $order->sum_price = Cart::where('order_id',$order->id)->sum('p_price');
         $order->in_word = $this->numberToWord($order->amount);
-        $customer = User::where('id',$order->user_id)->first();
-        $vendor = User::where('id',$order->vendor_id)->first();
+        $customer = User::where('id',$order->user_id)->withTrashed()->first();
+        $vendor = User::where('id',$order->vendor_id)->withTrashed()->first();
         $carts = Cart::where('order_id',$order->id)->get();
         foreach($carts as $key=>$val){
             $product = Product::where('id',$val->product_id)->first();
@@ -202,8 +202,8 @@ class OrderController extends Controller
         $order->sum_quantity = Cart::where('order_id',$order->id)->sum('quantity');
         $order->sum_price = Cart::where('order_id',$order->id)->sum('p_price');
         $order->in_word = $this->numberToWord($order->amount);
-        $customer = User::where('id',$order->user_id)->first();
-        $vendor = User::where('id',$order->vendor_id)->first();
+        $customer = User::where('id',$order->user_id)->withTrashed()->first();
+        $vendor = User::where('id',$order->vendor_id)->withTrashed()->first();
         $carts = Cart::where('order_id',$order->id)->get();
         foreach($carts as $key=>$val){
             $product = Product::where('id',$val->product_id)->first();

@@ -71,7 +71,7 @@ class OrderController extends Controller
             if(!empty($request->user()->active_store_code)){
                 $orders = Order::where(['user_id' => $request->user()->id,'store_code' => $request->user()->active_store_code])->orderBy('id','DESC')->get();
                 foreach($orders as $key=>$val){
-                    $user = Vendor::where('id',$val->vendor_id)->first();
+                    $user = Vendor::where('id',$val->vendor_id)->withTrashed()->first();
                     $val['total_item'] = Cart::where('order_id',$val->id)->count();
                     $val['product_image'] = $this->GetOneImage($val->id);
                     $val['vendor_image'] = asset('public/images/users/'.$user->image);
@@ -107,7 +107,7 @@ class OrderController extends Controller
                     $val['out_of_stock'] = $wish_stock->quantity;
                 }
             }
-            $vendor = Vendor::where('id',$order->vendor_id)->first();
+            $vendor = Vendor::where('id',$order->vendor_id)->withTrashed()->first();
             $vendor->image = asset('public/images/users/'.$vendor->image);
             return $this->sendSuccess('ORDER DETAIL FETCH SUCCESSFULLY', ['items' => $carts ,'detail' => $order,'vendor' => $vendor]);
         }catch(\Throwable $e){

@@ -107,7 +107,7 @@ class ProductController extends Controller
         }
         $data['images'] = isset($dd_image) ? $dd_image : '';
         Product::create($data);
-        return redirect()->route('products.index')->with('success','Product Create Success');
+        return redirect()->route('products.create')->with('success','Product Create Success');
     }
 
     /**

@@ -211,8 +211,8 @@
                                                 </td>
                                                 <td>{{ date('d-M-y H:i:s',strtotime($val->created_at)) }}</td>
                                                 <td>
-                                                    <a  href="{{route('products.edit',$val->id)}}">
-                                                        <button class="btn btn-info">Edit</button>
+                                                    <a  href="{{route('products.edit',$val->id)}}" class="btn btn-info">
+                                                       Edit
                                                     </a>
 
                                                     <a href="#" class="text-danger" data-bs-toggle="modal" data-bs-target="#danger_ke{{ $val->id }}"><button class="btn btn-danger">Delete</button></a>

@@ -108,6 +108,8 @@ Route::get('order-invoice/{id}',[OrderController::class,'OrderInvoice'])->name('
 Route::get('create_thumbnil_image',[Controller::class,'createthumbnil']);
 
 Route::get('test-pagenation',[Controller::class,'test_pagination']);
+
+
 Route::get('get_admin_products',function(){
     return json_encode(Product::where('is_admin',1)->get());
 });
