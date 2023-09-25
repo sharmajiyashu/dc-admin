@@ -136,7 +136,7 @@ class OrderController extends Controller
         try{
             $orders = Order::where(['vendor_id' => $request->user()->id])->orderBy('id','DESC')->get();
             foreach($orders as $key=>$val){
-                $user = Vendor::where('id',$val->user_id)->first();
+                $user = Vendor::where('id',$val->user_id)->withTrashed()->first();
                 $val['total_item'] = Cart::where('order_id',$val->id)->count();
                 $val['customer_name'] = isset($user->name) ? $user->name :'';
                 $val['product_image'] = $this->GetOneImage($val->id);
@@ -213,10 +213,9 @@ class OrderController extends Controller
                     $val['out_of_stock'] = $wish_stock->quantity;
                 }
             }
-
             $vendor = Vendor::where('id',$order->vendor_id)->first();
             $order->vendor_name = $vendor->name;
-            $customer = Vendor::where('id',$order->user_id)->first();
+            $customer = Vendor::where('id',$order->user_id)->withTrashed()->first();
             return $this->sendSuccess('ORDER DETAIL FETCH SUCCESSFULLY', ['items' => $carts ,'detail' => $order,'customer' => $customer]);
         }catch(\Throwable $e){
             return $this->sendFailed($e->getMessage(). ' On Line '. $e->getLine(),200);

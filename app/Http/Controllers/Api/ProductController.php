@@ -292,11 +292,12 @@ class ProductController extends Controller
                 ->where('status', Product::$active)
                 ->where('is_admin', '0')
                 ->latest()
-                ->get()->map(function ($product) use($slab_id){
+                ->get()->map(function ($product) use($slab_id,$user_id){
                     $image = $product->images;
                     $product->images = Helper::transformImages($image);
                     $product->original_images = Helper::transformOrignilImages($image);
                     $slab_check = SlabLink::where(['product_id' => $product->id ,'user_id' => $product->user_id,'slab_id' => $slab_id])->exists();
+                    $product->cart_count = Cart::where('user_id',$user_id)->where('product_id',$product->id)->where('status',0)->count();
                     $slab_data = Slab::find($slab_id);
                     if($slab_check && $slab_data->status == Slab::$active){
                         return $product ? $product :'';

@@ -319,7 +319,7 @@ class Helper {
 
 		// Retrieve the products related to the active store's slab
 		$products = Product::where('user_id', $storeLink->vendor_id)
-			->where('status', 'Active')
+			->where('status',1)
 			->where('is_admin', '0')
 			->latest()
 			->get()->map(function ($product) use($slab_id){
