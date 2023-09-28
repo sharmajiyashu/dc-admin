@@ -200,6 +200,7 @@ class StoreLinkController extends Controller
                 $val->customer_mobile = isset($vendor->mobile)  ? $vendor->mobile :'';
                 $val->customer_city = isset($vendor->city)  ? $vendor->city :'';
                 $val->is_register  = isset($vendor->is_register)  ? $vendor->is_register :'';
+                $val->slab_id = intval($val->slab_id);
             }
             return $this->sendSuccess('ADD IN CUSTOMERS FETCH SUCCESSFULLY',$in_ads);
         }catch(\Throwable $e){
