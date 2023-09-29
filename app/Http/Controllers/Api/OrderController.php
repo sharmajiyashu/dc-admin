@@ -229,6 +229,15 @@ class OrderController extends Controller
                 $order = Order::where('id',$request->order_id)->first();
                 $user = User::find($order->user_id);
                 if($user){
+                    if($order->status == 'rejected'){
+                        $cart_items = Cart::where('order_id',$order->id)->get();
+                        foreach($cart_items as $key=>$val){
+                            $product = Product::where('id',$val->product_id)->first();
+                            if($product->is_limited == 1){
+                                $product->update(['stock' => $product->stock + $val->quantity]);
+                            }
+                        }
+                    }
                     $order->update(['status' => $request->status]);
                     Helper::sentOrderChange($request->order_id,$request->status);
                     return $this->sendSuccess('ORDER STATUS CHANGE SUCCESSFULLY');
