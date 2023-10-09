@@ -19,6 +19,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\File;
 use Intervention\Image\Facades\Image;
 use Illuminate\Routing\Controller as BaseController;
+use Illuminate\Support\Facades\Validator;
 
 class Controller extends BaseController
 {
@@ -194,5 +195,45 @@ class Controller extends BaseController
 
     //     return 'Thumbnails created and moved to the target folder.';
     // }
+
+
+    function upload_image(Request $request){
+        $data = array();
+
+        $validator = Validator::make($request->all(), [
+             'file' => 'required|mimes:png,jpg,jpeg,pdf|max:2048'
+        ]);
+
+        if ($validator->fails()) {
+
+            $data['success'] = 0;
+            $data['error'] = $validator->errors()->first('file');// Error response
+
+        }else{
+             if($request->file('file')) {
+
+                 $file = $request->file('file');
+                 $filename = time().'_'.$file->getClientOriginalName();
+
+                  // File upload location
+                  $location = 'files';
+
+                  // Upload file
+                  $file->move($location,$filename);
+
+                  // Response
+                  $data['success'] = 1;
+                  $data['message'] = 'Uploaded Successfully!';
+                  $data['file_name'] = $filename;
+
+             }else{
+                   // Response
+                   $data['success'] = 0;
+                   $data['message'] = 'File not uploaded.'; 
+             }
+        }
+
+         return response()->json($data);
+    }
 
 }

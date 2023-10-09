@@ -35,8 +35,8 @@ class CustomersListApi extends FormRequest
         throw new HttpResponseException(response()->json([
             'ResponseCode' => 200,
             'Status'   => false,
-            'Message'   => 'Validation errors',
-            'Data'      => $validator->errors()->first()
+            'Message'  => 'Validation errors',
+            'Data'     => $validator->errors()->first()
         ]));
 
     }

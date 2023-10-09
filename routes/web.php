@@ -9,6 +9,7 @@ use App\Http\Controllers\VendorController;
 use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\OrderController;
+use App\Http\Controllers\ViewStoreController;
 use App\Models\Category;
 use App\Models\Product;
 
@@ -106,9 +107,8 @@ Route::post('check-login', [LoginController::class, 'check_login'])->name('check
 Route::get('order-history/{id}',[OrderController::class,'OrderHistory'])->name('order-history');
 Route::get('order-invoice/{id}',[OrderController::class,'OrderInvoice'])->name('order-invoice');
 Route::get('create_thumbnil_image',[Controller::class,'createthumbnil']);
-
 Route::get('test-pagenation',[Controller::class,'test_pagination']);
-
+// get products to admin pannels
 
 Route::get('get_admin_products',function(){
     return json_encode(Product::where('is_admin',1)->get());
@@ -116,3 +116,20 @@ Route::get('get_admin_products',function(){
 Route::get('get_admin_categories',function(){
     return json_encode(Category::where('is_admin',1)->get());
 });
+
+
+// dropzone work
+Route::get('dropzone',function(){
+    return view('dropzone');
+});
+Route::post('upload_image',[Controller::class,'upload_image'])->name('upload_image');
+
+// dropzone
+
+// store view
+
+Route::get('store-view/{id}',[ViewStoreController::class,'index'])->name('view_store');
+Route::get('store-view-product-detail/{id}',[ViewStoreController::class,'productDetail'])->name('view_store_product_detail');
+Route::get('store-view-categories/{id}/{user_id}',[ViewStoreController::class,'categoriesDetail'])->name('view_store_categories');
+
+
