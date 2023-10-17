@@ -96,18 +96,20 @@ class CustomerController extends Controller
 
     function CustomersUpdateDetail(CustomersUpdateDetail $request){
         try{
-            if($request->hasFile('image')) {
-                $image       = $request->file('image');
-                $extension = $image->getClientOriginalExtension();
-                $filename = uniqid().'.'.$extension;
-                $image_resize = Image::make($image->getRealPath());              
-                $image_resize->save(public_path('images/customers/'.$filename));
-            }
+            // if($request->hasFile('image')) {
+            //     $image       = $request->file('image');
+            //     $extension = $image->getClientOriginalExtension();
+            //     $filename = uniqid().'.'.$extension;
+            //     $image_resize = Image::make($image->getRealPath());              
+            //     $image_resize->save(public_path('images/customers/'.$filename));
+            // }
             $data = $request->validated();
-            $data['image'] = isset($filename) ? $filename : '';
+            // $data['image'] = isset($filename) ? $filename : '';
             $data['dob'] = date('Y-m-d H:i:s',strtotime($request->dob));
             $data['is_register'] = '1';
-            $data['pin'] = $request->pin;
+            if(!empty($request->pin)){
+                $data['pin'] = $request->pin;
+            }
             if(!empty($request->store_name)){
                 $data['store_name'] = $request->store_name;
             }

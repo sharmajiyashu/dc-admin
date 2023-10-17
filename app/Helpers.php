@@ -15,6 +15,7 @@ use App\Models\SlabLink;
 use App\Models\StoreLink;
 use App\Models\User;
 use App\Models\Vendor;
+use App\Models\WishCart;
 use Carbon\Carbon;
 use Illuminate\Support\Str;
 
@@ -322,12 +323,15 @@ class Helper {
 			->where('status',1)
 			->where('is_admin', '0')
 			->latest()
-			->get()->map(function ($product) use($slab_id){
+			->get()->map(function ($product) use($slab_id,$user_id){
 				$image = $product->images;
 				$product->images = self::transformImages($image);
 				$product->original_images = Helper::transformOrignilImages($image);
 				$slab_check = SlabLink::where(['product_id' => $product->id ,'user_id' => $product->user_id,'slab_id' => $slab_id])->exists();
 				$slab_data = Slab::find($slab_id);
+				$cart_sum = Cart::where('user_id',$user_id)->where('product_id',$product->id)->where('status',0)->count();
+				$wist_sum = WishCart::where('user_id',$user_id)->where('product_id',$product->id)->where('status',0)->count();
+				$product->cart_count = $cart_sum + $wist_sum;
 				if($slab_check && $slab_data->status == Slab::$active){
 					return $product ? $product :'';
 				}
