@@ -18,6 +18,7 @@ use App\Models\Slab;
 use App\Models\SlabLink;
 use App\Models\StoreLink;
 use App\Models\Vendor;
+use App\Models\WishCart;
 use App\Traits\ApiResponse;
 use GuzzleHttp\Handler\Proxy;
 use Illuminate\Pagination\LengthAwarePaginator;
@@ -297,7 +298,9 @@ class ProductController extends Controller
                     $product->images = Helper::transformImages($image);
                     $product->original_images = Helper::transformOrignilImages($image);
                     $slab_check = SlabLink::where(['product_id' => $product->id ,'user_id' => $product->user_id,'slab_id' => $slab_id])->exists();
-                    $product->cart_count = Cart::where('user_id',$user_id)->where('product_id',$product->id)->where('status',0)->count();
+                    $cart_sum = Cart::where('user_id',$user_id)->where('product_id',$product->id)->where('status',0)->count();
+                    $wist_sum = WishCart::where('user_id',$user_id)->where('product_id',$product->id)->where('status',0)->count();
+                    $product->cart_count = $cart_sum + $wist_sum;
                     $slab_data = Slab::find($slab_id);
                     if($slab_check && $slab_data->status == Slab::$active){
                         return $product ? $product :'';

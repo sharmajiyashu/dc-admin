@@ -7,6 +7,7 @@ use App\Http\Requests\RemoveCartItemApi;
 use App\Http\Requests\DecrementCartQuantityApi;
 use App\Http\Requests\GetCartItemApi;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\RemoveWishItemApi;
 use Illuminate\Http\Request;
 use App\Models\Role;
 use App\Models\Vendor;
@@ -174,6 +175,14 @@ class CartController extends Controller
     public function RemoveCartItem(RemoveCartItemApi $request){
         try{
             Cart::where(['id'=>$request->cart_id,'user_id' => $request->user()->id ,'status' => '0'])->delete();
+            return $this->sendSuccess('CART ITEM REMOVE SUCCESSFULLY','');
+        }catch(\Throwable $e){
+            return $this->sendFailed($e->getMessage(). ' On Line '. $e->getLine(),200);
+        }
+    }
+
+    public function RemoveWishItem(RemoveWishItemApi $request){
+        try{
             WishCart::where(['id'=>$request->cart_id,'user_id' => $request->user()->id ,'status' => '0'])->delete();
             return $this->sendSuccess('CART ITEM REMOVE SUCCESSFULLY','');
         }catch(\Throwable $e){

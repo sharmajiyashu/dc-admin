@@ -139,7 +139,24 @@ $(document).ready(function(){
         }
     });
 });
-    </script>
+</script>
+
+
+<script>
+if (localStorage.getItem('dc_dukaan_number') === null) {
+    const dataArray = [{ {{ $user->store_name }}: { start_date: '11-12-2001', mobile:'' } }];
+    // Store the array in localStorage under the key 'dc_dukaan_number'
+    localStorage.setItem('dc_dukaan_number', JSON.stringify(dataArray));
+}else{
+    
+} 
+</script>
+
+<script>
+    calculate
+</script>
+
+<script src="{{ asset('public/frontend/js/check_ids_is_exist.js') }}"></script>
     
 </body>
 </html>
