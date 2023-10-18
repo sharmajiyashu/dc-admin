@@ -12,6 +12,7 @@ use App\Http\Controllers\OrderController;
 use App\Http\Controllers\ViewStoreController;
 use App\Models\Category;
 use App\Models\Product;
+use App\Models\SlabLink;
 
 /*
 |--------------------------------------------------------------------------
@@ -131,5 +132,14 @@ Route::post('upload_image',[Controller::class,'upload_image'])->name('upload_ima
 Route::get('store-view/{id}',[ViewStoreController::class,'index'])->name('view_store');
 Route::get('store-view-product-detail/{id}',[ViewStoreController::class,'productDetail'])->name('view_store_product_detail');
 Route::get('store-view-categories/{id}/{user_id}',[ViewStoreController::class,'categoriesDetail'])->name('view_store_categories');
+
+Route::get('reset_all_maping',function(){
+    SlabLink::get()->map(function($slab_link){
+        $product = Product::find($slab_link->product_id);
+        if(empty($product)){
+            $slab_link->delete();
+        }
+    });
+});
 
 

@@ -113,7 +113,7 @@ class CartController extends Controller
                     $val->category_image = isset($product->category_image) ? $product->category_image :'';
                 }
 
-                $with_cart = WishCart::where(['user_id'=>$request->user()->id,'store_code' => $request->user()->active_store_code,'status' => '0'] )->get();
+                $with_cart = WishCart::where(['user_id'=>$request->user()->id,'store_code' => $request->user()->active_store_code,'status' => '0'] )->orderBy('id','DESC')->get();
                 foreach($with_cart as $key=>$val){
                     $product = $this->getProductData($val->product_id);
                     $val->product_name = isset($product->name) ? $product->name :'';
@@ -134,7 +134,7 @@ class CartController extends Controller
 
     public function wishListItems(Request $request){
         if(!empty($request->user()->active_store_code)){
-            $with_cart = WishCart::where(['user_id'=>$request->user()->id,'store_code' => $request->user()->active_store_code,'status' => '1'] )->orderBy('id','desc')->get();
+            $with_cart = WishCart::where(['user_id'=>$request->user()->id,'store_code' => $request->user()->active_store_code,'status' => '1'] )->orderBy('id','DESC')->get();
             foreach($with_cart as $key=>$val){
                 $product = $this->getProductData($val->product_id);
                 $val->product_name = isset($product->name) ? $product->name :'';

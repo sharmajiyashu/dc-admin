@@ -333,7 +333,13 @@ class Helper {
 				$wist_sum = WishCart::where('user_id',$user_id)->where('product_id',$product->id)->where('status',0)->count();
 				$product->cart_count = $cart_sum + $wist_sum;
 				if($slab_check && $slab_data->status == Slab::$active){
-					return $product ? $product :'';
+					if($product->is_limited == '1'){
+						if($product->stock > 0){
+							return $product ? $product :'';
+						}
+					}else{
+						return $product ? $product :'';
+					}
 				}
 			})->filter()->values()->take(10);
 

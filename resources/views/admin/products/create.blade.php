@@ -59,14 +59,14 @@
                                             <div class="col-md-6 col-12">
                                                 <div class="mb-1">
                                                     <label class="form-label" for="first-name-column">Product Name</label>
-                                                    <input type="text" id="first-name-column" name="name" class="form-control" placeholder="Title" value="{{ old('name') }}" oninput="this.value = this.value.toUpperCase()" />
+                                                    <input type="text" id="first-name-column" name="name" class="form-control" required placeholder="Title" value="{{ old('name') }}" oninput="this.value = this.value.toUpperCase()" />
                                                 </div>
                                             </div>
                                             
                                             <div class="col-md-6 col-12">
                                                 <div class="mb-1">
                                                     <label class="form-label"  for="last-name-column">Category</label>
-                                                    <select class="form-select" name="category_id" id="basicSelect">
+                                                    <select class="form-select" name="category_id" id="basicSelect" required> 
                                                         <option value="">(Select Category)</option>
                                                         @foreach ($categories as $item)
                                                             <option value="{{ $item->id }}" {{ (old("category_id") == $item->id ? "selected":"") }}  >{{ $item->title }}</option>
@@ -88,7 +88,7 @@
                                             <div class="col-md-6 col-12">
                                                 <div class="mb-1">
                                                     <label class="form-label"  for="last-name-column">Image</label>
-                                                    <input type="file" name="image[]" class="form-control product_image">
+                                                    <input type="file" name="image[]" class="form-control product_image" required>
                                                 </div>
                                             </div>
 

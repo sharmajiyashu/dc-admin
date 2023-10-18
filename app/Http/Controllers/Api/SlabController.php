@@ -26,9 +26,9 @@ class SlabController extends Controller
             $data = $request->validated();
             $data['name'] = Helper::createUpperString($request->name);
             $data['user_id'] = $request->user()->id;
-            $msg = 'Create';
+            $msg = 'added';
             if(!empty($request->id)){
-                $msg = 'Update';
+                $msg = 'updated';
                 $check = Slab::where(['name' => $data['name'] ,'user_id' => $request->user()->id])->where('id','!=',$request->id)->count();
             }else{
                 $check = Slab::where(['name' => $data['name'] ,'user_id' => $request->user()->id])->count();
@@ -37,7 +37,7 @@ class SlabController extends Controller
                 return $this->sendFailed('The name has already been taken.',200);
             }
             $product = Slab::updateOrCreate(['id' => $request->id],$data);
-            return $this->sendSuccess($msg.' SLAB SUCCESSFULLY');
+            return $this->sendSuccess('Slab is '.$msg.' successfully');
         }catch(\Throwable $e){
             return $this->sendFailed($e->getMessage(). ' On Line '. $e->getLine(),200);
         }
