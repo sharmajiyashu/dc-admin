@@ -25,7 +25,7 @@ class StoreCategoryRequest extends FormRequest
     {
         return [
             'title' => 'required|unique:categories,title,NULL,id,is_admin,1,deleted_at,NULL',
-            'status'=> 'required|In:Inactive,Active',
+            'status'=> 'required',
             'image'=> 'required|mimes:png,jpg',
         ];
     }
