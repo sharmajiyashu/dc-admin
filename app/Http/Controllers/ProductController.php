@@ -16,6 +16,7 @@ use Illuminate\Support\Facades\Redis;
 use Intervention\Image\Facades\Image;
 use Illuminate\Support\Facades\File;
 
+
 class ProductController extends Controller
 {
     /**
@@ -252,6 +253,18 @@ class ProductController extends Controller
         $product->images = json_decode($product->images);
         $dd_product = [];
         if(!empty($product->images)){
+            $path_1 = public_path('images/products/'.$request->image);
+            $path_2 = public_path('images/products/thumb1/'.$request->image);
+            $path_3 = public_path('images/products/thumb2/'.$request->image);
+            if(File::exists($path_1)) {
+                File::delete($path_1);
+            }
+            if(File::exists($path_2)) {
+                File::delete($path_2);
+            }
+            if(File::exists($path_3)) {
+                File::delete($path_3);
+            }
             foreach($product->images as $key){
                 if($key != $request->image){
                     $dd_product[] = $key;
