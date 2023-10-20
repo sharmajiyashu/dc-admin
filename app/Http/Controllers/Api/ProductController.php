@@ -198,6 +198,8 @@ class ProductController extends Controller
                 $id = json_decode($request->product_id);
                 Product::whereIn('id',$id)->delete();
                 SlabLink::whereIn('product_id',$id)->delete();
+                WishCart::whereIn('product_id',$id)->where('status','0')->delete();
+                Cart::whereIn('product_id',$id)->where('status','0')->delete();
             }
             DB::commit();
             return $this->sendSuccess('PRODUCT DELETE SUCCESSFULLY','');

@@ -117,7 +117,7 @@ class OrderController extends Controller
     }
 
     function getProductData($id){
-        $product = Product::where('id',$id)->first();
+        $product = Product::where('id',$id)->withTrashed()->first();
         $category = Category::where('id',$product->category_id)->first();
         $images = json_decode($product->images);
         if(!empty($images)){
@@ -229,7 +229,7 @@ class OrderController extends Controller
                 $order = Order::where('id',$request->order_id)->first();
                 $user = User::find($order->user_id);
                 if($user){
-                    if($order->status == 'rejected'){
+                    if($request->status == 'rejected'){
                         $cart_items = Cart::where('order_id',$order->id)->get();
                         foreach($cart_items as $key=>$val){
                             $product = Product::where('id',$val->product_id)->first();
