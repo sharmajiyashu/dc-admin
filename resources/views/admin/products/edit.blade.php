@@ -56,7 +56,7 @@
                                             <div class="col-md-12 col-12">
                                                 <div class="mb-1">
                                                     <label class="form-label" for="first-name-column">Product Name</label>
-                                                    <input type="text" id="first-name-column" name="name" class="form-control" placeholder="Title" value="{{ $product->name }}" />
+                                                    <input type="text" id="product_name" name="name" class="form-control" placeholder="Title" value="{{ $product->name }}" />
                                                 </div>
                                             </div>
                                             
@@ -201,4 +201,19 @@
                 </div>
         </div>
     </div>
+
+
+    <script>
+        window.onload = function() {
+            // Get the "name" input field by its ID
+            var nameInput = document.getElementById("product_name");
+
+            if (nameInput) {
+                // Set the cursor focus to the "name" input field
+                nameInput.focus();
+            }
+        };
+    </script>
+
+
 @endsection

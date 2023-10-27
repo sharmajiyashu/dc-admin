@@ -1,4 +1,4 @@
-<ul class="pagination pagination-primary justify-content-end mt-2">
+<ul class="pagination pagination-primary justify-content-center mt-2">
     <!-- First Page -->
     @if ($data->onFirstPage())
         <li class="page-item disabled"><span class="page-link" aria-hidden="true">&laquo;</span></li>
@@ -18,7 +18,7 @@
     @endif
 
     <!-- Page Links -->
-    @for ($page = max(1, $data->currentPage() - 2); $page <= min($data->lastPage(), $data->currentPage() + 2); $page++)
+    @for ($page = max(1, $data->currentPage() - 10); $page <= min($data->lastPage(), $data->currentPage() + 10); $page++)
         <li class="page-item @if ($page == $data->currentPage()) active disabled @endif">
             <a class="page-link" href="{{ $data->appends(['keyword' => $keyword])->url($page) }}">{{ $page }}</a>
         </li>

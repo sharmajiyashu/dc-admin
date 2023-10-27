@@ -44,9 +44,8 @@
 });
 </script>
 
-{{-- <script>
+<script>
     $(document).ready(function() {
-        
         toastr.options.timeOut = 10000;
         @if (Session::has('error'))
             toastr.error('{{ Session::get('error') }}');
@@ -56,9 +55,9 @@
         @endif
 
     });
-</script> --}}
+</script>
 
-@if (session('success'))
+{{-- @if (session('success'))
     <script>
         Swal.fire({
             title: 'Success!',
@@ -78,6 +77,6 @@
             confirmButtonText: 'OK'
         });
     </script>
-@endif
+@endif --}}
 <script src="{{ asset('public/admin/app-assets/vendors/js/forms/select/select2.full.min.js')}}"></script>
 <script src="{{ asset('public/admin/app-assets/js/scripts/forms/form-select2.js')}}"></script>

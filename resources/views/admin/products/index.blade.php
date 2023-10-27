@@ -118,6 +118,7 @@
                                     
                                 </div>
                                 <div class="card-datatable">
+                                    @include('admin._pagination_filter', ['data' => $products_2,'keyword' => $get])
                                     <table class="datatables-ajax table table-responsive ">
                                         <thead>
                                             <tr>
@@ -247,7 +248,11 @@
                                         </tbody>
                                     </table>
 
-                                    @include('admin._pagination_filter', ['data' => $products_2,'keyword' => $get])
+                                    <div>
+                                        @include('admin._pagination_filter', ['data' => $products_2,'keyword' => $get])
+                                    </div>
+
+                                    
 
                                     
                                 </div>

@@ -59,7 +59,7 @@
                                             <div class="col-md-6 col-12">
                                                 <div class="mb-1">
                                                     <label class="form-label" for="first-name-column">Product Name</label>
-                                                    <input type="text" id="first-name-column" name="name" class="form-control" required placeholder="Title" value="{{ old('name') }}" oninput="this.value = this.value.toUpperCase()" />
+                                                    <input type="text" id="product_name" name="name" class="form-control" required placeholder="Title" value="{{ old('name') }}" oninput="this.value = this.value.toUpperCase()" />
                                                 </div>
                                             </div>
                                             
@@ -156,4 +156,16 @@
         </div>
     </div>
     <!-- END: Content-->
+
+    <script>
+        window.onload = function() {
+            // Get the "name" input field by its ID
+            var nameInput = document.getElementById("product_name");
+
+            if (nameInput) {
+                // Set the cursor focus to the "name" input field
+                nameInput.focus();
+            }
+        };
+    </script>
 @endsection
