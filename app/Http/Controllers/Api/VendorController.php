@@ -129,10 +129,14 @@ class VendorController extends Controller
 
             if(!empty($request->slab_id)){
                 $slab = Slab::where('id',$request->slab_id)->first();
-                if($slab->status == Slab::$active){
+                if($slab->is_default != '1'){
+                    if($slab->status == Slab::$active){
                     Slab::where('id',$request->slab_id)->update(['status' => Slab::$inactive]);
+                    }else{
+                        Slab::where('id',$request->slab_id)->update(['status' => Slab::$active]);
+                    }    
                 }else{
-                    Slab::where('id',$request->slab_id)->update(['status' => Slab::$active]);
+                    return $this->sendFailed('You cant change default slab',200);
                 }
             }
 

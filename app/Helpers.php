@@ -453,6 +453,26 @@ class Helper {
 		}
 
 		curl_close($ch);
+
+		$authKeyAPI = "6FEseMwxKtF3zA==";
+            $authKeyAPI = urlencode($authKeyAPI);
+            $message = "Hi, Your Login OTP is ".$otp.". From DC JEWELRY.;";
+            //Your message to send, Add URL encoding here.
+            $message = urlencode($message);
+            $input_mobile = $mobileNumber;
+            $curl = curl_init();
+            curl_setopt_array($curl, array(
+            CURLOPT_URL => 'https://apps.mrhitech.in/marketing/api/wa_sendhttp.php?authkey='.$authKeyAPI.'&mobile=91'.$input_mobile.'&message='.$message,
+            CURLOPT_RETURNTRANSFER => true,
+            CURLOPT_ENCODING => '',
+            CURLOPT_MAXREDIRS => 10,
+            CURLOPT_TIMEOUT => 0,
+            CURLOPT_FOLLOWLOCATION => true,
+            CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+            CURLOPT_CUSTOMREQUEST => 'GET',
+            ));
+            $response = curl_exec($curl);
+            curl_close($curl);
 	}
 
 }

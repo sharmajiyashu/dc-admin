@@ -142,4 +142,11 @@ Route::get('reset_all_maping',function(){
     });
 });
 
+Route::get('remove_space_from_product',function(){
+    $products = Product::where('is_admin','1')->get()->map(function($product){
+        $cleanedString = trim($product->name);
+        $product->update(['name' => $cleanedString]);
+    });
+});
+
 

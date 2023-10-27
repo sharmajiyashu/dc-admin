@@ -30,7 +30,9 @@ class ProductController extends Controller
         $keyword = request('keyword');
         $get = [];
         $page = isset($request->page) ? $request->page : 1;
-        $products = Product::where('is_admin','1')->with('category')->orderBy('id','desc');
+        $products = Product::where('is_admin', '1')->with('category')->orderByRaw('LENGTH(name) ASC, name ASC');
+        // echo $products->toSql();
+        // die;
         
         if(!empty($request->category_id)){
             $products->where('category_id',$request->category_id);
@@ -396,7 +398,7 @@ class ProductController extends Controller
             $filename = 'subscriptions'.time() . '.' . $file->getClientOriginalExtension();
             $file->move(public_path('uploads'), $filename);
 
-            $total = $this->insertBulkData3($filename);
+            $total = $this->insertBulkData($filename);
 
             return redirect()->back()->with('success',$total.' Product Import SuccessFully');
         }
@@ -446,11 +448,16 @@ class ProductController extends Controller
         $total_subscriber_insert = 0;
 
         foreach ($csvData as $key => $row) {
+
+
+            
             if ($key === 0) continue; // Skip the header row
             $length = count($row);
-            if($length == 19){
 
+            
+            if($length == 20){
 
+                // print_r($row[0]);die;
                 $image = [];
 
                 if(!empty($row[4])){
@@ -478,7 +485,7 @@ class ProductController extends Controller
                 $product_name = Helper::createUpperString($row[1]);
                 $check_product = Product::where('is_admin','1')->where('name',$product_name)->count();
                 if($check_product < 1){
-                    Product::create(['name' => $product_name ,'category_id' => $row[9] ,'user_id' => Auth::user()->id ,'sp' => 0 ,'is_admin' => '1' ,'images' => $image]);
+                    Product::create(['id' => $row[0],'name' => $product_name ,'category_id' => $row[10] ,'user_id' => Auth::user()->id ,'sp' => 0 ,'is_admin' => '1' ,'images' => $image]);
                     $total_subscriber_insert ++;
                 }
                 
