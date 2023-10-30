@@ -35,13 +35,13 @@ class OrderController extends Controller
         foreach($carts as $key=>$val){
             $product = Product::where('id',$val->product_id)->first();
             $val->product_name = isset($product->name) ? $product->name :'';
-            $image = json_decode($product->images);
+            if($product->images){
+                $image = json_decode($product->images);
+            }
             $val->image = isset($image[0]) ? $image[0] :'no_image.png';
             $wish_stock = WishCart::where(['order_id' => $order->id ,'product_id' => $val->product_id])->first();
             $val['out_of_stock'] = 0;
             if(!empty($wish_stock)){
-                
-                
                 $val['out_of_stock'] = $wish_stock->quantity;
             }
         }
@@ -153,13 +153,13 @@ class OrderController extends Controller
         foreach($carts as $key=>$val){
             $product = Product::where('id',$val->product_id)->first();
             $val->product_name = isset($product->name) ? $product->name :'';
-            $image = json_decode($product->images);
+            if($product->images){
+                $image = json_decode($product->images);
+            }
             $val->image = isset($image[0]) ? $image[0] :'no_image.png';
             $wish_stock = WishCart::where(['order_id' => $order->id ,'product_id' => $val->product_id])->first();
             $val['out_of_stock'] = 0;
             if(!empty($wish_stock)){
-                
-                
                 $val['out_of_stock'] = $wish_stock->quantity;
             }
         }

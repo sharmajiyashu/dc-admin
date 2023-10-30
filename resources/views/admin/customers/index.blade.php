@@ -56,6 +56,7 @@
                                                 <th>Sr.no</th>
                                                 <th>Image</th>
                                                 <th>Name</th>
+                                                <th>Store Name</th>
                                                 <th>Mobile</th>
                                                 <th>Gender</th>
                                                 <th>State</th>
@@ -74,6 +75,7 @@
                                                     
                                                     <a href="{{ route('customers.show',$val->id) }}"><strong>{{ $val->name }}</strong></a>
                                                 </td>
+                                                <td>{{ $val->store_name }}</td>
                                                 <td>{{ $val->mobile }}</td>
                                                 <td>{{ $val->gender }}</td>
                                                 <td>{{ $val->state }}</td>
