@@ -49,8 +49,10 @@
         <div class="content-wrapper">
             <div class="content-header row">
             </div>
+
             <div class="content-body">
                 <div class="invoice-print p-3">
+                    
                     <div class="invoice-header d-flex justify-content-between flex-md-row flex-column pb-2">
                         <div class="d-flex justify-content-between " style="width: 95%">
                             <div>
@@ -58,14 +60,12 @@
                                     <img src="https://dcjewelry.in/admin/assets/uploads/logo_20230819122652_64e067b490ef8.jpg" alt="" style="height: 50px;width:100%">
                                     {{-- <h3 class="text-primary fw-bold ms-1">INVOICE</h3>  --}}
                                 </div>
-                                
-                                <p class="mb-25" style="font-size: 18px;">Invoice To  : {{ $customer->name }}</p>
+                                <p class="mb-25" style="font-size: 11px;">Date  : {{ date('d-M-y H:i:s') }}</p>
                             </div>
                             <div class="mt-md-0 mt-2">
-                                <h2>Invoice : #{{ $order->order_id }}</h2>
-                                <h5 class="">Invoice To  : {{ $customer->name }} </h5>
-                                <h5 class="">Invoice From  : {{ $vendor->name }} </h5>
-                                {{-- <h5>Month : {{ $month }}</h5> --}}
+                                <h3>Invoice : #{{ $order->order_id }}</h3>
+                                <h6 class="">Invoice To  : {{ $customer->store_name }} </h6>
+                                <h6 class="">Invoice From  : {{ $vendor->store_name }} </h6>
                             </div>
                         </div>
                     </div>

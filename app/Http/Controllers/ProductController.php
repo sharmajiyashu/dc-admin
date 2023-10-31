@@ -51,6 +51,8 @@ class ProductController extends Controller
             $products = $products->where('name', 'LIKE', '%' . $product_name . '%');
             $get['product_name'] = $product_name;
         }
+
+        $get['page_number'] = $page;
         $product_count = $products->count();
         $products = $products->paginate(50, ['*'], 'page', $page);
         
@@ -130,8 +132,9 @@ class ProductController extends Controller
      * @param  \App\Models\Product  $product
      * @return \Illuminate\Http\Response
      */
-    public function edit(Product $product)
+    public function edit(Product $product ,Request $request)
     {   
+        $page_data = isset($request->data) ? $request->data :'';
         $categories = Category::where('is_admin','1')->where('status',Category::$active)->get();
         $images = json_decode($product->images);
         $product['images'] = $images;
@@ -139,7 +142,7 @@ class ProductController extends Controller
         $product['image_2'] = isset($images[1]) ? $images[1] :'no_image.png';
         $product['image_3'] = isset($images[2]) ? $images[2] :'no_image.png';
         $product['image_4'] = isset($images[3]) ? $images[3] :'no_image.png';
-        return view('admin.products.edit',compact('product','categories'));
+        return view('admin.products.edit',compact('product','categories','page_data'));
     }
 
     /**
@@ -235,7 +238,13 @@ class ProductController extends Controller
         $data['images'] = json_encode($images);
 
         $product->update($data);
-        return redirect()->route('products.index')->with('success','Update Product Success');
+        $page_data = json_decode($request->page_data);
+        $get_data = [
+            'page' => isset($page_data->page_number) ? $page_data->page_number :'',
+            'category_id' => isset($page_data->category_id) ? $page_data->category_id :'',
+            'product_name' => isset($page_data->product_name) ? $page_data->product_name :'',
+        ];
+        return redirect()->route('products.index',$get_data)->with('success','Update Product Success');
     }
 
     /**
@@ -244,10 +253,20 @@ class ProductController extends Controller
      * @param  \App\Models\Product  $product
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Product $product)
+    public function destroy(Product $product ,Request $request)
     {
+        if(!empty($request->data)){
+            $page_data = json_decode($request->data);
+            $get_data = [
+                'page' => isset($page_data->page_number) ? $page_data->page_number :'',
+                'category_id' => isset($page_data->category_id) ? $page_data->category_id :'',
+                'product_name' => isset($page_data->product_name) ? $page_data->product_name :'',
+            ];
+        }else{
+            $get_data = [];
+        }
         $product->delete();
-        return redirect()->route('products.index')->with('success','Delete Product Success');
+        return redirect()->route('products.index',$get_data)->with('success','Delete Product Success');
     }
 
     public function delete_product_image (Request $request){
@@ -533,6 +552,8 @@ class ProductController extends Controller
 
 
     public function edit_multiple_product_image (Request $request){
+        $page_data = $request->get_data;
+
         $product_2 = $request->products;
         $product = json_decode($request->products);
         $products = Product::select('id','name','category_id','images')->whereIn('id',$product)->get();
@@ -552,11 +573,12 @@ class ProductController extends Controller
             $val['category_name'] = isset(Category::where('id',$val->category_id)->first()->title) ? Category::where('id',$val->category_id)->first()->title : '';
         }
 
-        return view('admin.products.edit_multiple_product_image',compact('products','product_2'));
+        return view('admin.products.edit_multiple_product_image',compact('products','product_2','page_data'));
 
     }
 
     public function update_multiple_products_image (Request $request){
+        $page_data = json_decode($request->get_data);
         $products = json_decode($request->products);
         $total_images_update = 0;
         foreach($products as $val){
@@ -587,7 +609,12 @@ class ProductController extends Controller
             }
             $product->update(['images' => json_encode($images)]);
         }
-        return redirect()->route('products.index')->with('success',$total_images_update.' Images Uplode');
+        $get_data = [
+            'page' => isset($page_data->page_number) ? $page_data->page_number :'',
+            'category_id' => isset($page_data->category_id) ? $page_data->category_id :'',
+            'product_name' => isset($page_data->product_name) ? $page_data->product_name :'',
+        ];
+        return redirect()->route('products.index',$get_data)->with('success',$total_images_update.' Images Uplode');
     }
 
     public function delete_multiple_images(Request $request){

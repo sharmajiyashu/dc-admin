@@ -81,7 +81,7 @@
                                     <h5 style="    color: #e16262;">ITEM(S): 2 | TOTAL: ₹ 540</h5>
                                     <div style="border-top: solid;padding-top: 1%;text-transform: uppercase;font-weight: 500;">
                                         <div style=" float:left">
-                                            By : {{ $vendor->name }} ({{ $vendor->city }})
+                                            By : {{ $vendor->store_name }} ({{ $vendor->city }})
                                         </div>
                                         <div style="float:right">
                                             {{ date('Y-m-d h:i:s',strtotime($order->created_at)) }}
@@ -100,7 +100,7 @@
                                     <div class="row" style="font-weight: 500;">
                                         <div class="col-md-6">
                                             <div style="float:left">From</div>
-                                            <div style="float:right;text-transform: uppercase;">{{ $customer->name }}</div>
+                                            <div style="float:right;text-transform: uppercase;">{{ $customer->store_name }}</div>
                                         </div>
                                       
                                         <div class="col-md-6">

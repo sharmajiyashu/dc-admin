@@ -128,6 +128,7 @@ class VendorController extends Controller
             $customer = Vendor::where('id',$val->user_id)->first();
             $val['status'] = $this->GetLinkStatus($val->status);
             $val['customer_name'] = isset($customer->name) ? $customer->name :'';
+            $val['customer_store_name'] = isset($customer->store_name) ? $customer->store_name :'';
             $val['customer_mobile'] = isset($customer->mobile) ? $customer->mobile :'';
             $val['customer_city'] = isset($customer->city) ? $customer->city :'';
             $val['customer_city'] = isset($customer->city) ? $customer->city :'';
@@ -153,8 +154,8 @@ class VendorController extends Controller
         $orders = Order::where('vendor_id',$id)->orderBy('id','DESC')->get();
 
         foreach($orders as $key=>$val){
-            $val->user_name = isset($this->getUserDetail($val->user_id)->name) ? $this->getUserDetail($val->user_id)->name :'';
-            $val->vendor_name = isset($this->getUserDetail($val->vendor_id)->name) ? $this->getUserDetail($val->vendor_id)->name :'';
+            $val->user_name = isset($this->getUserDetail($val->user_id)->store_name) ? $this->getUserDetail($val->user_id)->store_name :'';
+            $val->vendor_name = isset($this->getUserDetail($val->vendor_id)->store_name) ? $this->getUserDetail($val->vendor_id)->store_name :'';
             $val->total_item = Cart::where('order_id',$val->id)->count();
         }
         return view('admin.vendor.account.orders',compact('orders','vendor'));

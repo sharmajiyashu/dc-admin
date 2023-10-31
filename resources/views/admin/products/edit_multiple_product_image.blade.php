@@ -90,7 +90,7 @@
                                         </table>
                                     </div>
 
-
+                                    <input type="hidden" name="get_data" value="{{ $page_data }}">
                                     <button>Submit</button>
                                 </form>
 

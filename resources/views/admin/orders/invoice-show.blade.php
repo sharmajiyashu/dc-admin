@@ -51,49 +51,26 @@
             </div>
             <div class="content-body">
                 <div class="invoice-print p-3">
-                    <div class="invoice-header d-flex justify-content-between flex-md-row flex-column pb-2">
+                    {{-- <div class="invoice-header d-flex justify-content-between flex-md-row flex-column pb-2">
                         
-                    </div>
+                    </div> --}}
 
-                    <div style="background: black;color: white !important;letter-spacing: 12px;    text-align: center;    font-size: 22px;font-weight: 600;">
-                        INVOICE
-                    </div>
-
-                    <div class="row" style="padding-top: 2%;">
-                        <div class="col-md-6">
-                            <div class="row">
-                                <div class="col-md-6" >
-                                    Invoice To 
-                                    <h3>{{ $customer->name }}</h3>
+                    <div class="invoice-header d-flex justify-content-between flex-md-row flex-column pb-2">
+                        <div class="d-flex justify-content-between " style="width: 95%">
+                            <div>
+                                <div class="d-flex mb-1">
+                                    <img src="https://dcjewelry.in/admin/assets/uploads/logo_20230819122652_64e067b490ef8.jpg" alt="" style="height: 50px;width:100%">
+                                    {{-- <h3 class="text-primary fw-bold ms-1">INVOICE</h3>  --}}
                                 </div>
-                                <div class="col-md-6">
-                                    Invoice From 
-                                    <h3>{{ $vendor->name }}</h3>
-                                </div>
+                                <p class="mb-25" style="font-size: 11px;">Date  : {{ date('d-M-y H:i:s') }}</p>
+                            </div>
+                            <div class="mt-md-0 mt-2">
+                                <h3>Invoice : #{{ $order->order_id }}</h3>
+                                <h6 class="">Invoice To  : {{ $customer->store_name }} </h6>
+                                <h6 class="">Invoice From  : {{ $vendor->store_name }} </h6>
                             </div>
                         </div>
-                        <div class="col-md-6">
-                            <table class="datatables-ajax table table-responsive ">
-                                <thead>
-                                    <tr>
-                                        <th class="py-1">Invoice#</th>
-                                        <td class="py-1"><strong>{{ $order->order_id }}</strong></td>
-                                        <td></td>
-                                    </tr>
-                                    <tr>
-                                        <th class="py-1">Date</th>
-                                        <td class="py-1">{{ date('d-m-Y H:i:s',strtotime($order->created_at)) }}</td>
-                                        <td></td>
-                                    </tr>
-                                </thead>
-                                
-                            </table>
-                        </div>
                     </div>
-
-                    {{-- <hr class="my-2" /> --}}
-
-                    
 
                     <div class="table-responsive mt-2">
                         <table class="table m-0" style="max-width: 100%;">
@@ -120,7 +97,7 @@
                                             {{ $i }}
                                         </td>
                                         <td class="py-1">
-                                            <img src="{{ asset('public/images/products/thumb1/'.$item->image) }}" alt="product Image" width="90" >
+                                            <img src="{{ asset('public/images/products/thumb1/'.$item->image) }}" alt="product Image" width="40" >
                                             
                                         </td>
                                         <td class="py-1">

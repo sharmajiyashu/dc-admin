@@ -41,7 +41,7 @@
                                 </li>
                                 <li class="breadcrumb-item"><a href="{{ route('vendors.index') }}">Vendors </a>
                                 </li>
-                                <li class="breadcrumb-item"><a href="#">{{ $vendor->name }} </a>
+                                <li class="breadcrumb-item"><a href="#">{{ $vendor->store_name }} </a>
                                 </li>
                                 <li class="breadcrumb-item active"> Customers
                                 </li>
@@ -114,6 +114,7 @@
                                     <thead>
                                         <tr>
                                             <th>Sr.no</th>
+                                            <th>Store Name</th>
                                             <th>Customer Name</th>
                                             <th>Mobile</th>
                                             <th>State</th>
@@ -128,6 +129,7 @@
                                         @foreach($customers as $key => $val)
                                         <tr>
                                             <th scope="row">{{ $i }}</th>
+                                            <td>{{ $val->customer_store_name }}</td>
                                             <td>{{ $val->customer_name }}</td>
                                             <td>{{ $val->customer_mobile }}</td>
                                             <td>{{ $val->customer_state }}</td>

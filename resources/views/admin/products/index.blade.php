@@ -212,8 +212,8 @@
                                                 </td>
                                                 <td>{{ date('d-M-y H:i:s',strtotime($val->created_at)) }}</td>
                                                 <td>
-                                                    <a  href="{{route('products.edit',$val->id)}}" class="btn btn-info">
-                                                       Edit
+                                                    <a href="{{ route('products.edit', ['product' => $val->id]) }}?data={{ json_encode($get) }}" class="btn btn-info">
+                                                        Edit
                                                     </a>
 
                                                     <a href="#" class="text-danger" data-bs-toggle="modal" data-bs-target="#danger_ke{{ $val->id }}"><button class="btn btn-danger">Delete</button></a>
@@ -230,7 +230,7 @@
                                                                     <div class="modal-body">
                                                                         Are you sure you want to delete !
                                                                     </div>
-                                                                    <form action="{{route('products.destroy',$val->id)}}" method="POST">
+                                                                    <form action="{{route('products.destroy',['product' => $val->id]) }}?data={{ json_encode($get) }}" method="POST">
                                                                         @csrf
                                                                         @method('delete')
                                                                         <div class="modal-footer">
@@ -355,6 +355,7 @@
                                 <form action="{{ route('product.edit_multiple_product_image') }}" method="POST" >
                                     @csrf
                                     <input type="hidden" name="products" value="" id="update_selected_images">
+                                    <input type="hidden" name="get_data" value="{{ json_encode($get) }}" id="">
                                     <button class="btn btn-success" disabled id="update_select_product">Update Image Selected product</button>
                                 </form>
                             </div>
@@ -363,6 +364,7 @@
                                 <form action="{{ route('product.delete_multiple_images') }}" method="POST">
                                     @csrf
                                     <input type="hidden" name="products" value="" id="delete_selected_images">
+                                    <input type="hidden" name="get_data" value="{{ json_encode($get) }}" id="">
                                     <button class="btn btn-danger" disabled id="delete_select_product"> Delete Selected Product</button>
                                 </form>
                             </div>

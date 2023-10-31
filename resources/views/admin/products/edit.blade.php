@@ -152,7 +152,7 @@
                                                     <textarea class="form-control" name="detail" id="exampleFormControlTextarea1" rows="3" placeholder="Detail">{{ $product->detail }}</textarea>
                                                 </div>
                                             </div>
-
+                                            <input type="hidden" name="page_data" value="{{ $page_data }}">
 
                                             <div class="col-12">
                                                 <button type="submit" class="btn btn-primary me-1">Submit</button>

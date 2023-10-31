@@ -16,8 +16,8 @@ class OrderController extends Controller
         $orders = Order::orderBy('id','DESC')->get();
         
         foreach($orders as $key=>$val){
-            $val->user_name = isset($this->getUserDetail($val->user_id)->name) ? $this->getUserDetail($val->user_id)->name :'';
-            $val->vendor_name = isset($this->getUserDetail($val->vendor_id)->name) ? $this->getUserDetail($val->vendor_id)->name :'';
+            $val->user_name = isset($this->getUserDetail($val->user_id)->store_name) ? $this->getUserDetail($val->user_id)->store_name :'';
+            $val->vendor_name = isset($this->getUserDetail($val->vendor_id)->store_name) ? $this->getUserDetail($val->vendor_id)->store_name :'';
             $val->total_item = Cart::where('order_id',$val->id)->count();
         }
         return view('admin.orders.index',compact('orders'));
@@ -33,7 +33,7 @@ class OrderController extends Controller
         $vendor = User::where('id',$order->vendor_id)->withTrashed()->first();
         $carts = Cart::where('order_id',$order->id)->get();
         foreach($carts as $key=>$val){
-            $product = Product::where('id',$val->product_id)->first();
+            $product = Product::where('id',$val->product_id)->withTrashed()->first();
             $val->product_name = isset($product->name) ? $product->name :'';
             if($product->images){
                 $image = json_decode($product->images);
@@ -58,7 +58,7 @@ class OrderController extends Controller
         $vendor = User::where('id',$order->vendor_id)->withTrashed()->first();
         $carts = Cart::where('order_id',$id)->get();
         foreach($carts as $key=>$val){
-            $product = Product::where('id',$val->product_id)->first();
+            $product = Product::where('id',$val->product_id)->withTrashed()->first();
             $val->product_name = isset($product->name) ? $product->name :'';
             if(!empty($product->images)){
                 $image = json_decode($product->images);
@@ -151,7 +151,7 @@ class OrderController extends Controller
         $vendor = User::where('id',$order->vendor_id)->withTrashed()->first();
         $carts = Cart::where('order_id',$order->id)->get();
         foreach($carts as $key=>$val){
-            $product = Product::where('id',$val->product_id)->first();
+            $product = Product::where('id',$val->product_id)->withTrashed()->first();
             $val->product_name = isset($product->name) ? $product->name :'';
             if($product->images){
                 $image = json_decode($product->images);
@@ -211,7 +211,7 @@ class OrderController extends Controller
         $vendor = User::where('id',$order->vendor_id)->withTrashed()->first();
         $carts = Cart::where('order_id',$order->id)->get();
         foreach($carts as $key=>$val){
-            $product = Product::where('id',$val->product_id)->first();
+            $product = Product::where('id',$val->product_id)->withTrashed()->first();
             $val->product_name = isset($product->name) ? $product->name :'';
             $image = json_decode($product->images);
             $val->image = isset($image[0]) ? $image[0] :'no_image.png';
