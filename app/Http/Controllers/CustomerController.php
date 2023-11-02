@@ -132,7 +132,7 @@ class CustomerController extends Controller
         foreach($stores as $key=>$val){
             $customer_data = Customer::where('id',$val->vendor_id)->first();
             $val['status'] = $this->GetLinkStatus($val->status);
-            $val['vendor_name'] = isset($customer_data->name) ? $customer_data->name :'';
+            $val['vendor_name'] = isset($customer_data->store_name) ? $customer_data->store_name :'';
             $val['store_code'] = isset($customer_data->store_code) ? $customer_data->store_code :'';
             $val['vendor_mobile'] = isset($customer_data->mobile) ? $customer_data->mobile :'';
             $val['vendor_city'] = isset($customer_data->city) ? $customer_data->city :'';

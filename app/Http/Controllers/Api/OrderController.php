@@ -38,6 +38,8 @@ class OrderController extends Controller
                     $order->note = $request->note;
                     if($cart_total > 0){
                         $order->save();    
+                        $order_id = "DC".sprintf("%05d", $order->id);
+                        $order->update(['order_id' => $order_id]);
                         Cart::where(['user_id'=>$request->user()->id,'store_code' => $request->user()->active_store_code ,'status' => '0'])->update(['order_id' => $order->id ,'status' => '1']);
                         WishCart::where(['user_id'=>$request->user()->id,'store_code' => $request->user()->active_store_code ,'status' => '0'])->update(['order_id' => $order->id ,'status' => '1']);
                         Helper::sentMessageCreateOrder($order->id);
