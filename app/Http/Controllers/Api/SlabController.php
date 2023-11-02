@@ -82,6 +82,7 @@ class SlabController extends Controller
             foreach($store_link As $key=>$val){
                 $customer = Customer::where('id',$val->user_id)->first();
                 $val['customer_name'] = isset($customer->name) ? $customer->name :'';
+                $val['customer_store_name'] = isset($customer->store_name) ? $customer->store_name :'';
                 $val['customer_mobile'] = isset($customer->mobile) ? $customer->mobile :'';
             }
             return $this->sendSuccess('GET SLAB CUSTOMERS SUCCESSFULLY',$store_link);

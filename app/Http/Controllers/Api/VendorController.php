@@ -84,6 +84,7 @@ class VendorController extends Controller
             foreach($carts as $key=>$val){
                 $customer = Customer::where('id',$val->user_id)->first();
                 $val['customer_name'] = isset($customer->name) ? $customer->name :'';
+                $val['customer_store_name'] = isset($customer->store_name) ? $customer->store_name :'';
                 $val['customer_mobile'] = isset($customer->mobile) ? $customer->mobile :'';
                 $product = Product::where('id',$val->product_id)->first();
                 if(!empty($product->images)){

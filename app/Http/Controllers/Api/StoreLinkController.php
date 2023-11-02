@@ -61,6 +61,7 @@ class StoreLinkController extends Controller
                 $customer = $this->GetVendorDetail($val->user_id);
                 $slab = Slab::where('id',$val->slab_id)->first();
                 $val->customer_name = isset($customer->name)  ? $customer->name :'';
+                $val->customer_store_name = isset($customer->store_name)  ? $customer->store_name :'';
                 $val->customer_mobile = isset($customer->mobile)  ? $customer->mobile :'';
                 $val->customer_city = isset($customer->city)  ? $customer->city :'';
                 $val->slab_name = isset($slab->name) ? $slab->name :'';
@@ -71,8 +72,7 @@ class StoreLinkController extends Controller
                 $val->store_image =  isset($image) ? $image :'';
                 $val->store_name = isset($vendor->store_name)  ? $vendor->store_name :'';
                 $val->vendor_name = isset($vendor->name)  ? $vendor->name :'';
-
-                
+                $val->vendor_store_name = isset($vendor->store_name)  ? $vendor->store_name :'';
                 if(!empty($customer)){
                     if($customer->is_register != '1'){
                         unset($stores[$key]);
@@ -113,6 +113,7 @@ class StoreLinkController extends Controller
                 $vendor = $this->GetVendorDetail($val->user_id);
                 $slab = Slab::where('id',$val->slab_id)->first();
                 $val->customer_name = isset($vendor->name)  ? $vendor->name :'';
+                $val->customer_store_name = isset($vendor->store_name)  ? $vendor->store_name :'';
                 $val->customer_mobile = isset($vendor->mobile)  ? $vendor->mobile :'';
                 $val->customer_city = isset($vendor->city)  ? $vendor->city :'';
                 $val->slab_name = isset($slab->name) ? $slab->name :'';
@@ -197,6 +198,7 @@ class StoreLinkController extends Controller
             foreach($in_ads as $key=>$val){
                 $vendor = $this->GetVendorDetail($val->user_id);
                 $val->customer_name = isset($vendor->name)  ? $vendor->name :'';
+                $val->customer_store_name = isset($vendor->store_name)  ? $vendor->store_name :'';
                 $val->customer_mobile = isset($vendor->mobile)  ? $vendor->mobile :'';
                 $val->customer_city = isset($vendor->city)  ? $vendor->city :'';
                 $val->is_register  = isset($vendor->is_register)  ? $vendor->is_register :'';

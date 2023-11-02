@@ -89,7 +89,14 @@ class CartController extends Controller
                     $cart = Cart::where('id',$last_cart->id)->update($cart);
                     $cart_id = $last_cart->id;
                 }
-                return $this->sendSuccess('Product is added successfully in the cart');
+
+                $cart_total = Cart::where(['user_id'=>$request->user()->id,'store_code' => $request->user()->active_store_code,'status' => '0']);
+                return $this->sendSuccess('Product is added successfully in the cart',[
+                    'cart_detail' => [
+                        'cart_amount' => $cart_total->sum('total'),
+                        'cart_count' => $cart_total->count(),
+                    ]
+                ]);
             }else{
                 return $this->sendFailed('you do not have any active store plese select an active store',200);
             }
@@ -102,28 +109,8 @@ class CartController extends Controller
     public function CartItem(GetCartItemApi $request){
         try{
             if(!empty($request->user()->active_store_code)){
-                $carts = Cart::where(['user_id'=>$request->user()->id,'store_code' => $request->user()->active_store_code,'status' => '0'] )->get();
-                $cart_total = Cart::where(['user_id'=>$request->user()->id,'store_code' => $request->user()->active_store_code,'status' => '0'])->sum('total');
-                foreach($carts as $key=>$val){
-                    $product = $this->getProductData($val->product_id);
-                    $val->product_name = isset($product->name) ? $product->name :'';
-                    $val->product_image = isset($product->images) ? $product->images :'';
-                    $val->packing_quantity = isset($product->packing_quantity) ? $product->packing_quantity :'';
-                    $val->category_name = isset($product->category_name) ? $product->category_name :'';
-                    $val->category_image = isset($product->category_image) ? $product->category_image :'';
-                }
-
-                $with_cart = WishCart::where(['user_id'=>$request->user()->id,'store_code' => $request->user()->active_store_code,'status' => '0'] )->orderBy('id','DESC')->get();
-                foreach($with_cart as $key=>$val){
-                    $product = $this->getProductData($val->product_id);
-                    $val->product_name = isset($product->name) ? $product->name :'';
-                    $val->product_image = isset($product->images) ? $product->images :'';
-                    $val->product_detail = isset($product->detail) ? $product->detail :'';
-                    $val->packing_quantity = isset($product->packing_quantity) ? $product->packing_quantity :'';
-                    $val->category_name = isset($product->category_name) ? $product->category_name :'';
-                    $val->category_image = isset($product->category_image) ? $product->category_image :'';
-                }
-                return $this->sendSuccess('CART ITEM FETCH SUCCESSFULLY',['item' => $carts ,'wish_cart_item' => $with_cart , 'detail' => ['total' => $cart_total ,'delivery' => 'FREE' ,'grant_total' =>$cart_total]]);
+                $data = self::getUserCartItems($request->user());
+                return $this->sendSuccess('CART ITEM FETCH SUCCESSFULLY',$data);
             }else{
                 return $this->sendFailed('you do not have any active store plese select an active store',200);
             }
@@ -175,7 +162,8 @@ class CartController extends Controller
     public function RemoveCartItem(RemoveCartItemApi $request){
         try{
             Cart::where(['id'=>$request->cart_id,'user_id' => $request->user()->id ,'status' => '0'])->delete();
-            return $this->sendSuccess('CART ITEM REMOVE SUCCESSFULLY','');
+            $data = self::getUserCartItems($request->user());
+            return $this->sendSuccess('CART ITEM REMOVE SUCCESSFULLY',$data);
         }catch(\Throwable $e){
             return $this->sendFailed($e->getMessage(). ' On Line '. $e->getLine(),200);
         }
@@ -274,6 +262,31 @@ class CartController extends Controller
         }catch(\Throwable $e){
             return $this->sendFailed($e->getMessage(). ' On Line '. $e->getLine(),200);
         }
+    }
+
+    public function getUserCartItems($user){
+        $carts = Cart::where(['user_id'=>$user->id,'store_code' => $user->active_store_code,'status' => '0'] )->get();
+        $cart_total = Cart::where(['user_id'=>$user->id,'store_code' => $user->active_store_code,'status' => '0'])->sum('total');
+        foreach($carts as $key=>$val){
+            $product = $this->getProductData($val->product_id);
+            $val->product_name = isset($product->name) ? $product->name :'';
+            $val->product_image = isset($product->images) ? $product->images :'';
+            $val->packing_quantity = isset($product->packing_quantity) ? $product->packing_quantity :'';
+            $val->category_name = isset($product->category_name) ? $product->category_name :'';
+            $val->category_image = isset($product->category_image) ? $product->category_image :'';
+        }
+
+        $with_cart = WishCart::where(['user_id'=>$user->id,'store_code' => $user->active_store_code,'status' => '0'] )->orderBy('id','DESC')->get();
+        foreach($with_cart as $key=>$val){
+            $product = $this->getProductData($val->product_id);
+            $val->product_name = isset($product->name) ? $product->name :'';
+            $val->product_image = isset($product->images) ? $product->images :'';
+            $val->product_detail = isset($product->detail) ? $product->detail :'';
+            $val->packing_quantity = isset($product->packing_quantity) ? $product->packing_quantity :'';
+            $val->category_name = isset($product->category_name) ? $product->category_name :'';
+            $val->category_image = isset($product->category_image) ? $product->category_image :'';
+        }
+        return ['item' => $carts ,'wish_cart_item' => $with_cart , 'detail' => ['total' => $cart_total ,'delivery' => 'FREE' ,'grant_total' =>$cart_total]];
     }
 
 

@@ -79,6 +79,7 @@ class OrderController extends Controller
                     $val['product_image'] = $this->GetOneImage($val->id);
                     $val['vendor_image'] = asset('public/images/users/'.$user->image);
                     $val['vendor_name'] = isset($user->name) ? $user->name :'';
+                    $val['vendor_store_name'] = isset($user->store_name) ? $user->store_name :'';
                     $val['vendor_mobile'] = isset($user->mobile) ? $user->mobile :'';
                     $val['vendor_city'] = isset($user->city) ? $user->city :'';
                     $val['store_name'] = isset($user->store_name) ? $user->store_name :'';
@@ -142,6 +143,7 @@ class OrderController extends Controller
                 $user = Vendor::where('id',$val->user_id)->withTrashed()->first();
                 $val['total_item'] = Cart::where('order_id',$val->id)->count();
                 $val['customer_name'] = isset($user->name) ? $user->name :'';
+                $val['customer_store_name'] = isset($user->store_name) ? $user->store_name :'';
                 $val['product_image'] = $this->GetOneImage($val->id);
                 $val['order_history'] = route('order-history',$val['order_id']);
                 $val['order_invoice'] = route('order-invoice',$val['order_id']);
@@ -168,6 +170,7 @@ class OrderController extends Controller
              ->get() 
              ->map(function($order) {
                  $order->customer_name = $order->vendor->name ?? '';
+                 $order->customer_store_name = $order->vendor->store_name ?? '';
                  $order->product_image = $this->GetOneImage($order->id); 
                  $order->order_history = route('order-history', $order->order_id); 
                  $order->order_invoice = route('order-invoice', $order->order_id); 
@@ -218,6 +221,7 @@ class OrderController extends Controller
             }
             $vendor = Vendor::where('id',$order->vendor_id)->first();
             $order->vendor_name = $vendor->name;
+            $order->vendor_store_name = $vendor->store_name;
             $customer = Vendor::where('id',$order->user_id)->withTrashed()->first();
             return $this->sendSuccess('ORDER DETAIL FETCH SUCCESSFULLY', ['items' => $carts ,'detail' => $order,'customer' => $customer]);
         }catch(\Throwable $e){
