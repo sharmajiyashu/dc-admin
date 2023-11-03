@@ -208,6 +208,7 @@ class CustomerController extends Controller
                 $cart_count = Cart::where('user_id',$request->user()->id)->where('store_code',$request->user()->active_store_code)->where('status','0')->count();
                 $cart_amount = Cart::where('user_id',$request->user()->id)->where('store_code',$request->user()->active_store_code)->where('status','0')->sum('total');
                 return $this->sendSuccess('Data FETCH SUCCESSFULLY',[
+                    'active_store_code' => $request->user()->active_store_code,
                     'categories' => $categories,
                     'arrival_products' => $arrival_products,
                     'profile' => $user_data,
@@ -217,7 +218,18 @@ class CustomerController extends Controller
                     ]
                 ]);
             }else{
-                return $this->sendFailed('you do not have any active store plese select an active store',200);
+                $user_data = Vendor::find($request->user()->id);
+                $user_data['active_store_name'] = "";
+                return $this->sendSuccess('you do not have any active store plese select an active store',[
+                    'active_store_code' => $request->user()->active_store_code,
+                    'categories' => [],
+                    'arrival_products' => [],
+                    'profile' => $user_data,
+                    'cart_detail' => [
+                        'cart_count' => 0,
+                        'cart_amount' => 0
+                    ]
+                ]);
             }
         }catch(\Throwable $e){
             return $this->sendFailed($e->getMessage(). ' On Line '. $e->getLine(),200);

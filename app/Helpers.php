@@ -22,7 +22,7 @@ use Illuminate\Support\Str;
 class Helper {
     
 
-    public static function SendNotification($device_id,$title,$body,$image,$id){
+    public static function SendNotification($device_id,$title,$body,$image,$id,$type = null){
 
         $url = 'https://fcm.googleapis.com/fcm/send';
 
@@ -47,6 +47,7 @@ class Helper {
 				'action_type'       => 'transfer',
 				'image' => $image,
 				'id' =>  isset($id) ? $id : '',
+				'type' => $type,
 			),
 			"data" =>
 			array(
@@ -58,6 +59,7 @@ class Helper {
 				'action_type'       => 'transfer',
 				'image' => $image ,
 				'id' =>  isset($id) ? $id : '',
+				'type' => $type,
 			)
 		);
 		$ch = curl_init();
@@ -256,13 +258,15 @@ class Helper {
 		if($type == StoreLink::$active){
 			$title = 'Store '.$vendor->store_name.' have been activated!';
 			$body = "“".$vendor->name."” activate your account kindly enjoy the shopping";
+			$type = 'active_store';
 		}else{
 			$title = 'Store '.$vendor->store_name.' have been deactivated!';
 			$body = "“".$vendor->name."” your account has been deactivated, kindly contact the store";
+			$type = 'deactive_store';
 		}
 		$notification = Notification::create(['user_id' => $user->id ,'title' => $title ,'body' => $body ,'image' => $image]);
 		if($user->is_notify == 1){
-			Helper::SendNotification($device_id,$title,$body,$image,$notification->id);
+			Helper::SendNotification($device_id,$title,$body,$image,$notification->id,$type);
 		}
 	}
 

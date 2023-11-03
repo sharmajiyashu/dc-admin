@@ -60,7 +60,13 @@ class CartController extends Controller
                             $cart = WishCart::where('id',$last_cart_2->id)->update($cart_2);
                             $cart_id = $last_cart_2->id;
                         }
-                        return $this->sendSuccess('Product is added successfully in the whishlist');
+                        $cart_total_count = Cart::where(['user_id'=>$request->user()->id,'store_code' => $request->user()->active_store_code,'status' => '0']);
+                        return $this->sendSuccess('Product is added successfully in the whishlist',[
+                                'cart_detail' => [
+                                    'cart_amount' => $cart_total_count->sum('total'),
+                                    'cart_count' => $cart_total_count->count(),
+                                ]
+                            ]);
                     }
                 }
 
@@ -172,7 +178,8 @@ class CartController extends Controller
     public function RemoveWishItem(RemoveWishItemApi $request){
         try{
             WishCart::where(['id'=>$request->cart_id,'user_id' => $request->user()->id ,'status' => '0'])->delete();
-            return $this->sendSuccess('CART ITEM REMOVE SUCCESSFULLY','');
+            $data = self::getUserCartItems($request->user());
+            return $this->sendSuccess('CART ITEM REMOVE SUCCESSFULLY',$data);
         }catch(\Throwable $e){
             return $this->sendFailed($e->getMessage(). ' On Line '. $e->getLine(),200);
         }
