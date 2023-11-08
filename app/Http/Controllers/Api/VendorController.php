@@ -154,10 +154,10 @@ class VendorController extends Controller
                 $category = Category::where('id',$request->category_id)->first();
                 if($category->status == Category::$active){
                     Category::where('id',$request->category_id)->update(['status' => Category::$inactive]);
-                    Product::where('category_id',$request->category_id)->update(['status' => Product::$inactive]);
+                    // Product::where('category_id',$request->category_id)->update(['status' => Product::$inactive]);
                 }else{
                     Category::where('id',$request->category_id)->update(['status' => Category::$active]);
-                    Product::where('category_id',$request->category_id)->update(['status' => Product::$active]);
+                    // Product::where('category_id',$request->category_id)->update(['status' => Product::$active]);
                 }
             }
 

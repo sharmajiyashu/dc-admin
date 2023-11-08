@@ -113,12 +113,12 @@ class Helper {
 		}
 	}
 
-	public static function getDefaultSlab(){
-		$default_slab = Slab::where(['is_default'=>'1' ,'status' => '1'])->first();
+	public static function getDefaultSlab($user_id){
+		$default_slab = Slab::where(['is_default'=>'1' ,'user_id' => $user_id])->first();
 		if(!empty($default_slab)){
 			return $default_slab->id;
 		}else{
-			$default_slab = Slab::create(['is_default'=>'1' ,'status' => '1','name' => Helper::createUpperString('Default') ,'days' => 0]);
+			$default_slab = Slab::create(['is_default'=>'1' ,'status' => '1','name' => Helper::createUpperString('Default'),'user_id' => $user_id ,'days' => 0]);
 			return $default_slab->id;
 		}
 	}

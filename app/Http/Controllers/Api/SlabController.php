@@ -45,7 +45,7 @@ class SlabController extends Controller
 
     public function GetSlab(Request $request){
         try{
-            $slabs = Slab::where('user_id',$request->user()->id)->orWhere('is_default','1')->get();
+            $slabs = Slab::where('user_id',$request->user()->id)->get();
             foreach($slabs as $key=>$val){
                 $total_products = SlabLink::where(['slab_id' => $val->id ,'user_id' => $request->user()->id])->count();
                 $val['total_products'] = $total_products;
@@ -128,7 +128,7 @@ class SlabController extends Controller
                 foreach($js as $key => $val){
                     $slab_link_2 = SlabLink::where(['slab_id' => $request->slab_id ,'product_id' => $val ,'user_id' => $request->user()->id])->first();     
                     if(!empty($slab_link_2)){
-                        if($slab_link_2->slab_id == Helper::getDefaultSlab()){
+                        if($slab_link_2->slab_id == Helper::getDefaultSlab($request->user()->id)){
                         }else{
                             $slab_link_2->delete();
                             $count ++;
@@ -136,7 +136,7 @@ class SlabController extends Controller
                     }
                 }
                 if(!empty($slab_link)){
-                    if($slab_link->slab_id == Helper::getDefaultSlab()){
+                    if($slab_link->slab_id == Helper::getDefaultSlab($request->user()->id)){
                    
                     }else{
                         $slab_link->delete();
@@ -147,7 +147,7 @@ class SlabController extends Controller
             }
 
             if(!empty($slab_link)){
-                if($slab_link->slab_id == Helper::getDefaultSlab()){
+                if($slab_link->slab_id == Helper::getDefaultSlab($request->user()->id)){
                     return $this->sendFailed('You Cant Delete product from default slab',200);
                 }else{
                     $slab_link->delete();

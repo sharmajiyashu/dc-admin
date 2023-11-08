@@ -168,7 +168,7 @@ class ProductController extends Controller
 
                 $check = SlabLink::where(['user_id' => $request->user()->id ,'product_id'=>$product->id])->count();
                 if($check == 0){
-                    $get_default_slab = Helper::getDefaultSlab();
+                    $get_default_slab = Helper::getDefaultSlab($request->user()->id);
                     SlabLink::create(['user_id' => $request->user()->id ,'product_id'=>$product->id ,'slab_id' => $get_default_slab]);
                 }
                 // Helper::sentMessageToCreateUpdateProduct($product->id,$type);
@@ -438,7 +438,7 @@ class ProductController extends Controller
                         $product->update($data);
                         $check = SlabLink::where(['user_id' => $request->user()->id ,'product_id'=>$product->id])->count();
                         if($check == 0){
-                            $get_default_slab = Helper::getDefaultSlab();
+                            $get_default_slab = Helper::getDefaultSlab($request->user()->id);
                             SlabLink::create(['user_id' => $request->user()->id ,'product_id'=>$product->id ,'slab_id' => $get_default_slab]);
                         }
                         $total_update ++;
@@ -457,7 +457,7 @@ class ProductController extends Controller
                                         $product = Product::create($data);
                                         $check = SlabLink::where(['user_id' => $request->user()->id ,'product_id'=>$product->id])->count();
                                         if($check == 0){
-                                            $get_default_slab = Helper::getDefaultSlab();
+                                            $get_default_slab = Helper::getDefaultSlab($request->user()->id);
                                             SlabLink::create(['user_id' => $request->user()->id ,'product_id'=>$product->id ,'slab_id' => $get_default_slab]);
                                         }
                             $total_create ++;
@@ -478,7 +478,7 @@ class ProductController extends Controller
                                     $product = Product::create($data);
                                     $check = SlabLink::where(['user_id' => $request->user()->id ,'product_id'=>$product->id])->count();
                                     if($check == 0){
-                                        $get_default_slab = Helper::getDefaultSlab();
+                                        $get_default_slab = Helper::getDefaultSlab($request->user()->id);
                                         SlabLink::create(['user_id' => $request->user()->id ,'product_id'=>$product->id ,'slab_id' => $get_default_slab]);
                                     }
                         $total_create ++;
@@ -493,7 +493,7 @@ class ProductController extends Controller
                     $product = Product::create($data);
                     $check = SlabLink::where(['user_id' => $request->user()->id ,'product_id'=>$product->id])->count();
                     if($check == 0){
-                        $get_default_slab = Helper::getDefaultSlab();
+                        $get_default_slab = Helper::getDefaultSlab($request->user()->id);
                         SlabLink::create(['user_id' => $request->user()->id ,'product_id'=>$product->id ,'slab_id' => $get_default_slab]);
                     }
                     $total_create ++;

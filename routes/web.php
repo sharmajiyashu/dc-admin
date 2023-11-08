@@ -1,5 +1,6 @@
 <?php
 
+use App\Helpers\Helper;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\Controller;
@@ -13,6 +14,7 @@ use App\Http\Controllers\ViewStoreController;
 use App\Models\Category;
 use App\Models\Product;
 use App\Models\SlabLink;
+use App\Models\StoreLink;
 
 /*
 |--------------------------------------------------------------------------
@@ -146,6 +148,19 @@ Route::get('remove_space_from_product',function(){
     $products = Product::where('is_admin','1')->get()->map(function($product){
         $cleanedString = trim($product->name);
         $product->update(['name' => $cleanedString]);
+    });
+});
+
+Route::get('change_default_slabs',function(){
+    Product::where('is_admin','!=','1')->get()->map(function($product){
+        SlabLink::where('product_id',$product->id)->where('slab_id','1')->get()->map(function($slab_link) use($product){
+            $get_defaul_slab = Helper::getDefaultSlab($product->user_id);
+            $slab_link->update(['slab_id' => $get_defaul_slab]);
+        });
+    });
+    StoreLink::where('slab_id','1')->get()->map(function($store_link){
+        $get_defaul_slab = Helper::getDefaultSlab($store_link->vendor_id);
+        $store_link->update(['slab_id' => $get_defaul_slab]);
     });
 });
 
