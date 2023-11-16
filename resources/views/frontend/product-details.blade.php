@@ -48,8 +48,8 @@
     <header>
         <div class="header-wp">
             
-            <div class="container">
-                <a href="{{ route('view_store',$user->store_code) }}" style="font-weight: 600;"><img src="{{ asset('public/frontend/images/home.png') }}" alt="" width="18px"> {{ $user->store_name }}</a>
+            <div class="container header-homeicon">
+                <a href="{{ route('view_store',$user->store_code) }}" style="font-weight: 600;"><img src="{{ asset('public/frontend/images/home.png') }}" alt="" width="24px"> {{ $user->store_name }}</a>
             </div>
         </div>
     </header>
@@ -115,23 +115,35 @@
                                     </div>
                                 </div>
                             </div>
-                            <ul class="incdecbg">
-                                <li>
-                                    <button onclick="decbg()" class="btn btn-danger">-</button>
-                                </li>
-                                <li>
-                                    <button class="btn btn-outline-danger" id="updatvalue">1</button>
-                                </li>
-                                <li>
-                                    <button onclick="incbg()" class="btn btn-danger">+</button>
-                                </li>
-                                <br>
-                                <br>
-                                <button class="btn btn-danger">
-                                    Add to Cart
-                                </button>
-                                <br>
-                            </ul>
+                            <div class="nextItombg row">
+                                <ul class="incdecbg">
+                                    <li>
+                                        <button onclick="decbg()" class="btn btn-danger">-</button>
+                                    </li>
+                                    <li>
+                                        <button class="btn btn-outline-danger" id="updatvalue">1</button>
+                                    </li>
+                                    <li>
+                                        <button onclick="incbg()" class="btn btn-danger">+</button>
+                                    </li>
+                                    <br>
+                                    <br>
+                                    
+                                    {{-- <br> --}}
+                                </ul>
+                                <div class="col-md-4 col-sm-2 nextItombg-left">
+                                    <img src="{{ asset('public/frontend/images/rightbggb.svg')}}" alt="">
+                                </div>
+                                <div class="col-md-4 col-sm-8 nextItombg-center">
+                                    <a href="https://play.google.com/store/apps/details?id=com.jwelerydukancustomer" class="btn btn-danger">
+                                      
+                                        <img src="{{ asset('public/frontend/images/cartIcon.svg')}}" alt=""> Add to Cart 
+                                    </a>
+                                </div>
+                                <div class="col-md-4 col-sm-2 nextItombg-right">
+                                    <img src="{{ asset('public/frontend/images/nextbggb.svg')}}" alt="">
+                                </div>
+                            </div>
                             <script>
                                 var valueDi =1;
                                 function incbg(){

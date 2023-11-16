@@ -42,6 +42,11 @@
           text-decoration: none;
           display: block;
         }
+
+        .category-selectbg li {
+    display: inline-block;
+    width: 32%;
+}
         </style>
 </head>
 <body>
@@ -49,8 +54,8 @@
     <header>
         <div class="header-wp">
             
-            <div class="container">
-                <a href="{{ route('view_store',$user->store_code) }}" style="font-weight: 600;"><img src="{{ asset('public/frontend/images/home.png') }}" alt="" width="18px"> {{ $user->store_name }}</a>
+            <div class="container header-homeicon">
+                <a href="{{ route('view_store',$user->store_code) }}" style="font-weight: 600;"><img src="{{ asset('public/frontend/images/home.png') }}" alt="" width="24px"> {{ $user->store_name }}</a>
             </div>
         </div>
     </header>
@@ -60,14 +65,14 @@
             <div class="category-pagesec">
                 <div class="category-selectbg">
                     <ul>
-                        <li style="display: inline-block;">
+                        <li style="">
                             <div class="input-group input-group-lg">
                                 <input type="text" id="productSearch" class="form-control" onchange="searchProduct()"  placeholder="Search">
                               </div>
                         </li>
 
                         
-                        <li style="display: inline-block;">
+                        <li style="">
                             <div class="dropdown">
                                 <select class="form-select form-select-lg mb-3" aria-label="Large select example" onchange="changeCategory(this.value)">
                                     <option value="0">All</option>
@@ -91,7 +96,7 @@
                             }
                         </script>
 
-                        <li style="display: inline-block;">
+                        <li style="">
                             <select class="form-select form-select-lg mb-3" aria-label="Large select example">
                                 <option style="font-size: 14px;" selected>Newest</option>
                                 <option style="font-size: 14px;" value="1">Lowest Price</option>

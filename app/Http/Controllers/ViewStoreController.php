@@ -22,7 +22,7 @@ class ViewStoreController extends Controller
                 }
                 return $category;
             });
-            $slab_id = Helper::getDefaultSlab();
+            $slab_id = Helper::getDefaultSlab($user->id);
             $products = Product::where('user_id', $user->id)
 			->where('status',1)
 			->where('is_admin', '0')
@@ -51,14 +51,14 @@ class ViewStoreController extends Controller
             $user = User::find($product->user_id);
             return view('frontend.product-details',compact('product','user'));
         }else{
-
-        }
+            
+        }   
     }
 
     public function categoriesDetail($id,$user_id){
         $category = Category::find($id);
         $user = User::find($user_id);
-        $slab_id = Helper::getDefaultSlab();
+        $slab_id = Helper::getDefaultSlab($user->id);
         $products = Product::where('user_id', $user->id);
         if($category){
             $products->where('category_id',$category->id);

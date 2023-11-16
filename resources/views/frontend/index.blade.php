@@ -19,18 +19,26 @@
 
     <header>
         <div class="header-wp">
-            <div class="container">
+            <div class="container header-homeicon">
+                <a href="{{ route('view_store',$user->store_code) }}"><img src="{{ asset('public/frontend/images/home.png') }}" alt="" width="24px"></a>
                 <a href="#" style="font-weight: 600;">{{ $user->store_name }}</a>
                 <form class="d-flex" role="search">
+                    
                     <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
-                    <button class="btn btn-outline-success" type="submit">Search</button>
+                    {{-- <button class="btn btn-outline-success" type="submit">Search</button> --}}
                 </form>
             </div>
         </div>
     </header>
 
     <section class="bannerwp">
-        <div id="carouselExample" class="carousel slide">
+        <div class="container">
+            <a href="https://play.google.com/store/apps/details?id=com.jwelerydukancustomer" target="_blank">
+                <img src="{{ asset('public/frontend/images/dc_banner.png')}}" style="width: 100%;" alt="Image 1">
+            </a>
+        </div>
+
+        {{-- <div id="carouselExample" class="carousel slide">
             <div class="carousel-inner">
               <div class="carousel-item active">
                 <img src="{{ asset('public/frontend/images/banner1.jpeg')}}" style="width: 100%;" alt="Image 1">
@@ -50,7 +58,7 @@
               <span class="carousel-control-next-icon" aria-hidden="true"></span>
               <span class="visually-hidden">Next</span>
             </button>
-          </div>
+          </div> --}}
     </section>
 
     <section class="arrival-wp">
@@ -88,7 +96,7 @@
     <section class="category-wp">
         <div class="container">
             <div class="category-sec">
-                <h3>Cotegory</h3>
+                <h3>Category</h3>
                 <div class="row">
                     @foreach ($categories as $item)
                         <a href="{{ route('view_store_categories',[$item->id,$user->id]) }}"  class="col-lg-2 col-md-4 col-sm-6 categorybg-cmn">
@@ -125,7 +133,7 @@ $(document).ready(function(){
         responsive: {
             // Define responsive breakpoints
             0: {
-                items: 1 // Display one item on screens less than 600px wide
+                items: 2.2 // Display one item on screens less than 600px wide
             },
             768: {
                 items: 2 // Display two items on screens 600px or wider
@@ -139,24 +147,7 @@ $(document).ready(function(){
         }
     });
 });
-</script>
-
-
-<script>
-if (localStorage.getItem('dc_dukaan_number') === null) {
-    const dataArray = [{ {{ $user->store_name }}: { start_date: '11-12-2001', mobile:'' } }];
-    // Store the array in localStorage under the key 'dc_dukaan_number'
-    localStorage.setItem('dc_dukaan_number', JSON.stringify(dataArray));
-}else{
-    
-} 
-</script>
-
-<script>
-    calculate
-</script>
-
-<script src="{{ asset('public/frontend/js/check_ids_is_exist.js') }}"></script>
+    </script>
     
 </body>
 </html>

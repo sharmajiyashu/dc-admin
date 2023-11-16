@@ -67,7 +67,7 @@ class StoreLinkController extends Controller
                 $val->slab_name = isset($slab->name) ? $slab->name :'';
                 $vendor = $this->GetVendorDetail($val->vendor_id);
                 if($vendor){
-                    $image = asset('public/images/users/'.$vendor->store_image);
+                    $image = $vendor->store_image;
                 }
                 $val->store_image =  isset($image) ? $image :'';
                 $val->store_name = isset($vendor->store_name)  ? $vendor->store_name :'';
@@ -93,7 +93,9 @@ class StoreLinkController extends Controller
     public function GetVendorDetail($id){
         $vendor = Vendor::find($id);
         if(!empty($vendor)){
-            $vendor->store_image = asset('public/images/users/'.$vendor->image);
+            if(!empty($vendor->store_image)){
+                $vendor->store_image = asset('public/images/users/'.$vendor->store_image);
+            }
             return $vendor;    
         }else{
             return "";
