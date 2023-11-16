@@ -124,7 +124,7 @@
                                 </div>
 
                                 <div class="card-datatable">
-                                    <table class="datatables-ajax table table-responsive ">
+                                    <table class="datatables-ajax table table-responsive datatable_data_2">
                                         <thead>
                                             <tr>
                                                 <th>Sr.no</th>

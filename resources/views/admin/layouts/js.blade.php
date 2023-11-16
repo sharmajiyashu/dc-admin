@@ -41,6 +41,12 @@
     $('.datatable_data').DataTable( {
 
     });
+
+    $('.datatable_data_2').DataTable( {
+        paging: false,
+        searching: false,
+        info: false
+    });
 });
 </script>
 

@@ -119,7 +119,7 @@
                                 </div>
                                 <div class="card-datatable">
                                     @include('admin._pagination_filter', ['data' => $products_2,'keyword' => $get])
-                                    <table class="datatables-ajax table table-responsive ">
+                                    <table class="datatables-ajax table table-responsive datatable_data_2">
                                         <thead>
                                             <tr>
                                                 <th>Sr.no</th>
@@ -133,8 +133,6 @@
 
                                         </thead>
                                         <tbody>
-
-                                           
                         
 
                                             @php  $i = ($products->currentPage() - 1) * $products->perPage() + 1; @endphp
