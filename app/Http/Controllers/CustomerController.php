@@ -94,6 +94,7 @@ class CustomerController extends Controller
         $data['city'] = $request->city;
         $data['address'] = $request->address;
         $data['pin'] = $request->pin;
+        $data['store_name'] = $request->store_name;
 
         $data['active_store_code'] = isset($request->active_store_code) ? $request->active_store_code :'';
         

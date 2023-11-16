@@ -93,11 +93,16 @@
                                         </div>
                                     </div>
 
-
                                     <div class="col-12 col-sm-6 mb-1">
                                         <label class="form-label" for="accountFirstName">Name</label>
                                         <input type="text" class="form-control" id="accountFirstName" name="name" placeholder="Name" value="{{ $customer->name }}" data-msg="Please enter name" />
                                     </div>
+
+                                    <div class="col-12 col-sm-6 mb-1">
+                                        <label class="form-label" for="accountLastName">Store Name</label>
+                                        <input type="text"  class="form-control" id="accountLastName" name="store_name" placeholder="Store Code" value="{{ $customer->store_name }}" data-msg="Please enter business name" />
+                                    </div>
+
                                     {{-- <div class="col-12 col-sm-6 mb-1">
                                         <label class="form-label" for="accountLastName">Store Code</label>
                                         <input type="text" readonly class="form-control" id="accountLastName" name="" placeholder="Store Code" value="{{ $customer->store_code }}" data-msg="Please enter last name" />

@@ -20,8 +20,14 @@ class ViewStoreController extends Controller
                 if(empty($category->image)){
                     $category->image = 'no_image.png';
                 }
-                return $category;
-            });
+                
+                  $check_Category = Category::find($category->admin_id);
+                        if($check_Category->status == Category::$active){
+                            return $category;
+                        }
+                })->filter()->values();	
+
+
             $slab_id = Helper::getDefaultSlab($user->id);
             $products = Product::where('user_id', $user->id)
 			->where('status',1)
@@ -77,7 +83,17 @@ class ViewStoreController extends Controller
                 return $product ? $product :'';
             }
         })->filter()->values();
-        $categories = Category::where('user_id',$user->id)->where('status',Category::$active)->get();
+        // $categories = Category::where('user_id',$user->id)->where('status',Category::$active)->get();
+        $categories = Category::where('user_id',$user->id)->where('status',Category::$active)->get()->map(function($category){
+            if(empty($category->image)){
+                $category->image = 'no_image.png';
+            }
+            
+              $check_Category = Category::find($category->admin_id);
+                    if($check_Category->status == Category::$active){
+                        return $category;
+                    }
+            })->filter()->values();	
         return view('frontend.category',compact('user','category','products','categories'));
         
     }

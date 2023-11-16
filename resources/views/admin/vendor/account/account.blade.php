@@ -86,6 +86,13 @@
                                         <label class="form-label" for="accountLastName">Store Code</label>
                                         <input type="text" readonly class="form-control" id="accountLastName" name="" placeholder="Store Code" value="{{ $vendor->store_code }}" data-msg="Please enter last name" />
                                     </div>
+
+                                    <div class="col-12 col-sm-6 mb-1">
+                                        <label class="form-label" for="accountLastName">Store Name</label>
+                                        <input type="text"  class="form-control" id="accountLastName" name="store_name" placeholder="Store Code" value="{{ $vendor->store_name }}" data-msg="Please enter business name" />
+                                    </div>
+
+
                                     <div class="col-12 col-sm-6 mb-1">
                                         <label for="currency" class="form-label">Gender</label>
                                         <select id="currency" name="gender" class="select2 form-select">

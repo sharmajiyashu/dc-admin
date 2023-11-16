@@ -7,20 +7,60 @@ use Illuminate\Http\Request;
 use App\Models\Order;
 use App\Models\User;
 use App\Models\Cart;
+use App\Models\Customer;
 use App\Models\Product;
+use App\Models\Role;
 use App\Models\WishCart;
 
 class OrderController extends Controller
 {
-    public function index(){
-        $orders = Order::orderBy('id','DESC')->get();
+    public function index(Request $request){
+        $keyword = request('keyword');
+        $page = isset($request->page) ? $request->page : 1;
+        $get = [];
+        $orders = Order::orderBy('id','DESC');
+
+
+        if(!empty($request->customer_id)){
+            $products = $orders->where('user_id',$request->customer_id);
+            $get['customer_id'] = $request->customer_id;
+        }elseif(!empty($keyword['customer_id'])){
+            $customer_id = $keyword['customer_id'];
+            $products = $orders->where('user_id',$customer_id);
+            $get['customer_id'] = $customer_id;
+        }
+
+        if(!empty($request->order_id)){
+            $products = $orders->where('order_id', 'LIKE', '%' . $request->order_id . '%');
+            $get['order_id'] = $request->order_id;
+        }elseif(!empty($keyword['order_id'])){
+            $order_id = $keyword['order_id'];
+            $products = $orders->where('order_id', 'LIKE', '%' . $order_id . '%');
+            $get['order_id'] = $order_id;
+        }
+
+        if(!empty($request->vendor_id)){
+            $products = $orders->where('vendor_id',$request->vendor_id);
+            $get['vendor_id'] = $request->vendor_id;
+        }elseif(!empty($keyword['vendor_id'])){
+            $vendor_id = $keyword['vendor_id'];
+            $products = $orders->where('vendor_id',$vendor_id);
+            $get['vendor_id'] = $vendor_id;
+        }
+        
+        $orders = $orders->paginate(10, ['*'], 'page', $page);
+
         
         foreach($orders as $key=>$val){
             $val->user_name = isset($this->getUserDetail($val->user_id)->store_name) ? $this->getUserDetail($val->user_id)->store_name :'';
             $val->vendor_name = isset($this->getUserDetail($val->vendor_id)->store_name) ? $this->getUserDetail($val->vendor_id)->store_name :'';
             $val->total_item = Cart::where('order_id',$val->id)->count();
         }
-        return view('admin.orders.index',compact('orders'));
+        
+
+        $buyer = Customer::where('role_id',Role::$customer)->where('is_register','1')->get();
+        $seller = Customer::where('role_id',Role::$vendor)->where('is_register','1')->get();
+        return view('admin.orders.index',compact('orders','get','buyer','seller'));
     }
 
     public function order_invoice ($id){

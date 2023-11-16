@@ -137,7 +137,7 @@
                                            
                         
 
-                                            @php  $i=1; @endphp
+                                            @php  $i = ($products->currentPage() - 1) * $products->perPage() + 1; @endphp
                                             @foreach($products as $key => $val)
                                             <tr>
 
