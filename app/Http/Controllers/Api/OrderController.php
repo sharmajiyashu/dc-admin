@@ -144,6 +144,7 @@ class OrderController extends Controller
                 $val['total_item'] = Cart::where('order_id',$val->id)->count();
                 $val['customer_name'] = isset($user->name) ? $user->name :'';
                 $val['customer_store_name'] = isset($user->store_name) ? $user->store_name :'';
+                $val['customer_city'] = isset($user->city) ? $user->city :'';
                 $val['product_image'] = $this->GetOneImage($val->id);
                 $val['order_history'] = route('order-history',$val['order_id']);
                 $val['order_invoice'] = route('order-invoice',$val['order_id']);

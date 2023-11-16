@@ -126,7 +126,15 @@
                                                 <b>{{ $item->name }}</b>
                                             </li>
                                             <li class="rightbg">
-                                                RS {{ $item->sp }}
+                                                RS 
+                                                @if ($item->mrp > $item->sp)
+                                                <span style="
+                                                font-size: 90%;color:red
+                                            "><del>{{ $item->mrp }}</del></span>     
+                                                @endif
+                                                
+                                                
+                                                {{ $item->sp }}
                                             </li>
                                         </ul>
                                         <ul>

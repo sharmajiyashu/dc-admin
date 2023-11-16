@@ -88,7 +88,18 @@
                         <div class="product-detailright">
                             <div class="row product-detailrightbgrow">
                                 <div class="col-md-6">
-                                    <b>RS {{ $product->sp }}</b>
+                                    <b>
+                                       
+                                        
+                                        RS 
+                                        @if ($product->mrp > $product->sp)
+                                        <span style="
+                                        font-size: 90%;color: #bdbdbd
+                                    "><del>{{ $product->mrp }}</del></span>     
+                                        @endif
+                                        
+                                        
+                                        {{ $product->sp }}</b>
                                     <br>
                                     <br>
                                     <span style="font-size: 14px;">{{ $product->name }}</span>

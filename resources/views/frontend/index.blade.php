@@ -82,7 +82,13 @@
                             <a href="{{ route('view_store_product_detail',$item->id) }}">
                                 <img src="{{$item->image }}" alt="Image 1">
                                 <div class="boxcontantbg-cmn">
-                                    <b>RS {{ $item->sp }}</b><br>
+                                    <b>RS  
+                                        @if ($item->mrp > $item->sp)
+                                        <span style="
+                                        font-size: 90%;color:red
+                                    "><del>{{ $item->mrp }}</del></span>     
+                                        @endif
+                                        {{ $item->sp }}</b><br>
                                     <span>{{ $item->name }}</span>
                                 </div>
                             </a>
