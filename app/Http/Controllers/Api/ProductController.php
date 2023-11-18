@@ -71,7 +71,12 @@ class ProductController extends Controller
 
                     $old_product = Product::where('id',$request->id)->first();
                     if(!empty($old_product->images)){
-                        $images = json_decode($old_product->images);
+                        $admin_product_image = Product::where(['is_admin' => '1' ,'status' => Product::$active])->where('products.name',$old_product->name)->orderBy('products.id','DESC')->first();
+                        if(!empty($admin_product_image)){
+                            $images = json_decode($admin_product_image->images);
+                        }else{
+                            $images = json_decode($old_product->images);
+                        }
                     }elseif($request->fetch_product_id){
                         $fetch_product_data = Product::where('id',$request->fetch_product_id)->first();
                         if(!empty($fetch_product_data->images)){
@@ -345,7 +350,12 @@ class ProductController extends Controller
                 $product->packing_quantity = isset($vendor_category->packing_quantity) ? $vendor_category->packing_quantity :'';
             }
             if(!empty($product)){
-                $product->images = Helper::transformImages($product->images);
+                $admin_product = Product::where(['is_admin' => '1' ,'status' => Product::$active])->where('products.name',$request->name)->orderBy('products.id','DESC')->first();
+                if(!empty($admin_product)){
+                    $product->images = Helper::transformImages($admin_product->images);
+                }else{
+                    $product->images = Helper::transformImages($product->images);
+                }
                 $product->category_name = isset($this->GetCategoryDetail($product->category_id)->title) ? $this->GetCategoryDetail($product->category_id)->title :'';
                 return $this->sendSuccess('PRODUCT FETCH SUCCESSFULLY', $product);
             }else{
