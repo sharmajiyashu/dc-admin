@@ -38,6 +38,9 @@
             
             <li class="nav-item {{ Request::routeIs('notifications.index','notifications.create','notifications.edit','notifications.show') ? 'active' : '' }}"><a class="d-flex align-items-center" href="{{ route('notifications.index') }}"><i data-feather="shopping-cart"></i><span class="menu-title text-truncate" data-i18n="File Manager">Notification</span></a>
             </li>
+
+            <li class="nav-item {{ Request::routeIs('demo_products.index','demo_products.create','demo_products.edit','demo_products.show') ? 'active' : '' }}"><a class="d-flex align-items-center" href="{{ route('demo_products.index') }}"><i data-feather="shopping-cart"></i><span class="menu-title text-truncate" data-i18n="File Manager">Demo Products</span></a>
+            </li>
             
             
             

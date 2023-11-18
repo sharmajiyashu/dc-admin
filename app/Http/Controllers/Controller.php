@@ -8,6 +8,7 @@ use Illuminate\Foundation\Bus\DispatchesJobs;
 use Illuminate\Foundation\Validation\ValidatesRequests;
 use App\Models\Product;
 use App\Models\Category;
+use App\Models\DemoProduct;
 use App\Models\Role;
 use App\Models\User;
 use App\Models\Order;
@@ -64,6 +65,17 @@ class Controller extends BaseController
             return json_encode(['0' ,'Status Inactive Successfully']);
         }else{
             $payment_status->update(['status' => Product::$active]);
+            return json_encode(['1' ,'Status Active Successfully']);
+        }
+    }
+
+    public function changes_demo_product_status(Request $request){
+        $payment_status = DemoProduct::where('id',$request->id)->first();
+        if($payment_status->status == DemoProduct::$active){
+            $payment_status->update(['status' => DemoProduct::$inactive]);
+            return json_encode(['0' ,'Status Inactive Successfully']);
+        }else{
+            $payment_status->update(['status' => DemoProduct::$active]);
             return json_encode(['1' ,'Status Active Successfully']);
         }
     }

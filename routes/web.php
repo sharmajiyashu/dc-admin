@@ -8,6 +8,7 @@ use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\VendorController;
 use App\Http\Controllers\CustomerController;
+use App\Http\Controllers\DemoProductController;
 use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\ViewStoreController;
@@ -47,6 +48,7 @@ Route::group(['middleware' => 'AdminAuth'], function () {
     Route::get('products-edit/{id}',[ProductController::class,'edit_2'])->name('products.edit_2');
     Route::post('products-update_2',[ProductController::class,'update_2'])->name('products.update_2');
     Route::resource('vendors',VendorController::class);
+    Route::resource('demo_products',DemoProductController::class);
 
     Route::group(['as' => 'vendors.account.'], function () {
         Route::get('vendor-products/{id}',[VendorController::class,'vendors_products'])->name('products');
@@ -97,6 +99,7 @@ Route::group(['middleware' => 'AdminAuth'], function () {
     Route::post('changes_slab_status',[Controller::class,'changes_slab_status'])->name('changes_slab_status');
     Route::post('changes_category_status',[Controller::class,'changes_category_status'])->name('changes_category_status');
     Route::post('changes_product_status',[Controller::class,'changes_product_status'])->name('changes_product_status');
+    Route::post('changes_demo_product_status',[Controller::class,'changes_demo_product_status'])->name('changes_demo_product_status');
     Route::post('changes_store_link_status',[Controller::class,'changes_store_link_status'])->name('changes_store_link_status');
     Route::post('changes_notification_status',[Controller::class,'changes_notification_status'])->name('changes_notification_status');
 });
