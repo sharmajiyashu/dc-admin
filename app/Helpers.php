@@ -321,22 +321,27 @@ class Helper {
 			Customer::where('id', $user->id)->update(['active_store_code' => '']);
 			return [];
 		}
-
 		// Retrieve the products related to the active store's slab
+		$carts_product = Cart::where('user_id',$user_id)->pluck('product_id')->toArray();
+        $wish_product = WishCart::where('user_id',$user_id)->pluck('product_id')->toArray();
 		$products = Product::where('user_id', $storeLink->vendor_id)
 			->where('status',1)
 			->where('is_admin', '0')
 			->latest()
-			->get()->map(function ($product) use($slab_id,$user_id){
+			->get()->map(function ($product) use($slab_id,$user_id,$carts_product,$wish_product){
 				$image = $product->images;
 				$product->images = self::transformImages($image);
 				$product->original_images = Helper::transformOrignilImages($image);
-				$slab_check = SlabLink::where(['product_id' => $product->id ,'user_id' => $product->user_id,'slab_id' => $slab_id])->exists();
 				$slab_data = Slab::find($slab_id);
-				$cart_sum = Cart::where('user_id',$user_id)->where('product_id',$product->id)->where('status',0)->count();
-				$wist_sum = WishCart::where('user_id',$user_id)->where('product_id',$product->id)->where('status',0)->count();
-				$product->cart_count = $cart_sum + $wist_sum;
-				if($slab_check && $slab_data->status == Slab::$active){
+				$count = 0;
+				if (in_array($product->id,$carts_product)) {
+					$count ++;
+				}
+				if (in_array($product->id,$wish_product)) {
+					$count ++;
+				}
+				$product->cart_count = $count;
+				if($slab_data->status == Slab::$active){
 					if($product->is_limited == '1'){
 						if($product->stock > 0){
 							return $product ? $product :'';

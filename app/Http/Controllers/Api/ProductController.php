@@ -284,6 +284,43 @@ class ProductController extends Controller
         }
     }
 
+    // public function GetProduct(Request $request){
+    //     try{
+    //         $user_id = $request->user()->id;
+    //         $user = $request->user();
+    //         $active_store = $request->user()->active_store_code;
+    //         $storeLink = StoreLink::where('user_id',$user_id)->where('store_code',$active_store)->first();
+    //         $slab_id = isset($storeLink->slab_id) ? $storeLink->slab_id :'';
+
+    //         if (!$storeLink || $storeLink->status !== StoreLink::$active) {
+    //             Customer::where('id', $user->id)->update(['active_store_code' => '']);
+    //             return $this->sendSuccess('PRODUCT FETCH SUCCESSFULLY', []);
+    //         }
+    //         // Retrieve the products related to the active store's slab
+    //         $products = Product::where('user_id',$storeLink->vendor_id)
+    //             ->where('status', Product::$active)
+    //             ->where('is_admin', '0')
+    //             ->latest()
+    //             ->get()->map(function ($product) use($slab_id,$user_id){
+    //                 $image = $product->images;
+    //                 $product->images = Helper::transformImages($image);
+    //                 $product->original_images = Helper::transformOrignilImages($image);
+    //                 $slab_check = SlabLink::where(['product_id' => $product->id ,'user_id' => $product->user_id,'slab_id' => $slab_id])->exists();
+    //                 $cart_sum = Cart::where('user_id',$user_id)->where('product_id',$product->id)->where('status',0)->count();
+    //                 $wist_sum = WishCart::where('user_id',$user_id)->where('product_id',$product->id)->where('status',0)->count();
+    //                 $product->cart_count = $cart_sum + $wist_sum;
+    //                 $slab_data = Slab::find($slab_id);
+    //                 if($slab_check && $slab_data->status == Slab::$active){
+    //                     return $product ? $product :'';
+    //                 }
+    //             })->filter()->values();
+    //         return $this->sendSuccess('PRODUCT FETCH SUCCESSFULLY', $products);
+    //     }catch(\Throwable $e){
+    //         // \Log::error($e->getMessage(). ' On Line '. $e->getLine());
+    //         return $this->sendFailed($e->getMessage(). ' On Line '. $e->getLine(),200);
+    //     }
+    // }
+
     public function GetProduct(Request $request){
         try{
             $user_id = $request->user()->id;
@@ -296,21 +333,28 @@ class ProductController extends Controller
                 Customer::where('id', $user->id)->update(['active_store_code' => '']);
                 return $this->sendSuccess('PRODUCT FETCH SUCCESSFULLY', []);
             }
-            // Retrieve the products related to the active store's slab
+            
+            $carts_product = Cart::where('user_id',$user_id)->pluck('product_id')->toArray();
+            $wish_product = WishCart::where('user_id',$user_id)->pluck('product_id')->toArray();
+
             $products = Product::where('user_id',$storeLink->vendor_id)
                 ->where('status', Product::$active)
                 ->where('is_admin', '0')
                 ->latest()
-                ->get()->map(function ($product) use($slab_id,$user_id){
+                ->get()->map(function ($product) use($slab_id,$user_id,$carts_product,$wish_product){
                     $image = $product->images;
                     $product->images = Helper::transformImages($image);
                     $product->original_images = Helper::transformOrignilImages($image);
-                    $slab_check = SlabLink::where(['product_id' => $product->id ,'user_id' => $product->user_id,'slab_id' => $slab_id])->exists();
-                    $cart_sum = Cart::where('user_id',$user_id)->where('product_id',$product->id)->where('status',0)->count();
-                    $wist_sum = WishCart::where('user_id',$user_id)->where('product_id',$product->id)->where('status',0)->count();
-                    $product->cart_count = $cart_sum + $wist_sum;
+                    $count = 0;
+                    if (in_array($product->id,$carts_product)) {
+                        $count ++;
+                    }
+                    if (in_array($product->id,$wish_product)) {
+                        $count ++;
+                    }
+                    $product->cart_count = $count;
                     $slab_data = Slab::find($slab_id);
-                    if($slab_check && $slab_data->status == Slab::$active){
+                    if($slab_data->status == Slab::$active){
                         return $product ? $product :'';
                     }
                 })->filter()->values();
