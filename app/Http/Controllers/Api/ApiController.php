@@ -67,10 +67,16 @@ class ApiController extends Controller
     }
 
     public function getDemoStores(){
-        $category = Category::where('status',Category::$active)->where('is_admin','1')->get();
+        $category = Category::where('status',Category::$active)->where('is_admin','1')->get()->map(function($category){
+            if (!empty($category->image)) {
+				$category->image = asset('public/images/categories/' . $category->image);
+			}
+            return $category;
+        });
         $product = DemoProduct::where('status',DemoProduct::$active)->get()->map(function($product){
             $image = $product->images;
             $product->images = Helper::transformImages($image);
+            $product->original_images = Helper::transformOrignilImages($image);
             $check_category = Category::find($product->category_id);
             if($check_category){
                 if($check_category->status == Category::$active){
