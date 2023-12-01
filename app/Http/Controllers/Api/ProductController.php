@@ -334,9 +334,8 @@ class ProductController extends Controller
                 return $this->sendSuccess('PRODUCT FETCH SUCCESSFULLY', []);
             }
             
-            $carts_product = Cart::where('user_id',$user_id)->pluck('product_id')->toArray();
-            $wish_product = WishCart::where('user_id',$user_id)->pluck('product_id')->toArray();
-
+            $carts_product = Cart::where('user_id',$user_id)->where('status',0)->pluck('product_id')->toArray();
+            $wish_product = WishCart::where('user_id',$user_id)->where('status',0)->pluck('product_id')->toArray();
             $products = Product::where('user_id',$storeLink->vendor_id)
                 ->where('status', Product::$active)
                 ->where('is_admin', '0')
@@ -354,7 +353,8 @@ class ProductController extends Controller
                     }
                     $product->cart_count = $count;
                     $slab_data = Slab::find($slab_id);
-                    if($slab_data->status == Slab::$active){
+                    $slab_check = SlabLink::where(['product_id' => $product->id ,'user_id' => $product->user_id,'slab_id' => $slab_id])->exists();
+                    if($slab_check && $slab_data->status == Slab::$active){
                         return $product ? $product :'';
                     }
                 })->filter()->values();
