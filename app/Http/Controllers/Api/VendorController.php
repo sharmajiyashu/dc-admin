@@ -20,6 +20,7 @@ use App\Http\Requests\ChangeStatusApi;
 use App\Http\Requests\UpdateCategoryPackingApi;
 use App\Http\Requests\UploadApi;
 use App\Models\Notification;
+use App\Models\Order;
 use App\Models\Slab;
 use App\Models\StoreLink;
 use App\Models\User;
@@ -264,6 +265,49 @@ class VendorController extends Controller
             }else{
                 return $this->sendFailed('selected id is invalid',200);
             }
+        }catch(\Throwable $e){
+            return $this->sendFailed($e->getMessage(). ' On Line '. $e->getLine(),200);
+        } 
+    }
+
+
+    function getHomeData(Request $request){
+        try{
+            $categories = Category::where(['user_id' => $request->user()->id ,'is_admin' => '0'])->orderBy('title','asc')->get()->map(function($category){
+                $category->total_product = Product::where('category_id',$category->id)->count();
+                $category->image = asset('public/images/categories/'.$category->image);
+                $check_Category = Category::find($category->admin_id);
+                if($check_Category->status == Category::$active){
+                    return $category;
+                }
+            })->filter()->values();
+            $user_data = Vendor::find($request->user()->id);
+            $user_data['image'] = asset('public/images/users/'.$request->user()->image);
+
+                $product_query = Product::where('user_id', $request->user()->id)
+                    ->orderBy('id', 'DESC');
+                    $products = $product_query->take(10)
+                    ->get();
+                foreach($products as $key=>$val){
+                    $image = $val['images'];
+                    $val['images'] = Helper::transformImages($image);
+                    $val['original_images'] = Helper::transformOrignilImages($image);
+                    $val['slabs'] = Helper::getSlabNames($val->id, $val['user_id']);
+                    $val['category_name'] = Helper::getCategoryTitle($val->category_id);
+                }
+            $pending_orders = Order::where('status',Order::$pending)->where('vendor_id',$request->user()->id)->count();
+            $total_wishlist = WishCart::where('vendor_id',$request->user()->id)->count();
+            $total = [
+                'products' => $product_query->count(),
+                'pending_orders' => $pending_orders,
+                'with_carts' => $total_wishlist,
+            ];
+            return $this->sendSuccess('Data FETCH SUCCESSFULLY',[
+                'categories' => $categories,
+                'arrival_products' => $products,
+                'profile' => $user_data,
+                'total' => $total,
+            ]);
         }catch(\Throwable $e){
             return $this->sendFailed($e->getMessage(). ' On Line '. $e->getLine(),200);
         } 

@@ -30,6 +30,7 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 Route::group(['middleware' => 'auth:sanctum'], function () {
     Route::post('customer_update_details',[CustomerController::class,'CustomersUpdateDetail']);
     Route::get('get_home_data',[CustomerController::class,'getHomeData']);
+    Route::get('get_vendor_home_data',[VendorController::class,'getHomeData']);
     Route::post('vendors_update_details',[VendorController::class,'VendorsUpdateDetail']);
     Route::post('create_update_product',[ProductController::class,'CreateUpdateProduct']);
     Route::post('delete_product',[ProductController::class,'DeleteProduct']);
