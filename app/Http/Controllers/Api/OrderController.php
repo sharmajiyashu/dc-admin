@@ -138,7 +138,16 @@ class OrderController extends Controller
     
     public function VendorOrderHistory(Request $request){
         try{
-            $orders = Order::where(['vendor_id' => $request->user()->id])->orderBy('id','DESC')->get();
+            $page = isset($request->page) ? $request->page : 1;
+            $query_search = $request->input('search');
+            $orders = Order::join('users','users.id','=','orders.user_id')->select('orders.*')->where(['vendor_id' => $request->user()->id])
+            ->when($query_search, function ($query) use ($query_search) {
+                $query->where('orders.order_id', 'like', '%' . $query_search . '%')
+                    ->orWhere('orders.status', 'like', '%' . $query_search . '%')
+                    ->orWhere('users.name', 'like', '%' . $query_search . '%');
+            });
+
+            $orders = $orders->orderBy('orders.id','DESC')->paginate(50, ['*'], 'page', $page);
             foreach($orders as $key=>$val){
                 $user = Vendor::where('id',$val->user_id)->withTrashed()->first();
                 $val['total_item'] = Cart::where('order_id',$val->id)->count();
