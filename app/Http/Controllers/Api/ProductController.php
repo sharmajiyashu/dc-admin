@@ -218,17 +218,24 @@ class ProductController extends Controller
         try{
             if($request->user()->role_id == Role::$vendor){
                 $page = $request->input('page',1);
-                $products = Product::where('user_id', $request->user()->id)
-                    ->orderBy('id', 'DESC')
-                    ->get();
-                    // ->paginate(10, ['*'], 'page',$page);
+                $query_search = $request->input('search');
+
+                $products = Product::select('products.*', 'categories.title as category_name')
+                    ->when($query_search, function ($query) use ($query_search) {
+                        $query->where('products.name', 'like', '%' . $query_search . '%')
+                            ->orWhere('categories.title', 'like', '%' . $query_search . '%');
+                    })
+                    ->join('categories', 'categories.id', 'products.category_id')
+                    ->where('products.user_id', $request->user()->id)
+                    ->orderBy('products.updated_at', 'desc') // Use orderBy instead of latest after join
+                    // ->get();
+                    ->paginate(40, ['*'], 'page',$page);
 
                 foreach($products as $key=>$val){
                     $image = $val['images'];
                     $val['images'] = Helper::transformImages($image);
                     $val['original_images'] = Helper::transformOrignilImages($image);
                     $val['slabs'] = Helper::getSlabNames($val->id, $val['user_id']);
-                    $val['category_name'] = Helper::getCategoryTitle($val->category_id);
                 }
                 return $this->sendSuccess('PRODUCT FETCH SUCCESSFULLY', $products);
             }else{
@@ -323,6 +330,9 @@ class ProductController extends Controller
 
     public function GetProduct(Request $request){
         try{
+
+            $page = $request->input('page',1);
+
             $user_id = $request->user()->id;
             $user = $request->user();
             $active_store = $request->user()->active_store_code;
@@ -336,12 +346,51 @@ class ProductController extends Controller
             
             $carts_product = Cart::where('user_id',$user_id)->where('status',0)->pluck('product_id')->toArray();
             $wish_product = WishCart::where('user_id',$user_id)->where('status',0)->pluck('product_id')->toArray();
-            $products = Product::where('user_id',$storeLink->vendor_id)
-                ->where('status', Product::$active)
-                ->where('is_admin', '0')
-                ->latest()
-                ->get()->map(function ($product) use($slab_id,$user_id,$carts_product,$wish_product){
-                    $image = $product->images;
+            // $products = Product::where('user_id',$storeLink->vendor_id)
+            //     ->where('status', Product::$active)
+            //     ->where('is_admin', '0')
+            //     ->latest('updated_at')  
+            //     ->get()->map(function ($product) use($slab_id,$user_id,$carts_product,$wish_product){
+            //         $image = $product->images;
+            //         $product->images = Helper::transformImages($image);
+            //         $product->original_images = Helper::transformOrignilImages($image);
+            //         $count = 0;
+            //         if (in_array($product->id,$carts_product)) {
+            //             $count ++;
+            //         }
+            //         if (in_array($product->id,$wish_product)) {
+            //             $count ++;
+            //         }
+            //         $product->cart_count = $count;
+            //         $slab_data = Slab::find($slab_id);
+            //         $slab_check = SlabLink::where(['product_id' => $product->id ,'user_id' => $product->user_id,'slab_id' => $slab_id])->exists();
+            //         if($slab_check && $slab_data->status == Slab::$active){
+            //             return $product ? $product :'';
+            //         }
+            //     })->filter()->values();
+
+            $query_search = $request->input('search');
+            $products = Product::select('products.*','categories.title as category_name')
+                ->when($query_search, function ($query) use ($query_search) {
+                    $query->where('products.name', 'like', '%' . $query_search . '%')
+                        ->orWhere('categories.title', 'like', '%' . $query_search . '%');
+                })
+                ->where('products.user_id', $storeLink->vendor_id)
+                ->join('categories','categories.id','products.category_id')
+                ->where('products.status', Product::$active)
+                ->where('products.is_admin', '0')
+                ->join('slab_links', function ($join) use ($slab_id) {
+                    $join->on('products.id', '=', 'slab_links.product_id')
+                        ->join('slabs', 'slabs.id', '=', 'slab_links.slab_id')
+                        ->where('slabs.id', $slab_id)
+                        ->where('slabs.status', Slab::$active);
+                })
+                ->latest('products.updated_at')
+                ->paginate(40, ['*'], 'page',$page);
+                // ->get();
+
+            foreach($products as $key=>$product){
+                $image = $product->images;
                     $product->images = Helper::transformImages($image);
                     $product->original_images = Helper::transformOrignilImages($image);
                     $count = 0;
@@ -352,12 +401,7 @@ class ProductController extends Controller
                         $count ++;
                     }
                     $product->cart_count = $count;
-                    $slab_data = Slab::find($slab_id);
-                    $slab_check = SlabLink::where(['product_id' => $product->id ,'user_id' => $product->user_id,'slab_id' => $slab_id])->exists();
-                    if($slab_check && $slab_data->status == Slab::$active){
-                        return $product ? $product :'';
-                    }
-                })->filter()->values();
+            }
             return $this->sendSuccess('PRODUCT FETCH SUCCESSFULLY', $products);
         }catch(\Throwable $e){
             // \Log::error($e->getMessage(). ' On Line '. $e->getLine());

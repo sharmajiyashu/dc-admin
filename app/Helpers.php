@@ -328,7 +328,7 @@ class Helper {
 		$products = Product::where('user_id',$storeLink->vendor_id)
 			->where('status', Product::$active)
 			->where('is_admin', '0')
-			->latest()
+			->latest('updated_at')
 			->get()->map(function ($product) use($slab_id,$user_id,$carts_product,$wish_product){
 				$image = $product->images;
 				$product->images = Helper::transformImages($image);

@@ -127,7 +127,11 @@ class CartController extends Controller
 
     public function wishListItems(Request $request){
         if(!empty($request->user()->active_store_code)){
-            $with_cart = WishCart::where(['user_id'=>$request->user()->id,'store_code' => $request->user()->active_store_code,'status' => '1'] )->orderBy('id','DESC')->get();
+            $page = $request->input('page',1);
+            $with_cart = WishCart::where(['user_id'=>$request->user()->id,'store_code' => $request->user()->active_store_code,'status' => '1'] )
+            ->orderBy('id','DESC')
+            ->paginate(50, ['*'], 'page', $page);
+            // ->get();
             foreach($with_cart as $key=>$val){
                 $product = $this->getProductData($val->product_id);
                 $val->product_name = isset($product->name) ? $product->name :'';

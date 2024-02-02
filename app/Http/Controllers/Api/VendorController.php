@@ -85,7 +85,11 @@ class VendorController extends Controller
 
     public function WithListItem(Request $request){
         try {
-            $carts = WishCart::where('vendor_id',$request->user()->id)->where(['status' => '1'])->orderBy('id','DESC')->get();
+            $page = $request->input('page',1);
+            $carts = WishCart::where('vendor_id',$request->user()->id)->where(['status' => '1'])
+            ->orderBy('id','DESC')
+            ->paginate(50, ['*'], 'page', $page);
+            // ->get();
             foreach($carts as $key=>$val){
                 $customer = Customer::where('id',$val->user_id)->first();
                 $val['customer_name'] = isset($customer->name) ? $customer->name :'';
@@ -285,7 +289,7 @@ class VendorController extends Controller
             $user_data['image'] = asset('public/images/users/'.$request->user()->image);
 
                 $product_query = Product::where('user_id', $request->user()->id)
-                    ->orderBy('id', 'DESC');
+                    ->latest('updated_at');
                     $products = $product_query->take(10)
                     ->get();
                 foreach($products as $key=>$val){

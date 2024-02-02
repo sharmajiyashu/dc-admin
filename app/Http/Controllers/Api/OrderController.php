@@ -72,7 +72,13 @@ class OrderController extends Controller
     public function CustomerOrderHistory(CreateOrderApi $request){
         try{
             if(!empty($request->user()->active_store_code)){
-                $orders = Order::where(['user_id' => $request->user()->id,'store_code' => $request->user()->active_store_code])->orderBy('id','DESC')->get();
+                $page = $request->input('page',1);
+                $orders = Order::where(['user_id' => $request->user()->id,'store_code' => $request->user()->active_store_code])
+                        ->orderBy('id','DESC')
+                        ->paginate(50, ['*'], 'page', $page);
+                        // ->get();
+
+
                 foreach($orders as $key=>$val){
                     $user = Vendor::where('id',$val->vendor_id)->withTrashed()->first();
                     $val['total_item'] = Cart::where('order_id',$val->id)->count();
